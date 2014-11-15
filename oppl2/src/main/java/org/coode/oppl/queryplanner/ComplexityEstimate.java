@@ -27,17 +27,7 @@ import org.coode.oppl.variabletypes.INDIVIDUALVariableType;
 import org.coode.oppl.variabletypes.InputVariable;
 import org.coode.oppl.variabletypes.OBJECTPROPERTYVariableType;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLRuntimeException;
-import org.semanticweb.owlapi.util.OWLObjectVisitorAdapter;
+import org.semanticweb.owlapi.model.*;
 
 /** @author Luigi Iannone */
 public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
@@ -194,7 +184,7 @@ public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
 
     private Collection<OWLLiteral> getAllConstants() {
         final Set<OWLLiteral> toReturn = new HashSet<OWLLiteral>();
-        final OWLObjectVisitorAdapter constantExtractor = new ConstantExtractor(toReturn);
+        final OWLObjectVisitor constantExtractor = new ConstantExtractor(toReturn);
         ConstantCollector visitor = new ConstantCollector(toReturn, constantExtractor);
         for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
                 .getOntologies()) {

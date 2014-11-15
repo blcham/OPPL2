@@ -9,12 +9,9 @@ import java.util.regex.Pattern;
 import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.function.OPPLFunction;
 import org.coode.oppl.generated.RegexpGeneratedVariable;
-import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual> implements
@@ -55,7 +52,13 @@ public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual> 
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
-        return o.accept(new OWLObjectVisitorExAdapter<Boolean>(false) {
+        return o.accept(new OWLObjectVisitorEx<Boolean>() {
+            @Nonnull
+            @Override
+            public Boolean doDefault(@Nonnull Object object) {
+                return false;
+            }
+
             @Override
             public Boolean visit(OWLAnonymousIndividual individual) {
                 return true;

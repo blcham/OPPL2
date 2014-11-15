@@ -61,7 +61,9 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLProperty;
 
-/** @author Luigi Iannone Nov 17, 2008 */
+/**
+ * @author Luigi Iannone Nov 17, 2008
+ */
 public abstract class VariableValueEditor extends JPanel implements VerifiedInputEditor {
     private static final long serialVersionUID = 20100L;
 
@@ -101,10 +103,10 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
     private static class PropertyVariableValueEditor extends VariableValueEditor
             implements ChangeListener {
         private static final long serialVersionUID = 20100L;
-        private final AbstractHierarchySelectorPanel<? extends OWLProperty<?, ?>> propertySelector;
+        private final AbstractHierarchySelectorPanel<? extends OWLProperty> propertySelector;
 
         PropertyVariableValueEditor(OWLEditorKit owlEditorKit, Variable<?> variable,
-                boolean isDataProperty) {
+                                    boolean isDataProperty) {
             super(variable.getName(), owlEditorKit);
             setLayout(new BorderLayout());
             propertySelector = isDataProperty ? new OWLDataPropertySelectorPanel(
@@ -121,7 +123,7 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            Set<? extends OWLProperty<?, ?>> selectedObjects = propertySelector
+            Set<? extends OWLProperty> selectedObjects = propertySelector
                     .getSelectedObjects();
             if (selectedObjects != null) {
                 setVariableValues(selectedObjects);
@@ -141,7 +143,7 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
         private final AbstractHierarchySelectorPanel<OWLAnnotationProperty> propertySelector;
 
         AnnotationPropertyVariableValueEditor(OWLEditorKit owlEditorKit,
-                Variable<?> variable) {
+                                              Variable<?> variable) {
             super(variable.getName(), owlEditorKit);
             setLayout(new BorderLayout());
             propertySelector = new OWLAnnotationPropertySelectorPanel(getOwlEditorKit(),
@@ -224,7 +226,8 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
                             // with an OPPLPatternParser
                             if (!text.contains("^")) {
                                 text = "\"" + text + "\"";
-                            } else if (!text.startsWith("\"")) {
+                            }
+                            else if (!text.startsWith("\"")) {
                                 text = text.replaceAll("(.*)\\^", "\"$1\"^");
                             }
                             OPPLParser opplParser = ProtegeParserFactory.getInstance(
@@ -266,28 +269,37 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
         this.owlEditorKit = owlEditorKit;
     }
 
-    /** @return the owlEditorKit */
+    /**
+     * @return the owlEditorKit
+     */
     public OWLEditorKit getOwlEditorKit() {
         return owlEditorKit;
     }
 
-    /** @return the listeners */
+    /**
+     * @return the listeners
+     */
     public List<InputVerificationStatusChangedListener> getListeners() {
         return listeners;
     }
 
-    /** @return the title */
+    /**
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
-    /** @return the variableValues */
+    /**
+     * @return the variableValues
+     */
     public Set<OWLObject> getVariableValues() {
         return variableValues;
     }
 
-    /** @param variableValues
-     *            the variableValues to set */
+    /**
+     * @param variableValues the variableValues to set
+     */
     protected final void setVariableValues(Set<? extends OWLObject> variableValues) {
         if (this.variableValues == null) {
             this.variableValues = new HashSet<OWLObject>(variableValues.size());
@@ -309,7 +321,9 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
         listeners.remove(listener);
     }
 
-    /** notify listeners */
+    /**
+     * notify listeners
+     */
     public void notifyListeners() {
         for (InputVerificationStatusChangedListener listener : this.getListeners()) {
             notifyListener(listener);
@@ -321,11 +335,11 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
                 && getVariableValues().size() > 0);
     }
 
-    /** @param owlEditorKit
-     *            owlEditorKit
-     * @param variable
-     *            variable
-     * @return variable value editor */
+    /**
+     * @param owlEditorKit owlEditorKit
+     * @param variable     variable
+     * @return variable value editor
+     */
     public static VariableValueEditor getVariableValueEditor(
             final OWLEditorKit owlEditorKit, final Variable<?> variable) {
         return variable.getType().accept(
@@ -363,16 +377,17 @@ public abstract class VariableValueEditor extends JPanel implements VerifiedInpu
                     }
 
                     @Override
-                    public
-                            VariableValueEditor
-                            visitANNOTATIONPROPERTYVariableType(
-                                    ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
+                    public VariableValueEditor
+                    visitANNOTATIONPROPERTYVariableType(
+                            ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
                         return new AnnotationPropertyVariableValueEditor(owlEditorKit,
                                 variable);
                     }
                 });
     }
 
-    /** dispose component */
+    /**
+     * dispose component
+     */
     public abstract void dispose();
 }

@@ -12,12 +12,7 @@ import org.coode.parsers.oppl.testcase.OPPLTestCase;
 import org.coode.parsers.oppl.testcase.OPPLTestCaseParser;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.model.AnnotationContainer;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAnnotationValue;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
 
 /** @author Luigi Iannone */
 public class OPPLTestCaseAnnotationContainer implements AnnotationContainer {
@@ -59,7 +54,7 @@ public class OPPLTestCaseAnnotationContainer implements AnnotationContainer {
         OPPLTestCase extracted = null;
         if (annotation.getProperty().equals(testCaseAnnotationProperty)) {
             OWLAnnotationValue value = annotation.getValue();
-            extracted = value.accept(new OWLObjectVisitorExAdapter<OPPLTestCase>() {
+            extracted = value.accept(new OWLObjectVisitorEx<OPPLTestCase>() {
                 @Override
                 public OPPLTestCase visit(OWLLiteral literal) {
                     String input = literal.getLiteral();

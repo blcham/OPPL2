@@ -4,15 +4,7 @@ import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.Variable;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.exceptions.RuntimeExceptionHandler;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
 
 /** @author Luigi Iannone */
 public class IRIVariableAttribute extends VariableAttribute<IRI> {
@@ -44,7 +36,7 @@ public class IRIVariableAttribute extends VariableAttribute<IRI> {
                         IRIVariableAttribute.this.getVariable(), parameters);
                 if (assignmentValue != null) {
                     toReturn = assignmentValue
-                            .accept(new OWLObjectVisitorExAdapter<IRI>() {
+                            .accept(new OWLObjectVisitorEx<IRI>() {
                                 @Override
                                 public IRI visit(OWLAnnotationProperty property) {
                                     return getOWLEntityIRI(property);

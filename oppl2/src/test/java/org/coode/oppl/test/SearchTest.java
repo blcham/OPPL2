@@ -33,15 +33,7 @@ import org.coode.parsers.ErrorListener;
 import org.coode.parsers.test.JUnitTestErrorListener;
 import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
+import org.semanticweb.owlapi.model.*;
 
 @SuppressWarnings("javadoc")
 public class SearchTest {
@@ -172,7 +164,7 @@ public class SearchTest {
         final Set<OWLAxiom> subClassAxioms = new HashSet<OWLAxiom>(solutions.size());
         Set<OWLSubClassOfAxiom> axioms = pizza.getAxioms(AxiomType.SUBCLASS_OF);
         for (OWLSubClassOfAxiom owlSubClassAxiom : axioms) {
-            owlSubClassAxiom.accept(new OWLAxiomVisitorAdapter() {
+            owlSubClassAxiom.accept(new OWLAxiomVisitor() {
                 @Override
                 public void visit(OWLSubClassOfAxiom axiom) {
                     OWLClassExpression subClass = axiom.getSubClass();

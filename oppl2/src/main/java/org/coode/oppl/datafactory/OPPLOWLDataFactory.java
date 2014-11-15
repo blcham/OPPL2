@@ -2,9 +2,11 @@ package org.coode.oppl.datafactory;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.coode.oppl.function.inline.InlineSet;
 import org.semanticweb.owlapi.model.*;
@@ -151,20 +153,6 @@ public class OPPLOWLDataFactory implements OWLDataFactory {
     /** @return delegate datafactory */
     public OWLDataFactory getDelegate() {
         return delegate;
-    }
-
-    @Override
-    @Deprecated
-    public SWRLRule getSWRLRule(IRI iri, Set<? extends SWRLAtom> body,
-            Set<? extends SWRLAtom> head) {
-        return delegate.getSWRLRule(iri, body, head);
-    }
-
-    @Override
-    @Deprecated
-    public SWRLRule getSWRLRule(NodeID nodeID, Set<? extends SWRLAtom> body,
-            Set<? extends SWRLAtom> head) {
-        return delegate.getSWRLRule(nodeID, body, head);
     }
 
     @Override
@@ -400,6 +388,11 @@ public class OPPLOWLDataFactory implements OWLDataFactory {
     }
 
     @Override
+    public OWLDatatype getStringOWLDatatype() {
+        return delegate.getStringOWLDatatype();
+    }
+
+    @Override
     public OWLDatatype getIntegerOWLDatatype() {
         return delegate.getIntegerOWLDatatype();
     }
@@ -457,60 +450,6 @@ public class OPPLOWLDataFactory implements OWLDataFactory {
     @Override
     public OWLLiteral getOWLLiteral(String literal, String lang) {
         return delegate.getOWLLiteral(literal, lang);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(String literal, OWLDatatype datatype) {
-        return delegate.getOWLTypedLiteral(literal, datatype);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(String literal, OWL2Datatype datatype) {
-        return delegate.getOWLTypedLiteral(literal, datatype);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(int value) {
-        return delegate.getOWLTypedLiteral(value);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(double value) {
-        return delegate.getOWLTypedLiteral(value);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(boolean value) {
-        return delegate.getOWLTypedLiteral(value);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(float value) {
-        return delegate.getOWLTypedLiteral(value);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLTypedLiteral(String value) {
-        return delegate.getOWLTypedLiteral(value);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLStringLiteral(String literal, String lang) {
-        return delegate.getOWLStringLiteral(literal, lang);
-    }
-
-    @Override
-    @Deprecated
-    public OWLLiteral getOWLStringLiteral(String literal) {
-        return delegate.getOWLStringLiteral(literal);
     }
 
     @Override
@@ -1230,19 +1169,19 @@ public class OPPLOWLDataFactory implements OWLDataFactory {
 
     @Override
     public OWLHasKeyAxiom getOWLHasKeyAxiom(OWLClassExpression ce,
-            Set<? extends OWLPropertyExpression<?, ?>> properties) {
+            Set<? extends OWLPropertyExpression> properties) {
         return delegate.getOWLHasKeyAxiom(ce, properties);
     }
 
     @Override
     public OWLHasKeyAxiom getOWLHasKeyAxiom(OWLClassExpression ce,
-            OWLPropertyExpression<?, ?>... properties) {
+            OWLPropertyExpression... properties) {
         return delegate.getOWLHasKeyAxiom(ce, properties);
     }
 
     @Override
     public OWLHasKeyAxiom getOWLHasKeyAxiom(OWLClassExpression ce,
-            Set<? extends OWLPropertyExpression<?, ?>> objectProperties,
+            Set<? extends OWLPropertyExpression> objectProperties,
             Set<? extends OWLAnnotation> annotations) {
         return delegate.getOWLHasKeyAxiom(ce, objectProperties, annotations);
     }
@@ -1412,7 +1351,7 @@ public class OPPLOWLDataFactory implements OWLDataFactory {
 
     @Override
     public OWLAnnotation getOWLAnnotation(OWLAnnotationProperty property,
-            OWLAnnotationValue value, Set<? extends OWLAnnotation> annotations) {
+            OWLAnnotationValue value, Stream<? extends OWLAnnotation> annotations) {
         return delegate.getOWLAnnotation(property, value, annotations);
     }
 

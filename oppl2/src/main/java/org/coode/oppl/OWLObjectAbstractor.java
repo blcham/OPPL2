@@ -99,12 +99,13 @@ import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** Visitor that abstracts OWLObjects into variables.
  * 
  * @author Luigi Iannone */
-public class OWLObjectAbstractor extends OWLObjectVisitorExAdapter<OWLObject> implements
+public class OWLObjectAbstractor implements
         OWLObjectVisitorEx<OWLObject> {
     private final ValueComputationParameters parameters;
     private final Set<Variable<?>> variables = new HashSet<Variable<?>>();
@@ -120,10 +121,12 @@ public class OWLObjectAbstractor extends OWLObjectVisitorExAdapter<OWLObject> im
         this(variables, parameters, parameters.getConstraintSystem().getLeaves());
     }
 
+    @Nonnull
     @Override
-    protected OWLObject getDefaultReturnValue(OWLObject object) {
-        return object;
+    public OWLObject doDefault(@Nonnull Object object) {
+        return (OWLObject) object;
     }
+
 
     /** @param variables
      *            variables

@@ -63,7 +63,7 @@ public class PatternEditor extends AbstractOWLObjectEditor<PatternModel> impleme
     private final OWLOntologyChangeListener ontologyChangeListener = new OWLOntologyChangeListener() {
         @Override
         public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                throws OWLException {
+                {
             mainPanel.setSelectedComponent(patternBuilder.getEditorComponent());
         }
     };

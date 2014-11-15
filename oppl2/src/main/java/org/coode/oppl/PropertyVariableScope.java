@@ -34,7 +34,7 @@ import org.semanticweb.owlapi.model.OWLPropertyExpression;
  * @author Luigi Iannone
  * @param <P>
  *            type */
-public abstract class PropertyVariableScope<P extends OWLPropertyExpression<?, ?>>
+public abstract class PropertyVariableScope<P extends OWLPropertyExpression>
         extends AbstractVariableScope<P> implements VariableScope<P> {
     private final P property;
 
@@ -52,12 +52,12 @@ public abstract class PropertyVariableScope<P extends OWLPropertyExpression<?, ?
         return this.property;
     }
 
-    static <O extends OWLPropertyExpression<?, ?>> SubPropertyVariableScope<O>
+    static <O extends OWLPropertyExpression> SubPropertyVariableScope<O>
             buildSubPropertyVariableScope(O property, VariableScopeChecker checker) {
         return new SubPropertyVariableScope<O>(property, checker);
     }
 
-    static <O extends OWLPropertyExpression<?, ?>> SuperPropertyVariableScope<O>
+    static <O extends OWLPropertyExpression> SuperPropertyVariableScope<O>
             buildSuperPropertyVariableScope(O property, VariableScopeChecker checker) {
         return new SuperPropertyVariableScope<O>(property, checker);
     }

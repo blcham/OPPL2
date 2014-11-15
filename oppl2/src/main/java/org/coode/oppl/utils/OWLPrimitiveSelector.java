@@ -10,15 +10,21 @@ import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** This class determines if an OWLObject is either an OWLEntity or a an
  * OWLConstant.
  * 
  * @author Luigi Iannone */
 public final class OWLPrimitiveSelector {
-    private static final OWLObjectVisitorEx<Boolean> allPrimitiveSelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allPrimitiveSelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLClass desc) {
             return Boolean.TRUE;
@@ -49,8 +55,12 @@ public final class OWLPrimitiveSelector {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLEntitySelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLEntitySelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
         @Override
         public Boolean visit(OWLClass desc) {
             return Boolean.TRUE;
@@ -76,50 +86,85 @@ public final class OWLPrimitiveSelector {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLClassSelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLClassSelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLClass desc) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLDataPropertySelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLDataPropertySelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLDataProperty property) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLObjectPropertySelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLObjectPropertySelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLObjectProperty property) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLAnnotationPropertySelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLAnnotationPropertySelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLAnnotationProperty property) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLIndividualSelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLIndividualSelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLNamedIndividual individual) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLDatatypeSelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLDatatypeSelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLDatatype dataType) {
             return Boolean.TRUE;
         }
     };
-    private static final OWLObjectVisitorEx<Boolean> allOWLConstantSelector = new OWLObjectVisitorExAdapter<Boolean>(
-            Boolean.FALSE) {
+    private static final OWLObjectVisitorEx<Boolean> allOWLConstantSelector = new OWLObjectVisitorEx<Boolean>() {
+        @Nonnull
+        @Override
+        public Boolean doDefault(@Nonnull Object object) {
+            return Boolean.FALSE;
+        }
+
         @Override
         public Boolean visit(OWLLiteral constant) {
             return Boolean.TRUE;

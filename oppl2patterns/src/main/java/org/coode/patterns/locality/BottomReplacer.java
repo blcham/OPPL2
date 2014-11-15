@@ -60,10 +60,9 @@ import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
-import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
 
 /** @author Luigi Iannone */
-public class BottomReplacer extends OWLAxiomVisitorAdapter implements OWLAxiomVisitor,
+public class BottomReplacer implements OWLAxiomVisitor,
         OWLClassExpressionVisitor {
     private final OWLDataFactory df;
     private final OWLClass nothing;

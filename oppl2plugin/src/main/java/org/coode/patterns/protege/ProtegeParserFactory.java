@@ -21,14 +21,7 @@ import org.coode.patterns.OPPLPatternParser.AbstractParserFactory;
 import org.coode.patterns.VisitedPatternReferenceResolver;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.expression.OWLEntityChecker;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 /** @author Luigi Iannone */
@@ -121,7 +114,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
             OWLEntity owlEntity = getOWLEditorKit().getOWLModelManager()
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
-                toReturn = owlEntity.accept(new OWLObjectVisitorExAdapter<OWLClass>() {
+                toReturn = owlEntity.accept(new OWLObjectVisitorEx<OWLClass>() {
                     @Override
                     public OWLClass visit(OWLClass desc) {
                         return desc;
@@ -138,7 +131,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
                 toReturn = owlEntity
-                        .accept(new OWLObjectVisitorExAdapter<OWLAnnotationProperty>() {
+                        .accept(new OWLObjectVisitorEx<OWLAnnotationProperty>() {
                             @Override
                             public OWLAnnotationProperty visit(
                                     OWLAnnotationProperty property) {
@@ -156,7 +149,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
                 toReturn = owlEntity
-                        .accept(new OWLObjectVisitorExAdapter<OWLDataProperty>() {
+                        .accept(new OWLObjectVisitorEx<OWLDataProperty>() {
                             @Override
                             public OWLDataProperty visit(OWLDataProperty property) {
                                 return property;
@@ -173,7 +166,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
                 toReturn = owlEntity
-                        .accept(new OWLObjectVisitorExAdapter<OWLObjectProperty>() {
+                        .accept(new OWLObjectVisitorEx<OWLObjectProperty>() {
                             @Override
                             public OWLObjectProperty visit(OWLObjectProperty property) {
                                 return property;
@@ -189,7 +182,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
             OWLEntity owlEntity = getOWLEditorKit().getOWLModelManager()
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
-                toReturn = owlEntity.accept(new OWLObjectVisitorExAdapter<OWLDatatype>() {
+                toReturn = owlEntity.accept(new OWLObjectVisitorEx<OWLDatatype>() {
                     @Override
                     public OWLDatatype visit(OWLDatatype node) {
                         return node;
@@ -206,7 +199,7 @@ public class ProtegeParserFactory implements AbstractParserFactory {
                     .getOWLEntityFinder().getOWLEntity(name);
             if (owlEntity != null) {
                 toReturn = owlEntity
-                        .accept(new OWLObjectVisitorExAdapter<OWLNamedIndividual>() {
+                        .accept(new OWLObjectVisitorEx<OWLNamedIndividual>() {
                             @Override
                             public OWLNamedIndividual
                                     visit(OWLNamedIndividual individual) {

@@ -58,18 +58,20 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.RemoveAxiom;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 
 /** @author Luigi Iannone Jun 11, 2008 */
 public class InstantiatedPatternModel implements InstantiatedOPPLScript,
         PatternOPPLScript, HasPatternModel {
-    private IRI uri = null;
     private final PatternModel patternModel;
     private final RuntimeExceptionHandler runtimeExceptionHandler;
-
+    private final Map<Variable<?>, Set<OWLObject>> instantiations = new HashMap<Variable<?>, Set<OWLObject>>();
+    private IRI uri = null;
+    private String unresolvedOPPLStatementString;
     /** Creates an InstantiatedPatternModel instance starting from the input
      * PatternModel
-     * 
+     *
      * @param patternModel
      *            the Pattern on which the this instantiated pattern will be
      *            built. Cannot be {@code null}.
@@ -80,9 +82,6 @@ public class InstantiatedPatternModel implements InstantiatedOPPLScript,
         this.patternModel = checkNotNull(patternModel, "patternModel");
         runtimeExceptionHandler = checkNotNull(handler, "handler");
     }
-
-    private final Map<Variable<?>, Set<OWLObject>> instantiations = new HashMap<Variable<?>, Set<OWLObject>>();
-    private String unresolvedOPPLStatementString;
 
     /** @param variable
      *            variable
@@ -300,18 +299,17 @@ public class InstantiatedPatternModel implements InstantiatedOPPLScript,
             getOWLObjects(OWLOntology ontology, ErrorListener errorListener) {
         Set<OWLObject> toReturn = new HashSet<OWLObject>();
         boolean found = false;
-        OWLAnnotationAssertionAxiom annotationAxiom = null;
+        OWLAnnotation annotationAxiom = null;
         OWLClass owlClass;
         Iterator<OWLClass> classIterator = ontology.getClassesInSignature().iterator();
         while (classIterator.hasNext()) {
             owlClass = classIterator.next();
-            Iterator<OWLAnnotationAssertionAxiom> annotationIterator = owlClass
-                    .getAnnotationAssertionAxioms(ontology).iterator();
+            Iterator<OWLAnnotation> annotationIterator = EntitySearcher.getAnnotations(owlClass, ontology).iterator();
             while (annotationIterator.hasNext()) {
                 annotationAxiom = annotationIterator.next();
                 PatternExtractor patternExtractor = patternModel.getPatternModelFactory()
                         .getPatternExtractor(errorListener);
-                OWLAnnotation annotation = annotationAxiom.getAnnotation();
+                OWLAnnotation annotation = annotationAxiom;
                 PatternOPPLScript script = annotation.accept(patternExtractor);
                 found = script != null && getName().equals(script.getName());
                 if (found) {

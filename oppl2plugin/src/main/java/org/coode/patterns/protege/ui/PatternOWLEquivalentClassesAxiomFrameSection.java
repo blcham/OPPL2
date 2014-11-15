@@ -37,19 +37,20 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-/** @author Luigi Iannone Jul 22, 2008 */
+/**
+ * @author Luigi Iannone Jul 22, 2008
+ */
 public class PatternOWLEquivalentClassesAxiomFrameSection extends
         OWLEquivalentClassesAxiomFrameSection {
     private final AbstractPatternModelFactory factory;
 
-    /** @param editorKit
-     *            editorKit
-     * @param frame
-     *            frame
-     * @param f
-     *            f */
+    /**
+     * @param editorKit editorKit
+     * @param frame     frame
+     * @param f         f
+     */
     public PatternOWLEquivalentClassesAxiomFrameSection(OWLEditorKit editorKit,
-            OWLFrame<OWLClass> frame, AbstractPatternModelFactory f) {
+                                                        OWLFrame<OWLClass> frame, AbstractPatternModelFactory f) {
         super(editorKit, frame);
         factory = f;
     }
@@ -61,7 +62,7 @@ public class PatternOWLEquivalentClassesAxiomFrameSection extends
 
     @Override
     protected Set<OWLEquivalentClassesAxiom> getClassAxioms(OWLClassExpression descr,
-            OWLOntology ont) {
+                                                            OWLOntology ont) {
         Set<OWLEquivalentClassesAxiom> toReturn = new HashSet<OWLEquivalentClassesAxiom>();
         if (!descr.isAnonymous()) {
             for (OWLEquivalentClassesAxiom ax : ont
@@ -93,7 +94,8 @@ public class PatternOWLEquivalentClassesAxiomFrameSection extends
     }
 
     @Override
-    protected void refillInferred() {}
+    protected void refillInferred() {
+    }
 
     @Override
     public void visit(OWLEquivalentClassesAxiom axiom) {

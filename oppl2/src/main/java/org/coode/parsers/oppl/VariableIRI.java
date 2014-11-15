@@ -162,7 +162,7 @@ public class VariableIRI extends IRI {
     }
 
     @Override
-    public String getStart() {
+    public String getNamespace() {
         return getScheme();
     }
 

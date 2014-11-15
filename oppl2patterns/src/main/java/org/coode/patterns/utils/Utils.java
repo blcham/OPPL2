@@ -31,13 +31,9 @@ import org.coode.patterns.AbstractPatternModelFactory;
 import org.coode.patterns.PatternExtractor;
 import org.coode.patterns.PatternManager;
 import org.coode.patterns.PatternModel;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationValue;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone Jun 10, 2008 */
 public class Utils {
@@ -185,7 +181,13 @@ public class Utils {
             isPatternGenerated = uriString.startsWith(PatternModel.NAMESPACE);
             if (isPatternGenerated) {
                 OWLAnnotationValue value = annotation.getValue();
-                IRI patternIRI = value.accept(new OWLObjectVisitorExAdapter<IRI>(null) {
+                IRI patternIRI = value.accept(new OWLObjectVisitorEx<IRI>() {
+                    @Nonnull
+                    @Override
+                    public IRI doDefault(@Nonnull Object object) {
+                        return null;
+                    }
+
                     @Override
                     public IRI visit(OWLLiteral literal) {
                         return IRI.create(literal.getLiteral());
@@ -219,7 +221,13 @@ public class Utils {
             isPatternGenerated = annotation.getProperty().getIRI().toString()
                     .startsWith(PatternModel.NAMESPACE)
                     && annotation.getValue().accept(
-                            new OWLObjectVisitorExAdapter<Boolean>(false) {
+                            new OWLObjectVisitorEx<Boolean>() {
+                                @Nonnull
+                                @Override
+                                public Boolean doDefault(@Nonnull Object object) {
+                                    return false;
+                                }
+
                                 @Override
                                 public Boolean visit(OWLLiteral literal) {
                                     return literal.getLiteral().endsWith(
@@ -245,7 +253,13 @@ public class Utils {
                     .startsWith(PatternModel.NAMESPACE);
             if (isPatternGenerated) {
                 OWLAnnotationValue value = annotation.getValue();
-                IRI patternIRI = value.accept(new OWLObjectVisitorExAdapter<IRI>(null) {
+                IRI patternIRI = value.accept(new OWLObjectVisitorEx<IRI>() {
+                    @Nonnull
+                    @Override
+                    public IRI doDefault(@Nonnull Object object) {
+                        return null;
+                    }
+
                     @Override
                     public IRI visit(OWLLiteral literal) {
                         return IRI.create(literal.getLiteral());

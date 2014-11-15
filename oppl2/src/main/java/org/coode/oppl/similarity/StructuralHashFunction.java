@@ -89,10 +89,11 @@ import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
-public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> implements
+public class StructuralHashFunction implements
         HashFunction, OWLObjectVisitorEx<Integer> {
     private final static Map<AxiomType<?>, Integer> axiomTypeHashCodes = new HashMap<AxiomType<?>, Integer>();
     private final static Map<IRI, Integer> iriHashCodes = new HashMap<IRI, Integer>();
@@ -105,8 +106,11 @@ public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> i
     /**
      * 
      */
-    public StructuralHashFunction() {
-        super(1);
+
+    @Nonnull
+    @Override
+    public Integer doDefault(@Nonnull Object object) {
+        return 1;
     }
 
     @Override
@@ -501,7 +505,7 @@ public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> i
      *            description
      * @return hashcode */
     private int getOWLQuantifiedRestrictionHashCode(
-            OWLQuantifiedRestriction<?, ?, ?> description) {
+            OWLQuantifiedRestriction<?> description) {
         return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
                 * description.getFiller().accept(this);
     }
@@ -520,7 +524,7 @@ public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> i
      *            description
      * @return hashcode */
     private int
-            getOWLValueRestricitonHashCode(OWLHasValueRestriction<?, ?, ?> description) {
+            getOWLValueRestricitonHashCode(OWLHasValueRestriction<?> description) {
         return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
                 * description.getProperty().accept(this)
                 * description.getValue().accept(this);
@@ -535,7 +539,7 @@ public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> i
      *            description
      * @return hashcode */
     private int getOWLCardinalityRestrictionHashCode(
-            OWLCardinalityRestriction<?, ?, ?> description) {
+            OWLCardinalityRestriction<?> description) {
         return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
                 * getIntegerHashCode(description.getCardinality())
                 * (description.isQualified() ? description.getFiller().accept(this) : 1);
@@ -682,7 +686,7 @@ public class StructuralHashFunction extends OWLObjectVisitorExAdapter<Integer> i
 
     @Override
     public Integer visit(OWLOntology ontology) {
-        return getIRIHashCode(ontology.getOntologyID().getOntologyIRI());
+        return getIRIHashCode(ontology.getOntologyID().getOntologyIRI().get());
     }
 
     /** @return the maxPrime */

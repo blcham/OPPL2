@@ -66,7 +66,7 @@ public final class OPPLTextEditor extends JPanel implements VerifiedInputEditor,
     private final OWLOntologyChangeListener ontologyChangeListener = new OWLOntologyChangeListener() {
         @Override
         public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                throws OWLException {
+                {
             // Force refresh
             editor.setText(editor.getText());
         }

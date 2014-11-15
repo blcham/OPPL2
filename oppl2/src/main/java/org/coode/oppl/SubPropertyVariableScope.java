@@ -30,8 +30,9 @@ import org.coode.oppl.variabletypes.VariableType;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLProperty;
-import org.semanticweb.owlapi.model.OWLPropertyExpression;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
+import org.semanticweb.owlapi.search.EntitySearcher;
 
 /** Represents a range limitations that could be added to a
  * {@link GeneratedVariable} instance with OBJECTPROERTY or DATAPROPERTY
@@ -42,7 +43,7 @@ import org.semanticweb.owlapi.model.OWLRuntimeException;
  * @author Luigi Iannone
  * @param <P>
  *            type */
-public class SubPropertyVariableScope<P extends OWLPropertyExpression<?, ?>> extends
+public class SubPropertyVariableScope<P extends OWLPropertyExpression> extends
         PropertyVariableScope<P> {
     SubPropertyVariableScope(P property, VariableScopeChecker checker) {
         super(property, checker);
@@ -56,7 +57,7 @@ public class SubPropertyVariableScope<P extends OWLPropertyExpression<?, ?>> ext
     }
 
     boolean check(P property, Set<OWLOntology> ontologies) {
-        return property.getSuperProperties(ontologies).contains(property);
+        return EntitySearcher.getSuperProperties(property, ontologies).contains(property);
     }
 
     @Override

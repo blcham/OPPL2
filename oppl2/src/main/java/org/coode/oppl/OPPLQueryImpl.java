@@ -62,8 +62,7 @@ public class OPPLQueryImpl implements OPPLQuery {
     private boolean dirty = true;
     private final OWLOntologyChangeListener listener = new OWLOntologyChangeListener() {
         @Override
-        public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                throws OWLException {
+        public void ontologiesChanged(List<? extends OWLOntologyChange> changes) {
             OPPLQueryImpl.this.setDirty(true);
         }
     };

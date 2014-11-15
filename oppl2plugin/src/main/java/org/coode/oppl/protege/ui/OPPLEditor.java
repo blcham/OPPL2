@@ -65,7 +65,7 @@ public final class OPPLEditor extends JTabbedPane implements VerifiedInputEditor
     private final OWLOntologyChangeListener ontologyChangeListener = new OWLOntologyChangeListener() {
         @Override
         public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                throws OWLException {
+                {
             OPPLEditor.this.setSelectedComponent(opplTextEditor);
         }
     };

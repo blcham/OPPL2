@@ -34,16 +34,10 @@ import org.coode.parsers.ErrorListener;
 import org.coode.parsers.oppl.OPPLSyntaxTree;
 import org.coode.parsers.oppl.patterns.OPPLPatternsSymbolTable;
 import org.coode.patterns.OPPLPatternParser.PatternReferenceResolver;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationObjectVisitorEx;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
 
 /** @author Luigi Iannone */
-public class PatternExtractor extends OWLObjectVisitorExAdapter<PatternOPPLScript>
+public class PatternExtractor
         implements OWLAnnotationObjectVisitorEx<PatternOPPLScript> {
     private final OWLOntologyManager ontologyManager;
     private final OWLOntology ontology;
@@ -86,7 +80,7 @@ public class PatternExtractor extends OWLObjectVisitorExAdapter<PatternOPPLScrip
             if (PatternModel.NAMESPACE.equals(annotation.getProperty().getIRI()
                     .getNamespace())) {
                 String value = annotation.getValue().accept(
-                        new OWLObjectVisitorExAdapter<String>() {
+                        new OWLObjectVisitorEx<String>() {
                             @Override
                             public String visit(OWLLiteral literal) {
                                 return literal.getLiteral();

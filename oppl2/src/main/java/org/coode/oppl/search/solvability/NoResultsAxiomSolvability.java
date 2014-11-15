@@ -5,8 +5,10 @@ import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.utils.VariableExtractor;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class NoResultsAxiomSolvability extends QuerySolverBasedAbstractAxiomSolvability
@@ -25,9 +27,10 @@ public class NoResultsAxiomSolvability extends QuerySolverBasedAbstractAxiomSolv
             final BindingNode bindingNode) {
         final VariableExtractor variableExtractor = new VariableExtractor(
                 getConstraintSystem(), true);
-        return owlAxiom.accept(new OWLObjectVisitorExAdapter<SolvabilitySearchNode>() {
+        return owlAxiom.accept(new OWLObjectVisitorEx<SolvabilitySearchNode>() {
+            @Nonnull
             @Override
-            protected SolvabilitySearchNode getDefaultReturnValue(OWLObject object) {
+            public SolvabilitySearchNode doDefault(@Nonnull Object object) {
                 return new UnsolvableSearchNode((OWLAxiom) object, bindingNode);
             }
 

@@ -10,11 +10,9 @@ import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.function.OPPLFunction;
 import org.coode.oppl.generated.RegexpGeneratedVariable;
 import org.coode.oppl.utils.OWLObjectExtractor;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class CONSTANTVariableType extends AbstractVariableType<OWLLiteral> implements
@@ -57,8 +55,13 @@ public class CONSTANTVariableType extends AbstractVariableType<OWLLiteral> imple
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
-        OWLObjectVisitorExAdapter<Boolean> visitor = new OWLObjectVisitorExAdapter<Boolean>(
-                false) {
+        OWLObjectVisitorEx<Boolean> visitor = new OWLObjectVisitorEx<Boolean>() {
+            @Nonnull
+            @Override
+            public Boolean doDefault(@Nonnull Object object) {
+                return false;
+            }
+
             @Override
             public Boolean visit(OWLLiteral literal) {
                 return true;

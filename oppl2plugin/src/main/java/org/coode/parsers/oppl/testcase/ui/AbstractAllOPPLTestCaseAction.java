@@ -22,13 +22,8 @@ import org.coode.protege.editor.core.ui.view.AbstractOWLActiveOntologyAction;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.model.event.OWLModelManagerChangeEvent;
 import org.protege.editor.owl.model.event.OWLModelManagerListener;
-import org.semanticweb.owlapi.model.AddOntologyAnnotation;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChange;
-import org.semanticweb.owlapi.model.OWLOntologyChangeListener;
-import org.semanticweb.owlapi.model.RemoveOntologyAnnotation;
-import org.semanticweb.owlapi.util.OWLOntologyChangeVisitorAdapter;
+import org.semanticweb.owlapi.model.*;
+
 
 /** @author Luigi Iannone */
 abstract class AbstractAllOPPLTestCaseAction extends AbstractOWLActiveOntologyAction {
@@ -85,13 +80,13 @@ abstract class AbstractAllOPPLTestCaseAction extends AbstractOWLActiveOntologyAc
             ontologyChangeListener = new OWLOntologyChangeListener() {
                 @Override
                 public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                        throws OWLException {
+                       {
                     boolean found = false;
                     Iterator<? extends OWLOntologyChange> iterator = changes.iterator();
                     final Set<OWLOntologyChange> relevantChanges = new HashSet<OWLOntologyChange>();
                     while (!found && iterator.hasNext()) {
                         OWLOntologyChange owlOntologyChange = iterator.next();
-                        owlOntologyChange.accept(new OWLOntologyChangeVisitorAdapter() {
+                        owlOntologyChange.accept(new OWLOntologyChangeVisitor() {
                             @Override
                             public void visit(RemoveOntologyAnnotation change) {
                                 relevantChanges.add(change);

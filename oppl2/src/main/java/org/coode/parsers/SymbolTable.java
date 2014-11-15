@@ -15,37 +15,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.coode.oppl.semanticweb.owlapi.model.OWLPropertyChain;
 import org.coode.oppl.semanticweb.owlapi.model.OWLPropertyChainImpl;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLCardinalityRestriction;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLDataRange;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLDatatypeRestriction;
-import org.semanticweb.owlapi.model.OWLDifferentIndividualsAxiom;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLFacetRestriction;
-import org.semanticweb.owlapi.model.OWLHasKeyAxiom;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectComplementOf;
-import org.semanticweb.owlapi.model.OWLObjectOneOf;
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLPropertyExpression;
-import org.semanticweb.owlapi.model.OWLQuantifiedRestriction;
-import org.semanticweb.owlapi.model.OWLSameIndividualAxiom;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 
 /** @author Luigi Iannone */
@@ -1207,7 +1177,7 @@ public class SymbolTable {
      * @return symbol replaced owl object */
     public OWLObject getExactCardinalityRestriction(CommonTree expression, int i,
             ManchesterOWLSyntaxTree propertyExpression, ManchesterOWLSyntaxTree filler) {
-        OWLCardinalityRestriction<?, ?, ?> toReturn = null;
+        OWLCardinalityRestriction<?> toReturn = null;
         boolean rightKinds = true;
         if (propertyExpression.getEvalType() == null
                 || !propertyExpression.getEvalType().accept(pDetector)) {
@@ -1256,7 +1226,7 @@ public class SymbolTable {
      * @return symbol replaced owl object */
     public OWLObject getMaxCardinalityRestriction(CommonTree expression, int cardinality,
             ManchesterOWLSyntaxTree propertyExpression, ManchesterOWLSyntaxTree filler) {
-        OWLCardinalityRestriction<?, ?, ?> toReturn = null;
+        OWLCardinalityRestriction<?> toReturn = null;
         boolean rightKinds = true;
         if (propertyExpression.getEvalType() == null
                 || !propertyExpression.getEvalType().accept(pDetector)) {
@@ -1305,7 +1275,7 @@ public class SymbolTable {
      * @return symbol replaced owl object */
     public OWLObject getMinCardinalityRestriction(CommonTree expression, int cardinality,
             ManchesterOWLSyntaxTree propertyExpression, ManchesterOWLSyntaxTree filler) {
-        OWLCardinalityRestriction<?, ?, ?> toReturn = null;
+        OWLCardinalityRestriction<?> toReturn = null;
         boolean rightKinds = true;
         if (propertyExpression.getEvalType() == null
                 || !propertyExpression.getEvalType().accept(pDetector)) {
@@ -1352,7 +1322,7 @@ public class SymbolTable {
      * @return symbol replaced owl object */
     public OWLObject getAllValueRestriction(CommonTree expression,
             ManchesterOWLSyntaxTree propertyExpression, ManchesterOWLSyntaxTree filler) {
-        OWLQuantifiedRestriction<?, ?, ?> toReturn = null;
+        OWLQuantifiedRestriction<?> toReturn = null;
         boolean rightKinds = true;
         if (propertyExpression.getEvalType() == null
                 || !propertyExpression.getEvalType().accept(pDetector)) {
@@ -1398,7 +1368,7 @@ public class SymbolTable {
      * @return symbol replaced owl object */
     public OWLObject getSomeValueRestriction(CommonTree expression,
             ManchesterOWLSyntaxTree propertyExpression, ManchesterOWLSyntaxTree filler) {
-        OWLQuantifiedRestriction<?, ?, ?> toReturn = null;
+        OWLQuantifiedRestriction<?> toReturn = null;
         boolean rightKinds = true;
         if (propertyExpression.getEvalType() == null
                 || !propertyExpression.getEvalType().accept(pDetector)) {
@@ -2590,14 +2560,14 @@ public class SymbolTable {
             ce = (OWLClassExpression) node.getOWLObject();
             boolean allFine = true;
             Iterator<ManchesterOWLSyntaxTree> iterator = propertyExpressions.iterator();
-            Set<OWLPropertyExpression<?, ?>> pes = new HashSet<OWLPropertyExpression<?, ?>>();
+            Set<OWLPropertyExpression> pes = new HashSet<OWLPropertyExpression>();
             while (allFine && iterator.hasNext()) {
                 ManchesterOWLSyntaxTree propertyNode = iterator.next();
                 allFine = propertyNode.getEvalType() != null
                         && propertyNode.getEvalType().accept(pDetector)
                         && propertyNode.getOWLObject() != null;
                 if (allFine) {
-                    pes.add((OWLPropertyExpression<?, ?>) propertyNode.getOWLObject());
+                    pes.add((OWLPropertyExpression) propertyNode.getOWLObject());
                 }
             }
             if (allFine) {
@@ -2704,7 +2674,7 @@ public class SymbolTable {
             reportIllegalToken(object, "Invalid object");
         } else {
             OWLAnnotation annotation = object.getOWLObject().accept(
-                    new OWLObjectVisitorExAdapter<OWLAnnotation>() {
+                    new OWLObjectVisitorEx<OWLAnnotation>() {
                         @Override
                         public OWLAnnotation visit(IRI i) {
                             return df.getOWLAnnotation(

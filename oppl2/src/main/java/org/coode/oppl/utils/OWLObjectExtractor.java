@@ -86,21 +86,26 @@ import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLUnaryPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** Extracts from an OWLObject a particular kind of OWLObject component.
  * 
  * @author Luigi Iannone
  * @param <O>
  *            type */
-public final class OWLObjectExtractor<O extends OWLObject> extends
-        OWLObjectVisitorExAdapter<Set<O>> implements OWLObjectVisitorEx<Set<O>> {
+public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectVisitorEx<Set<O>> {
     private final OWLObjectVisitorEx<Boolean> selector;
+
+    @Nonnull
+    @Override
+    public Set<O> doDefault(@Nonnull Object object) {
+        return Collections.<O> emptySet();
+    }
 
     /** @param selector
      *            selector */
     private OWLObjectExtractor(OWLObjectVisitorEx<Boolean> selector) {
-        super(Collections.<O> emptySet());
         this.selector = checkNotNull(selector, "selector");
     }
 
@@ -437,7 +442,7 @@ public final class OWLObjectExtractor<O extends OWLObject> extends
     /** @param desc
      *            desc
      * @return set of objects */
-    private Set<O> visitOWLQuantifiedRestriction(OWLQuantifiedRestriction<?, ?, ?> desc) {
+    private Set<O> visitOWLQuantifiedRestriction(OWLQuantifiedRestriction<?> desc) {
         Set<O> toReturn = new HashSet<O>();
         toReturn.addAll(desc.getProperty().accept(this));
         toReturn.addAll(desc.getFiller().accept(this));
@@ -457,7 +462,7 @@ public final class OWLObjectExtractor<O extends OWLObject> extends
     /** @param desc
      *            desc
      * @return set of objects */
-    private Set<O> visitOWLValueRestriction(OWLHasValueRestriction<?, ?, ?> desc) {
+    private Set<O> visitOWLValueRestriction(OWLHasValueRestriction<?> desc) {
         Set<O> toReturn = new HashSet<O>();
         toReturn.addAll(desc.getProperty().accept(this));
         toReturn.addAll(desc.getValue().accept(this));
@@ -483,7 +488,7 @@ public final class OWLObjectExtractor<O extends OWLObject> extends
      *            desc
      * @return set of objects */
     private Set<O>
-            visitOWLCardinalityRestriction(OWLCardinalityRestriction<?, ?, ?> desc) {
+            visitOWLCardinalityRestriction(OWLCardinalityRestriction<?> desc) {
         Set<O> toReturn = new HashSet<O>();
         toReturn.addAll(desc.getProperty().accept(this));
         if (desc.getFiller() != null) {

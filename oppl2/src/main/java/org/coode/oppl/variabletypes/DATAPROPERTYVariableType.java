@@ -9,11 +9,9 @@ import java.util.regex.Pattern;
 import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.function.OPPLFunction;
 import org.coode.oppl.generated.RegexpGeneratedVariable;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class DATAPROPERTYVariableType extends
@@ -56,7 +54,13 @@ public class DATAPROPERTYVariableType extends
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
-        return o.accept(new OWLObjectVisitorExAdapter<Boolean>(false) {
+        return o.accept(new OWLObjectVisitorEx<Boolean>() {
+            @Nonnull
+            @Override
+            public Boolean doDefault(@Nonnull Object object) {
+                return false;
+            }
+
             @Override
             public Boolean visit(OWLDataProperty property) {
                 return true;

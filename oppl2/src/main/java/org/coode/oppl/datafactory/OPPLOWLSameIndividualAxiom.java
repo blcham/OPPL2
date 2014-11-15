@@ -2,30 +2,15 @@ package org.coode.oppl.datafactory;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.coode.oppl.function.inline.InlineSet;
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLAxiomVisitor;
-import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectVisitor;
-import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
-import org.semanticweb.owlapi.model.OWLSameIndividualAxiom;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.*;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndividual>
@@ -103,6 +88,18 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
         return delegate.asPairwiseAxioms();
     }
 
+    @Nonnull
+    @Override
+    public <T> Collection<T> walkPairwise(OWLPairwiseVisitor<T, OWLIndividual> visitor) {
+        return delegate.walkPairwise(visitor);
+    }
+
+    @Nonnull
+    @Override
+    public Set<OWLSameIndividualAxiom> splitToAnnotatedPairs() {
+        return delegate.splitToAnnotatedPairs();
+    }
+
     @Override
     public Set<OWLObjectProperty> getObjectPropertiesInSignature() {
         return delegate.getObjectPropertiesInSignature();
@@ -143,6 +140,18 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
         return delegate.getAxiomWithoutAnnotations();
     }
 
+    @Nonnull
+    @Override
+    public OWLAxiom getAnnotatedAxiom(@Nonnull Collection<OWLAnnotation> annotations) {
+        return delegate.getAnnotatedAxiom(annotations);
+    }
+
+    @Nonnull
+    @Override
+    public OWLAxiom getAnnotatedAxiom(@Nonnull Stream<OWLAnnotation> annotations) {
+        return delegate.getAnnotatedAxiom(annotations);
+    }
+
     @Override
     public Set<OWLClass> getClassesInSignature() {
         return delegate.getClassesInSignature();
@@ -153,6 +162,12 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
         return delegate.containsAnonymousIndividuals();
     }
 
+    @Nonnull
+    @Override
+    public Stream<OWLAnnotation> annotations() {
+        return null;
+    }
+
     @Override
     public Set<OWLAnnotation> getAnnotations() {
         return delegate.getAnnotations();
@@ -161,11 +176,6 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
     @Override
     public Set<OWLAnnotation> getAnnotations(OWLAnnotationProperty annotationProperty) {
         return delegate.getAnnotations(annotationProperty);
-    }
-
-    @Override
-    public OWLAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return delegate.getAnnotatedAxiom(annotations);
     }
 
     @Override
@@ -231,5 +241,10 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
     @Override
     public boolean isAnnotationAxiom() {
         return delegate.isAnnotationAxiom();
+    }
+
+    @Override
+    public boolean containsEntityInSignature(@Nonnull OWLEntity owlEntity) {
+        return false;
     }
 }

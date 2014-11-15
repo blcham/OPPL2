@@ -61,28 +61,11 @@ import org.coode.oppl.variabletypes.VariableTypeFactory;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
 import org.coode.parsers.ErrorListener;
 import org.coode.patterns.utils.Utils;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLAxiomChange;
-import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentDataPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentObjectPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.OWLPropertyExpression;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.ShortFormProvider;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone Jun 10, 2008 */
 public class PatternModel implements OPPLScript, PatternOPPLScript {
@@ -108,13 +91,14 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         }
     }
 
-    class ClassPatternDetector extends OWLObjectVisitorExAdapter<Boolean> implements
+    class ClassPatternDetector implements
             OWLAxiomVisitorEx<Boolean>, OPPLScriptVisitorEx<Boolean> {
         private final OWLClass thisClass = ontologyManager.getOWLDataFactory()
                 .getOWLClass(getConstraintSystem().getThisClassVariable().getIRI());
 
+        @Nonnull
         @Override
-        protected Boolean getDefaultReturnValue(OWLObject object) {
+        public Boolean doDefault(@Nonnull Object object) {
             return Boolean.FALSE;
         }
 
@@ -174,11 +158,11 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     /** Extracts the definition
      * 
      * @author Luigi Iannone Jun 26, 2008 */
-    static class DefinitorialExtractor extends OWLObjectVisitorExAdapter<OWLObject>
+    static class DefinitorialExtractor
             implements OWLAxiomVisitorEx<OWLObject>,
             OPPLScriptVisitorEx<OWLClassExpression> {
         protected final Set<OWLClassExpression> extractedDescriptions = new HashSet<OWLClassExpression>();
-        protected OWLPropertyExpression<?, ?> extractedProperty = null;
+        protected OWLPropertyExpression extractedProperty = null;
         protected OWLObject owlObject;
         protected OWLDataFactory dataFactory;
         private final VariableType<?> variableType;
@@ -342,7 +326,7 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     private String rendering = null;
     private IRI iri = null;
     private final OPPLScript opplStatement;
-    protected final OWLOntologyManager ontologyManager;
+    protected OWLOntologyManager ontologyManager = null;
     private boolean valid = true;
     private final Set<PatternModelChangeListener> listeners = new HashSet<PatternModelChangeListener>();
     private Variable<?> returnVariable = null;
@@ -547,7 +531,7 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
                     instantiate = !remainingVariables.isEmpty()
                             && hasValuesFor(remainingVariables, bindingNode, parameters);
                 }
-                instantiatedAxiom.accept(extractor);
+                instantiatedAxiom.accept((OWLObjectVisitor) extractor);
             }
         }
         getConstraintSystem().setLeaves(null);
@@ -655,11 +639,9 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         for (OWLOntology ontology : ontologies) {
             Set<OWLClass> referencedClasses = ontology.getClassesInSignature();
             for (OWLClass owlClass : referencedClasses) {
-                Set<OWLAnnotationAssertionAxiom> annotationAxioms = owlClass
-                        .getAnnotationAssertionAxioms(ontology);
-                for (OWLAnnotationAssertionAxiom annotationAxiom : annotationAxioms) {
-                    OPPLScript extractedPatternModel = annotationAxiom.getAnnotation()
-                            .accept(patternExtractor);
+                Set<OWLAnnotation> annotationAxioms = (Set<OWLAnnotation>) EntitySearcher.getAnnotations(owlClass, ontology);
+                for (OWLAnnotation annotationAxiom : annotationAxioms) {
+                    OPPLScript extractedPatternModel = annotationAxiom.accept(patternExtractor);
                     if (extractedPatternModel != null
                             && extractedPatternModel instanceof InstantiatedPatternModel
                             && ((InstantiatedPatternModel) extractedPatternModel)

@@ -3,22 +3,28 @@ package org.coode.oppl.utils;
 import org.coode.parsers.oppl.IRIVisitorEx;
 import org.coode.parsers.oppl.VariableIRI;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone
  * @param <O>
  *            type */
-public class IRIVisitorExAdapter<O> extends OWLObjectVisitorExAdapter<O> implements
-        IRIVisitorEx<O> {
-    /** default constructor */
-    public IRIVisitorExAdapter() {
-        super();
+public class IRIVisitorExAdapter<O> implements
+        IRIVisitorEx<O>, OWLObjectVisitorEx<O> {
+
+    O variable;
+
+    @Nonnull
+    @Override
+    public O doDefault(@Nonnull Object object) {
+        return variable;
     }
 
     /** @param defaultReturnValue
      *            defaultReturnValue */
     public IRIVisitorExAdapter(O defaultReturnValue) {
-        super(defaultReturnValue);
+        variable = defaultReturnValue;
     }
 
     @Override

@@ -81,7 +81,7 @@ public class TypeInPatternBuilder implements VerifiedInputEditor,
     private final OWLOntologyChangeListener ontologyChangeListener = new OWLOntologyChangeListener() {
         @Override
         public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-                throws OWLException {
+               {
             patternModelEditor.setText(patternModelEditor.getText());
         }
     };

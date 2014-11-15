@@ -38,32 +38,13 @@ import org.coode.oppl.variabletypes.INDIVIDUALVariableType;
 import org.coode.oppl.variabletypes.InputVariable;
 import org.coode.oppl.variabletypes.OBJECTPROPERTYVariableType;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLClassExpressionVisitor;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLRuntimeException;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
-import org.semanticweb.owlapi.util.OWLObjectVisitorAdapter;
+import org.semanticweb.owlapi.model.*;
 
 /** @author Luigi Iannone */
 public abstract class AbstractSolvabilityOPPLOWLAxiomSearchTree extends
         SearchTree<SolvabilitySearchNode> {
     /** test */
-    private final class ConstantCollector extends OWLAxiomVisitorAdapter {
+    private final class ConstantCollector implements OWLAxiomVisitor {
         private final Set<OWLLiteral> toReturn;
         private final OWLClassExpressionVisitor constantExtractor;
 
@@ -410,7 +391,7 @@ public abstract class AbstractSolvabilityOPPLOWLAxiomSearchTree extends
 
     private Collection<OWLLiteral> getAllConstants() {
         final Set<OWLLiteral> toReturn = new HashSet<OWLLiteral>();
-        final OWLObjectVisitorAdapter constantExtractor = new ConstantExtractor(toReturn);
+        final OWLObjectVisitor constantExtractor = new ConstantExtractor(toReturn);
         ConstantCollector visitor = new ConstantCollector(toReturn, constantExtractor);
         for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
                 .getOntologies()) {

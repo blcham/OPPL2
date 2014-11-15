@@ -48,8 +48,11 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
+import org.semanticweb.owlapi.search.EntitySearcher;
 
-/** @author Luigi Iannone */
+/**
+ * @author Luigi Iannone
+ */
 public class PatternClassFrameSection
         extends
         AbstractOWLFrameSection<OWLClass, OWLAnnotationAssertionAxiom, InstantiatedPatternModel> {
@@ -57,7 +60,7 @@ public class PatternClassFrameSection
     private final AbstractPatternModelFactory factory;
 
     protected PatternClassFrameSection(OWLEditorKit editorKit,
-            OWLFrame<? extends OWLClass> frame, AbstractPatternModelFactory f) {
+                                       OWLFrame<? extends OWLClass> frame, AbstractPatternModelFactory f) {
         super(editorKit, LABEL, frame);
         factory = f;
     }
@@ -68,12 +71,12 @@ public class PatternClassFrameSection
     }
 
     @Override
-    protected void clear() {}
+    protected void clear() {
+    }
 
     @Override
-    public
-            Comparator<OWLFrameSectionRow<OWLClass, OWLAnnotationAssertionAxiom, InstantiatedPatternModel>>
-            getRowComparator() {
+    public Comparator<OWLFrameSectionRow<OWLClass, OWLAnnotationAssertionAxiom, InstantiatedPatternModel>>
+    getRowComparator() {
         return null;
     }
 
@@ -100,36 +103,25 @@ public class PatternClassFrameSection
     @Override
     protected void refill(OWLOntology ontology) {
         OWLClass rootObject = getRootObject();
-        Set<OWLAnnotationAssertionAxiom> annotationAxioms = rootObject
-                .getAnnotationAssertionAxioms(ontology);
+        Set<OWLAnnotation> annotationAxioms = (Set<OWLAnnotation>) EntitySearcher.getAnnotations(rootObject, ontology);
         PatternExtractor patternExtractor = factory
                 .getPatternExtractor(ProtegeParserFactory.getDefaultErrorListener());
-        for (OWLAnnotationAssertionAxiom annotationAxiom : annotationAxioms) {
-            OWLAnnotation annotation = annotationAxiom.getAnnotation();
+        for (OWLAnnotation annotationAxiom : annotationAxioms) {
+            OWLAnnotation annotation = annotationAxiom;
             PatternOPPLScript statementModel = annotation.accept(patternExtractor);
             if (statementModel != null) {
                 OWLFrameSectionRow<OWLClass, OWLAnnotationAssertionAxiom, InstantiatedPatternModel> row = new PatternClassFrameSectionRow(
                         getOWLEditorKit(), this, ontology, getRootObject(),
-                        annotationAxiom, factory);
+                        (OWLAnnotationAssertionAxiom) annotationAxiom, factory);
                 addRow(row);
             }
         }
     }
 
     @Override
-    protected void refillInferred() throws OWLRuntimeException {}
-
-    @Override
-    public void visit(OWLAnnotationAssertionAxiom annotationAxiom) {
-        if (annotationAxiom.getSubject().equals(getRootObject().getIRI())) {
-            PatternExtractor patternExtractor = factory
-                    .getPatternExtractor(ProtegeParserFactory.getDefaultErrorListener());
-            OWLAnnotation annotation = annotationAxiom.getAnnotation();
-            if (annotation.accept(patternExtractor) != null) {
-                reset();
-            }
-        }
+    protected void refillInferred() throws OWLRuntimeException {
     }
+
 
     @Override
     public void handleEditingFinished(Set<InstantiatedPatternModel> editedObjects) {
@@ -148,7 +140,8 @@ public class PatternClassFrameSection
                                         + instantiatedPatternModel.getName()
                                         + " has got scoped variables but you are curently using a NoOpReasoner, the pattern will not work properly unless you activate reasoning.",
                                 "No Reasoner", JOptionPane.OK_OPTION);
-            } else {
+            }
+            else {
                 super.handleEditingFinished(editedObjects);
             }
         }

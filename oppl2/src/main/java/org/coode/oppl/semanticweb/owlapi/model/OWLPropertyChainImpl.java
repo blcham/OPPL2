@@ -24,6 +24,8 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectVisitor;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 
+import javax.annotation.Nonnull;
+
 /** @author Luigi Iannone */
 public class OWLPropertyChainImpl implements OWLPropertyChain {
     private static final long serialVersionUID = 20100L;
@@ -238,5 +240,10 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
         return Collections.emptySet();
+    }
+
+    @Override
+    public boolean containsEntityInSignature(@Nonnull OWLEntity owlEntity) {
+        return getSignature().contains(owlEntity);
     }
 }

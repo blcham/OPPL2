@@ -133,7 +133,7 @@ public class OPPLMacroView extends AbstractOWLViewComponent implements
             @Override
             public void actionPerformed(ActionEvent e) {
                 StringBuilder opplString = new StringBuilder();
-                DefaultListModel variableModel = variableList.getDefaultModel();
+                DefaultListModel<Object> variableModel = variableList.getDefaultModel();
                 boolean first = true;
                 for (int i = 0; i < variableModel.getSize(); i++) {
                     Object variableElement = variableModel.getElementAt(i);
@@ -168,7 +168,7 @@ public class OPPLMacroView extends AbstractOWLViewComponent implements
                     }
                 }
                 first = true;
-                DefaultListModel actionModel = recordedActions.getDefaultModel();
+                DefaultListModel<Object> actionModel = recordedActions.getDefaultModel();
                 opplString.append("\nBEGIN");
                 VariableOWLCellRenderer cellRenderer = new VariableOWLCellRenderer(
                         OPPLMacroView.this.getOWLEditorKit(), constraintSystem,
@@ -218,9 +218,9 @@ public class OPPLMacroView extends AbstractOWLViewComponent implements
         recorderPanel.add(recordedActionBorderPanel, BorderLayout.CENTER);
         entities = new OWLObjectList(constraintSystem, getOWLEditorKit());
         entities.addOPPLMacroListener(this);
-        entities.setModel(new DefaultListModel());
+        entities.setModel(new DefaultListModel<Object>());
         variableList = new VariableList(getOWLEditorKit(), constraintSystem);
-        variableList.setModel(new DefaultListModel());
+        variableList.setModel(new DefaultListModel<Object>());
         variableList.getModel().addListDataListener(entities);
         JScrollPane entitiesPane = ComponentFactory.createScrollPane(entities);
         JPanel entitiesBorderPanel = new JPanel(new BorderLayout());
@@ -251,8 +251,8 @@ public class OPPLMacroView extends AbstractOWLViewComponent implements
 
     @Override
     public void ontologiesChanged(List<? extends OWLOntologyChange> changes)
-            throws OWLException {
-        DefaultListModel existingListModel = recordedActions.getDefaultModel();
+             {
+        DefaultListModel<Object> existingListModel = recordedActions.getDefaultModel();
         ActionListModel updatedListModel = new ActionListModel(false);
         updatedListModel.addListDataListener(this);
         recordedActions.setModel(updatedListModel);
@@ -282,9 +282,9 @@ public class OPPLMacroView extends AbstractOWLViewComponent implements
 
     private void refreshEntities() {
         copy2ClipboardButton.setEnabled(recordedActions.getModel().getSize() > 0);
-        DefaultListModel model = recordedActions.getDefaultModel();
+        DefaultListModel<Object> model = recordedActions.getDefaultModel();
         int size = model.getSize();
-        DefaultListModel entitiesModel = entities.getDefaultModel();
+        DefaultListModel<Object> entitiesModel = entities.getDefaultModel();
         entitiesModel.clear();
         for (int i = 0; i < size; i++) {
             Object element = model.getElementAt(i);

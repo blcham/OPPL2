@@ -11,8 +11,10 @@ import org.coode.oppl.function.OPPLFunction;
 import org.coode.oppl.generated.RegexpGeneratedVariable;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.OWLObjectVisitorExAdapter;
+
+import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class ANNOTATIONPROPERTYVariableType extends
@@ -36,7 +38,13 @@ public class ANNOTATIONPROPERTYVariableType extends
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
-        return o.accept(new OWLObjectVisitorExAdapter<Boolean>(false) {
+        return o.accept(new OWLObjectVisitorEx<Boolean>() {
+            @Nonnull
+            @Override
+            public Boolean doDefault(@Nonnull Object object) {
+                return false;
+            }
+
             @Override
             public Boolean visit(OWLAnnotationProperty property) {
                 return true;

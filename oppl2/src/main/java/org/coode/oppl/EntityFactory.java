@@ -2,6 +2,7 @@ package org.coode.oppl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.coode.oppl.entity.OWLEntityCreationException;
 import org.coode.oppl.entity.OWLEntityCreationSet;
@@ -33,10 +34,14 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
      *            shortName
      * @return iri */
     private IRI buildIRI(String shortName) {
-        IRI ontologyIRI = factory.getOntology().getOntologyID().getOntologyIRI();
-        return ontologyIRI == null ? IRI.create(String.format("%s#%s", factory
-                .getDefaultOntologyIRI().toString(), shortName)) : IRI.create(String
-                .format("%s#%s", ontologyIRI.toString(), shortName));
+        Optional<IRI> ontologyIRI = factory.getOntology().getOntologyID().getOntologyIRI();
+        if(ontologyIRI.isPresent()) {
+            return IRI.create(String
+                    .format("%s#%s", ontologyIRI.toString(), shortName));
+        }
+        return
+            IRI.create(String.format("%s#%s", factory
+                    .getDefaultOntologyIRI().toString(), shortName));
     }
 
     /** @param label

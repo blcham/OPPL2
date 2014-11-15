@@ -37,25 +37,26 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-/** @author Luigi Iannone Jul 24, 2008 */
+/**
+ * @author Luigi Iannone Jul 24, 2008
+ */
 public class PatternOWLSubCLassAxiomFrameSection extends OWLSubClassAxiomFrameSection {
     private final AbstractPatternModelFactory factory;
 
-    /** @param editorKit
-     *            editorKit
-     * @param frame
-     *            frame
-     * @param f
-     *            f */
+    /**
+     * @param editorKit editorKit
+     * @param frame     frame
+     * @param f         f
+     */
     public PatternOWLSubCLassAxiomFrameSection(OWLEditorKit editorKit,
-            OWLFrame<OWLClass> frame, AbstractPatternModelFactory f) {
+                                               OWLFrame<OWLClass> frame, AbstractPatternModelFactory f) {
         super(editorKit, frame);
         factory = f;
     }
 
     @Override
     protected Set<OWLSubClassOfAxiom> getClassAxioms(OWLClassExpression descr,
-            OWLOntology ont) {
+                                                     OWLOntology ont) {
         Set<OWLSubClassOfAxiom> toReturn = new HashSet<OWLSubClassOfAxiom>();
         if (!descr.isAnonymous()) {
             for (OWLSubClassOfAxiom ax : ont.getSubClassAxiomsForSubClass(getRootObject()
@@ -94,7 +95,8 @@ public class PatternOWLSubCLassAxiomFrameSection extends OWLSubClassAxiomFrameSe
     }
 
     @Override
-    protected void refillInferred() {}
+    protected void refillInferred() {
+    }
 
     @Override
     public boolean canAdd() {

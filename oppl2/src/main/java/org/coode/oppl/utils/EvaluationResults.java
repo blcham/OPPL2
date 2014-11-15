@@ -10,23 +10,14 @@ import org.coode.oppl.OPPLScript;
 import org.coode.oppl.bindingtree.Assignment;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.rendering.ManchesterSyntaxRenderer;
-import org.semanticweb.owlapi.model.AddAxiom;
-import org.semanticweb.owlapi.model.AddImport;
-import org.semanticweb.owlapi.model.AddOntologyAnnotation;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLAxiomChange;
-import org.semanticweb.owlapi.model.RemoveAxiom;
-import org.semanticweb.owlapi.model.RemoveImport;
-import org.semanticweb.owlapi.model.RemoveOntologyAnnotation;
-import org.semanticweb.owlapi.model.SetOntologyID;
-import org.semanticweb.owlapi.util.OWLOntologyChangeVisitorAdapterEx;
+import org.semanticweb.owlapi.model.*;
 
 /** Utility class for collecting the evaluation results and dumping them into a
  * String
  * 
  * @author Luigi Iannone */
 public class EvaluationResults {
-    private final class ChangeRenderer extends OWLOntologyChangeVisitorAdapterEx<String> {
+    private final class ChangeRenderer implements OWLOntologyChangeVisitorEx<String> {
         public ChangeRenderer() {}
 
         @Override

@@ -2027,7 +2027,7 @@ public class OPPLTypes extends TreeFilter {
                                     (OPPLSyntaxTree) retval.start, propertyExpression);
                             retval.variableScope = VariableScopes
                                     .buildSuperPropertyVariableScope(
-                                            (OWLPropertyExpression<?, ?>) propertyExpression
+                                            (OWLPropertyExpression) propertyExpression
                                                     .getOWLObject(), checker);
                         } catch (OPPLException e) {
                             getErrorListener().reportThrowable(
@@ -2075,7 +2075,7 @@ public class OPPLTypes extends TreeFilter {
                                     (OPPLSyntaxTree) retval.start, propertyExpression);
                             retval.variableScope = VariableScopes
                                     .buildSubPropertyVariableScope(
-                                            (OWLPropertyExpression<?, ?>) propertyExpression
+                                            (OWLPropertyExpression) propertyExpression
                                                     .getOWLObject(), checker);
                         } catch (OPPLException e) {
                             getErrorListener().reportThrowable(
