@@ -23,6 +23,7 @@
 package org.coode.oppl;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +31,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.function.ValueComputationParameters;
@@ -100,25 +104,28 @@ import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 
-import javax.annotation.Nonnull;
-
-/** Visitor that abstracts OWLObjects into variables.
+/**
+ * Visitor that abstracts OWLObjects into variables.
  * 
- * @author Luigi Iannone */
-public class OWLObjectAbstractor implements
-        OWLObjectVisitorEx<OWLObject> {
+ * @author Luigi Iannone
+ */
+public class OWLObjectAbstractor implements OWLObjectVisitorEx<OWLObject> {
+
     private final ValueComputationParameters parameters;
     private final Set<Variable<?>> variables = new HashSet<Variable<?>>();
     private final Set<BindingNode> bindingNodes = new HashSet<BindingNode>();
     private final OWLDataFactory df;
 
-    /** @param variables
-     *            variables
+    /**
+     * @param variables
+     *        variables
      * @param parameters
-     *            parameters */
+     *        parameters
+     */
     public OWLObjectAbstractor(Collection<? extends Variable<?>> variables,
             ValueComputationParameters parameters) {
-        this(variables, parameters, parameters.getConstraintSystem().getLeaves());
+        this(variables, parameters, parameters.getConstraintSystem()
+                .getLeaves());
     }
 
     @Nonnull
@@ -127,13 +134,14 @@ public class OWLObjectAbstractor implements
         return (OWLObject) object;
     }
 
-
-    /** @param variables
-     *            variables
+    /**
+     * @param variables
+     *        variables
      * @param parameters
-     *            parameters
+     *        parameters
      * @param bindingNodes
-     *            bindingNodes */
+     *        bindingNodes
+     */
     public OWLObjectAbstractor(Collection<? extends Variable<?>> variables,
             ValueComputationParameters parameters,
             Collection<? extends BindingNode> bindingNodes) {
@@ -142,19 +150,16 @@ public class OWLObjectAbstractor implements
         if (bindingNodes != null) {
             this.bindingNodes.addAll(bindingNodes);
         }
-        df = parameters.getConstraintSystem().getOntologyManager().getOWLDataFactory();
+        df = parameters.getConstraintSystem().getOntologyManager()
+                .getOWLDataFactory();
     }
 
     private <T extends OWLObject> T abs(T property) {
         return (T) property.accept(this);
     }
 
-    private <T extends OWLObject> Set<T> abs(Collection<T> c) {
-        Set<T> values = new HashSet<T>();
-        for (T v : c) {
-            values.add(abs(v));
-        }
-        return values;
+    private <T extends OWLObject> Set<T> abs(Stream<T> c) {
+        return asSet(c.map(v -> abs(v)));
     }
 
     private Variable<?> getAbstractingVariable(OWLObject owlObject) {
@@ -164,11 +169,12 @@ public class OWLObjectAbstractor implements
         Variable<?> aVariable = null;
         while (!found && it.hasNext()) {
             aVariable = it.next();
-            Iterator<BindingNode> bindingNodesIterator = getBindingNodes().iterator();
+            Iterator<BindingNode> bindingNodesIterator = getBindingNodes()
+                    .iterator();
             while (!found && bindingNodesIterator.hasNext()) {
                 BindingNode bindingNode = bindingNodesIterator.next();
-                found = bindingNode.getAssignmentValue(aVariable, getParameters())
-                        .equals(owlObject);
+                found = bindingNode.getAssignmentValue(aVariable,
+                        getParameters()).equals(owlObject);
             }
         }
         if (found) {
@@ -200,7 +206,8 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLDataAllValuesFrom desc) {
-        return df.getOWLDataAllValuesFrom(abs(desc.getProperty()), abs(desc.getFiller()));
+        return df.getOWLDataAllValuesFrom(abs(desc.getProperty()),
+                abs(desc.getFiller()));
     }
 
     @Override
@@ -211,27 +218,27 @@ public class OWLObjectAbstractor implements
     @Override
     public OWLObject visit(OWLDataExactCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLDataExactCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLDataExactCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLObject visit(OWLDataMaxCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLDataMaxCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLDataMaxCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLObject visit(OWLDataMinCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLDataMinCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLDataMinCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLObject visit(OWLDataOneOf node) {
-        return df.getOWLDataOneOf(abs(node.getValues()));
+        return df.getOWLDataOneOf(abs(node.values()));
     }
 
     @Override
@@ -270,8 +277,8 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLDataSomeValuesFrom desc) {
-        return df
-                .getOWLDataSomeValuesFrom(abs(desc.getProperty()), abs(desc.getFiller()));
+        return df.getOWLDataSomeValuesFrom(abs(desc.getProperty()),
+                abs(desc.getFiller()));
     }
 
     @Override
@@ -287,7 +294,8 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLDataHasValue desc) {
-        return df.getOWLDataHasValue(abs(desc.getProperty()), abs(desc.getValue()));
+        return df.getOWLDataHasValue(abs(desc.getProperty()),
+                abs(desc.getValue()));
     }
 
     @Override
@@ -297,43 +305,44 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLDifferentIndividualsAxiom axiom) {
-        return df.getOWLDifferentIndividualsAxiom(abs(axiom.getIndividuals()));
+        return df.getOWLDifferentIndividualsAxiom(abs(axiom.individuals()));
     }
 
     @Override
     public OWLObject visit(OWLDisjointClassesAxiom axiom) {
-        return df.getOWLDisjointClassesAxiom(abs(axiom.getClassExpressions()));
+        return df.getOWLDisjointClassesAxiom(abs(axiom.classExpressions()));
     }
 
     @Override
     public OWLObject visit(OWLDisjointDataPropertiesAxiom axiom) {
-        return df.getOWLDisjointDataPropertiesAxiom(abs(axiom.getProperties()));
+        return df.getOWLDisjointDataPropertiesAxiom(abs(axiom.properties()));
     }
 
     @Override
     public OWLObject visit(OWLDisjointObjectPropertiesAxiom axiom) {
-        return df.getOWLDisjointObjectPropertiesAxiom(abs(axiom.getProperties()));
+        return df.getOWLDisjointObjectPropertiesAxiom(abs(axiom.properties()));
     }
 
     @Override
     public OWLObject visit(OWLDisjointUnionAxiom axiom) {
         return df.getOWLDisjointUnionAxiom(abs(axiom.getOWLClass()),
-                abs(axiom.getClassExpressions()));
+                abs(axiom.classExpressions()));
     }
 
     @Override
     public OWLObject visit(OWLEquivalentClassesAxiom axiom) {
-        return df.getOWLEquivalentClassesAxiom(abs(axiom.getClassExpressions()));
+        return df.getOWLEquivalentClassesAxiom(abs(axiom.classExpressions()));
     }
 
     @Override
     public OWLObject visit(OWLEquivalentDataPropertiesAxiom axiom) {
-        return df.getOWLEquivalentDataPropertiesAxiom(abs(axiom.getProperties()));
+        return df.getOWLEquivalentDataPropertiesAxiom(abs(axiom.properties()));
     }
 
     @Override
     public OWLObject visit(OWLEquivalentObjectPropertiesAxiom axiom) {
-        return df.getOWLEquivalentObjectPropertiesAxiom(abs(axiom.getProperties()));
+        return df
+                .getOWLEquivalentObjectPropertiesAxiom(abs(axiom.properties()));
     }
 
     @Override
@@ -358,30 +367,34 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
-        return df.getOWLInverseFunctionalObjectPropertyAxiom(abs(axiom.getProperty()));
+        return df.getOWLInverseFunctionalObjectPropertyAxiom(abs(axiom
+                .getProperty()));
     }
 
     @Override
     public OWLObject visit(OWLInverseObjectPropertiesAxiom axiom) {
-        return df.getOWLInverseObjectPropertiesAxiom(abs(axiom.getFirstProperty()),
-                abs(axiom.getSecondProperty()));
+        return df.getOWLInverseObjectPropertiesAxiom(
+                abs(axiom.getFirstProperty()), abs(axiom.getSecondProperty()));
     }
 
     @Override
     public OWLObject visit(OWLIrreflexiveObjectPropertyAxiom axiom) {
-        return df.getOWLIrreflexiveObjectPropertyAxiom(abs(axiom.getProperty()));
+        return df
+                .getOWLIrreflexiveObjectPropertyAxiom(abs(axiom.getProperty()));
     }
 
     @Override
     public OWLObject visit(OWLNegativeDataPropertyAssertionAxiom axiom) {
-        return df.getOWLNegativeDataPropertyAssertionAxiom(abs(axiom.getProperty()),
-                abs(axiom.getSubject()), abs(axiom.getObject()));
+        return df.getOWLNegativeDataPropertyAssertionAxiom(
+                abs(axiom.getProperty()), abs(axiom.getSubject()),
+                abs(axiom.getObject()));
     }
 
     @Override
     public OWLObject visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
-        return df.getOWLNegativeObjectPropertyAssertionAxiom(abs(axiom.getProperty()),
-                abs(axiom.getSubject()), abs(axiom.getObject()));
+        return df.getOWLNegativeObjectPropertyAssertionAxiom(
+                abs(axiom.getProperty()), abs(axiom.getSubject()),
+                abs(axiom.getObject()));
     }
 
     @Override
@@ -398,32 +411,32 @@ public class OWLObjectAbstractor implements
     @Override
     public OWLObject visit(OWLObjectExactCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLObjectExactCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLObjectExactCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLClassExpression visit(OWLObjectIntersectionOf desc) {
-        return df.getOWLObjectIntersectionOf(abs(desc.getOperands()));
+        return df.getOWLObjectIntersectionOf(abs(desc.operands()));
     }
 
     @Override
     public OWLObject visit(OWLObjectMaxCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLObjectMaxCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLObjectMaxCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLObject visit(OWLObjectMinCardinality desc) {
         int cardinality = desc.getCardinality();
-        return df.getOWLObjectMinCardinality(cardinality, abs(desc.getProperty()),
-                abs(desc.getFiller()));
+        return df.getOWLObjectMinCardinality(cardinality,
+                abs(desc.getProperty()), abs(desc.getFiller()));
     }
 
     @Override
     public OWLObject visit(OWLObjectOneOf desc) {
-        return df.getOWLObjectOneOf(abs(desc.getIndividuals()));
+        return df.getOWLObjectOneOf(abs(desc.individuals()));
     }
 
     @Override
@@ -444,12 +457,14 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLSubPropertyChainOfAxiom axiom) {
-        List<OWLObjectPropertyExpression> propertyChain = axiom.getPropertyChain();
+        List<OWLObjectPropertyExpression> propertyChain = axiom
+                .getPropertyChain();
         List<OWLObjectPropertyExpression> values = new ArrayList<OWLObjectPropertyExpression>();
         for (OWLObjectPropertyExpression v : propertyChain) {
             values.add(abs(v));
         }
-        return df.getOWLSubPropertyChainOfAxiom(values, abs(axiom.getSuperProperty()));
+        return df.getOWLSubPropertyChainOfAxiom(values,
+                abs(axiom.getSuperProperty()));
     }
 
     @Override
@@ -488,12 +503,13 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLClassExpression visit(OWLObjectUnionOf desc) {
-        return df.getOWLObjectUnionOf(abs(desc.getOperands()));
+        return df.getOWLObjectUnionOf(abs(desc.operands()));
     }
 
     @Override
     public OWLClassExpression visit(OWLObjectHasValue desc) {
-        return df.getOWLObjectHasValue(abs(desc.getProperty()), abs(desc.getValue()));
+        return df.getOWLObjectHasValue(abs(desc.getProperty()),
+                abs(desc.getFiller()));
     }
 
     @Override
@@ -508,7 +524,7 @@ public class OWLObjectAbstractor implements
 
     @Override
     public OWLObject visit(OWLSameIndividualAxiom axiom) {
-        return df.getOWLSameIndividualAxiom(abs(axiom.getIndividuals()));
+        return df.getOWLSameIndividualAxiom(abs(axiom.individuals()));
     }
 
     @Override

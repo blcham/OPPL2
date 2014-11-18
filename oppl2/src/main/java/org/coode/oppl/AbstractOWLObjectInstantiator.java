@@ -1,10 +1,8 @@
 package org.coode.oppl;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
-import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -211,12 +209,8 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLObject visit(OWLDataOneOf node) {
-        Set<? extends OWLLiteral> values = node.getValues();
-        Set<OWLLiteral> instantiatedValues = new HashSet<OWLLiteral>();
-        for (OWLLiteral constant : values) {
-            instantiatedValues.add((OWLLiteral) constant.accept(this));
-        }
-        return df.getOWLDataOneOf(instantiatedValues);
+        return df.getOWLDataOneOf(asSet(node.values().map(
+                v -> (OWLLiteral) v.accept(this))));
     }
 
     @Override
@@ -265,10 +259,9 @@ abstract class AbstractOWLObjectInstantiator implements
     @Override
     public OWLObject visit(OWLDatatypeRestriction node) {
         OWLDataRange dataRange = node.getDatatype();
-        Set<OWLFacetRestriction> facetRestrictions = node
-                .getFacetRestrictions();
         return df.getOWLDatatypeRestriction(
-                (OWLDatatype) dataRange.accept(this), facetRestrictions);
+                (OWLDatatype) dataRange.accept(this),
+                asSet(node.facetRestrictions()));
     }
 
     @Override
@@ -297,7 +290,7 @@ abstract class AbstractOWLObjectInstantiator implements
     @Override
     public OWLObject visit(OWLDataHasValue desc) {
         OWLDataPropertyExpression property = desc.getProperty();
-        OWLLiteral value = desc.getValue();
+        OWLLiteral value = desc.getFiller();
         return df.getOWLDataHasValue(
                 (OWLDataPropertyExpression) property.accept(this),
                 (OWLLiteral) value.accept(this));
@@ -310,126 +303,85 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLObject visit(OWLDifferentIndividualsAxiom axiom) {
-        Set<OWLIndividual> individuals = axiom.getIndividuals();
-        Set<OWLIndividual> instantiatedIndividuals = new HashSet<OWLIndividual>();
         if (OPPLOWLDifferentIndividualsAxiom.class.isAssignableFrom(axiom
                 .getClass())) {
             InlineSet<OWLIndividual> inlineSet = ((OPPLOWLDifferentIndividualsAxiom) axiom)
                     .getInlineSet();
-            instantiatedIndividuals.addAll(inlineSet.compute(getParameters()));
-        } else {
-            for (OWLIndividual individual : individuals) {
-                instantiatedIndividuals.add((OWLIndividual) individual
-                        .accept(this));
-            }
+            return df.getOWLDifferentIndividualsAxiom(inlineSet
+                    .compute(getParameters()));
         }
-        return df.getOWLDifferentIndividualsAxiom(instantiatedIndividuals);
+        return df.getOWLDifferentIndividualsAxiom(asSet(axiom.individuals()
+                .map(i -> (OWLIndividual) i.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLDisjointClassesAxiom axiom) {
-        Set<OWLClassExpression> descriptions = axiom.getClassExpressions();
-        Set<OWLClassExpression> instatiatedDescriptions = new HashSet<OWLClassExpression>();
         if (OPPLOWLDisjointClassesAxiom.class
                 .isAssignableFrom(axiom.getClass())) {
             InlineSet<OWLClassExpression> inlineSet = ((OPPLOWLDisjointClassesAxiom) axiom)
                     .getInlineSet();
-            instatiatedDescriptions.addAll(inlineSet.compute(getParameters()));
-        } else {
-            for (OWLClassExpression description : descriptions) {
-                instatiatedDescriptions.add((OWLClassExpression) description
-                        .accept(this));
-            }
+            return df.getOWLDisjointClassesAxiom(inlineSet
+                    .compute(getParameters()));
         }
-        return df.getOWLDisjointClassesAxiom(instatiatedDescriptions);
+        return df.getOWLDisjointClassesAxiom(asSet(axiom.classExpressions()
+                .map(c -> (OWLClassExpression) c.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLDisjointDataPropertiesAxiom axiom) {
-        Set<OWLDataPropertyExpression> properties = axiom.getProperties();
-        Set<OWLDataPropertyExpression> instantiatedProperties = new HashSet<OWLDataPropertyExpression>();
         if (OPPLOWLDisjointDataPropertiesAxiom.class.isAssignableFrom(axiom
                 .getClass())) {
             InlineSet<OWLDataPropertyExpression> inlineSet = ((OPPLOWLDisjointDataPropertiesAxiom) axiom)
                     .getInlineSet();
-            instantiatedProperties.addAll(inlineSet.compute(getParameters()));
-        } else {
-            for (OWLDataPropertyExpression objectPropertyExpression : properties) {
-                instantiatedProperties
-                        .add((OWLDataPropertyExpression) objectPropertyExpression
-                                .accept(this));
-            }
+            return df.getOWLDisjointDataPropertiesAxiom(inlineSet
+                    .compute(getParameters()));
         }
-        return df.getOWLDisjointDataPropertiesAxiom(instantiatedProperties);
+        return df.getOWLDisjointDataPropertiesAxiom(asSet(axiom.properties()
+                .map(p -> (OWLDataPropertyExpression) p.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLDisjointObjectPropertiesAxiom axiom) {
-        Set<OWLObjectPropertyExpression> properties = axiom.getProperties();
-        Set<OWLObjectPropertyExpression> instantiatedProperties = new HashSet<OWLObjectPropertyExpression>();
         if (OPPLOWLDisjointObjectPropertiesAxiom.class.isAssignableFrom(axiom
                 .getClass())) {
             InlineSet<OWLObjectPropertyExpression> inlineSet = ((OPPLOWLDisjointObjectPropertiesAxiom) axiom)
                     .getInlineSet();
-            instantiatedProperties.addAll(inlineSet.compute(getParameters()));
-        } else {
-            for (OWLObjectPropertyExpression objectPropertyExpression : properties) {
-                instantiatedProperties
-                        .add((OWLObjectPropertyExpression) objectPropertyExpression
-                                .accept(this));
-            }
+            return df.getOWLDisjointObjectPropertiesAxiom(inlineSet
+                    .compute(getParameters()));
         }
-        return df.getOWLDisjointObjectPropertiesAxiom(instantiatedProperties);
+        return df.getOWLDisjointObjectPropertiesAxiom(asSet(axiom.properties()
+                .map(p -> (OWLObjectPropertyExpression) p.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLDisjointUnionAxiom axiom) {
-        Set<? extends OWLClassExpression> descriptions = axiom
-                .getClassExpressions();
         OWLClass owlClass = axiom.getOWLClass();
         Set<OWLClassExpression> instantiatedDescriptions = asSet(
                 axiom.classExpressions(), OWLClassExpression.class);
-        for (OWLClassExpression description : descriptions) {
-            instantiatedDescriptions.add((OWLClassExpression) description
-                    .accept(this));
-        }
+        axiom.classExpressions().forEach(
+                c -> instantiatedDescriptions.add((OWLClassExpression) c
+                        .accept(this)));
         return df.getOWLDisjointUnionAxiom((OWLClass) owlClass.accept(this),
                 instantiatedDescriptions);
     }
 
     @Override
     public OWLObject visit(OWLEquivalentClassesAxiom axiom) {
-        Set<OWLClassExpression> descriptions = axiom.getClassExpressions();
-        Set<OWLClassExpression> instantiatedDescriptions = new HashSet<OWLClassExpression>();
-        for (OWLClassExpression description : descriptions) {
-            instantiatedDescriptions.add((OWLClassExpression) description
-                    .accept(this));
-        }
-        return df.getOWLEquivalentClassesAxiom(instantiatedDescriptions);
+        return df.getOWLEquivalentClassesAxiom(asSet(axiom.classExpressions()
+                .map(c -> (OWLClassExpression) c.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLEquivalentDataPropertiesAxiom axiom) {
-        Set<OWLDataPropertyExpression> properties = axiom.getProperties();
-        Set<OWLDataPropertyExpression> instantiatedProperties = new HashSet<OWLDataPropertyExpression>();
-        for (OWLDataPropertyExpression dataPropertyExpression : properties) {
-            instantiatedProperties
-                    .add((OWLDataPropertyExpression) dataPropertyExpression
-                            .accept(this));
-        }
-        return df.getOWLEquivalentDataPropertiesAxiom(instantiatedProperties);
+        return df.getOWLEquivalentDataPropertiesAxiom(asSet(axiom.properties()
+                .map(c -> (OWLDataPropertyExpression) c.accept(this))));
     }
 
     @Override
     public OWLObject visit(OWLEquivalentObjectPropertiesAxiom axiom) {
-        Set<OWLObjectPropertyExpression> properties = axiom.getProperties();
-        Set<OWLObjectPropertyExpression> instantiatedProperties = new HashSet<OWLObjectPropertyExpression>();
-        for (OWLObjectPropertyExpression objectPropertyExpression : properties) {
-            instantiatedProperties
-                    .add((OWLObjectPropertyExpression) objectPropertyExpression
-                            .accept(this));
-        }
-        return df.getOWLEquivalentObjectPropertiesAxiom(instantiatedProperties);
+        return df.getOWLEquivalentObjectPropertiesAxiom(asSet(axiom
+                .properties().map(
+                        p -> (OWLObjectPropertyExpression) p.accept(this))));
     }
 
     @Override
@@ -545,13 +497,8 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLClassExpression visit(OWLObjectIntersectionOf desc) {
-        Set<? extends OWLClassExpression> operands = desc.getOperands();
-        Set<OWLClassExpression> instantiatedOperands = new HashSet<OWLClassExpression>();
-        for (OWLClassExpression description : operands) {
-            instantiatedOperands.add((OWLClassExpression) description
-                    .accept(this));
-        }
-        return df.getOWLObjectIntersectionOf(instantiatedOperands);
+        return df.getOWLObjectIntersectionOf(asSet(desc.operands().map(
+                d -> (OWLClassExpression) d.accept(this))));
     }
 
     @Override
@@ -576,13 +523,8 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLObject visit(OWLObjectOneOf desc) {
-        Set<? extends OWLIndividual> individuals = desc.getIndividuals();
-        Set<OWLIndividual> instantiatedIndividuals = new HashSet<OWLIndividual>();
-        for (OWLIndividual individual : individuals) {
-            instantiatedIndividuals
-                    .add((OWLIndividual) individual.accept(this));
-        }
-        return df.getOWLObjectOneOf(instantiatedIndividuals);
+        return df.getOWLObjectOneOf(asSet(desc.individuals().map(
+                i -> (OWLIndividual) i.accept(this))));
     }
 
     @Override
@@ -612,17 +554,12 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLObject visit(OWLSubPropertyChainOfAxiom axiom) {
-        List<OWLObjectPropertyExpression> propertyChain = axiom
-                .getPropertyChain();
-        List<OWLObjectPropertyExpression> instantiatedPropertyChain = new ArrayList<OWLObjectPropertyExpression>();
-        OWLObjectPropertyExpression superProperty = axiom.getSuperProperty();
-        for (OWLObjectPropertyExpression objectPropertyExpression : propertyChain) {
-            instantiatedPropertyChain
-                    .add((OWLObjectPropertyExpression) objectPropertyExpression
-                            .accept(this));
-        }
-        return df.getOWLSubPropertyChainOfAxiom(instantiatedPropertyChain,
-                (OWLObjectPropertyExpression) superProperty.accept(this));
+        List<OWLObjectPropertyExpression> chain = asList(axiom
+                .getPropertyChain().stream()
+                .map(p -> (OWLObjectPropertyExpression) p.accept(this)));
+        OWLObjectPropertyExpression p = (OWLObjectPropertyExpression) axiom
+                .getSuperProperty().accept(this);
+        return df.getOWLSubPropertyChainOfAxiom(chain, p);
     }
 
     @Override
@@ -677,19 +614,14 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLClassExpression visit(OWLObjectUnionOf desc) {
-        Set<? extends OWLClassExpression> operands = desc.getOperands();
-        Set<OWLClassExpression> instantiatedOperands = new HashSet<OWLClassExpression>();
-        for (OWLClassExpression description : operands) {
-            instantiatedOperands.add((OWLClassExpression) description
-                    .accept(this));
-        }
-        return df.getOWLObjectUnionOf(instantiatedOperands);
+        return df.getOWLObjectUnionOf(asSet(desc.operands().map(
+                d -> (OWLClassExpression) d.accept(this))));
     }
 
     @Override
     public OWLClassExpression visit(OWLObjectHasValue desc) {
         OWLObjectPropertyExpression property = desc.getProperty();
-        OWLIndividual value = desc.getValue();
+        OWLIndividual value = desc.getFiller();
         return df.getOWLObjectHasValue(
                 (OWLObjectPropertyExpression) property.accept(this),
                 (OWLIndividual) value.accept(this));
@@ -710,20 +642,14 @@ abstract class AbstractOWLObjectInstantiator implements
 
     @Override
     public OWLObject visit(OWLSameIndividualAxiom axiom) {
-        Set<OWLIndividual> individuals = axiom.getIndividuals();
-        Set<OWLIndividual> instantiatedIndividuals = new HashSet<OWLIndividual>(
-                axiom.getIndividuals().size());
         if (OPPLOWLSameIndividualAxiom.class.isAssignableFrom(axiom.getClass())) {
             InlineSet<OWLIndividual> inlineSet = ((OPPLOWLSameIndividualAxiom) axiom)
                     .getInlineSet();
-            instantiatedIndividuals.addAll(inlineSet.compute(getParameters()));
-        } else {
-            for (OWLIndividual individual : individuals) {
-                instantiatedIndividuals.add((OWLIndividual) individual
-                        .accept(this));
-            }
+            return df.getOWLSameIndividualAxiom(inlineSet
+                    .compute(getParameters()));
         }
-        return df.getOWLSameIndividualAxiom(instantiatedIndividuals);
+        return df.getOWLSameIndividualAxiom(asSet(axiom.individuals().map(
+                i -> (OWLIndividual) i.accept(this))));
     }
 
     @Override

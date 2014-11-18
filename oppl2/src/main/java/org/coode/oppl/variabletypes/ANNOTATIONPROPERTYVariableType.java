@@ -1,10 +1,13 @@
 package org.coode.oppl.variabletypes;
 
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
+
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
 
 import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.function.OPPLFunction;
@@ -14,14 +17,15 @@ import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import javax.annotation.Nonnull;
-
 /** @author Luigi Iannone */
 public class ANNOTATIONPROPERTYVariableType extends
         AbstractVariableType<OWLAnnotationProperty> implements
         VariableType<OWLAnnotationProperty> {
-    /** @param name
-     *            name */
+
+    /**
+     * @param name
+     *        name
+     */
     public ANNOTATIONPROPERTYVariableType(VariableTypeName name) {
         super(name, EnumSet.noneOf(Direction.class));
     }
@@ -29,16 +33,14 @@ public class ANNOTATIONPROPERTYVariableType extends
     @Override
     public Set<OWLAnnotationProperty> getReferencedOWLObjects(
             Collection<? extends OWLOntology> ontologies) {
-        Set<OWLAnnotationProperty> toReturn = new HashSet<OWLAnnotationProperty>();
-        for (OWLOntology ontology : ontologies) {
-            toReturn.addAll(ontology.getAnnotationPropertiesInSignature());
-        }
-        return toReturn;
+        return asSet(ontologies.stream().flatMap(
+                o -> o.annotationPropertiesInSignature()));
     }
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
         return o.accept(new OWLObjectVisitorEx<Boolean>() {
+
             @Nonnull
             @Override
             public Boolean doDefault(@Nonnull Object object) {

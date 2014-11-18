@@ -1,7 +1,6 @@
 package org.coode.oppl.utils;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import org.coode.oppl.ConstraintSystem;
 import org.semanticweb.owlapi.model.IRI;
@@ -148,7 +147,7 @@ public abstract class AbstractVariableDetector implements
     @Override
     public Boolean visit(OWLObjectHasValue desc) {
         return constraintSystem.isVariable(desc.getProperty()
-                .asOWLObjectProperty()) || desc.getValue().accept(this);
+                .asOWLObjectProperty()) || desc.getFiller().accept(this);
     }
 
     @Override
@@ -259,8 +258,8 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLDisjointClassesAxiom axiom) {
-        Set<OWLClassExpression> descriptions = axiom.getClassExpressions();
-        Iterator<OWLClassExpression> iterator = descriptions.iterator();
+        Iterator<OWLClassExpression> iterator = axiom.classExpressions()
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -282,8 +281,7 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLEquivalentObjectPropertiesAxiom axiom) {
-        Set<OWLObjectPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLObjectPropertyExpression> iterator = descriptions
+        Iterator<OWLObjectPropertyExpression> iterator = axiom.properties()
                 .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
@@ -301,8 +299,7 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLDifferentIndividualsAxiom axiom) {
-        Set<OWLIndividual> descriptions = axiom.getIndividuals();
-        Iterator<OWLIndividual> iterator = descriptions.iterator();
+        Iterator<OWLIndividual> iterator = axiom.individuals().iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -312,8 +309,8 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLDisjointDataPropertiesAxiom axiom) {
-        Set<OWLDataPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLDataPropertyExpression> iterator = descriptions.iterator();
+        Iterator<OWLDataPropertyExpression> iterator = axiom.properties()
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -323,8 +320,7 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLDisjointObjectPropertiesAxiom axiom) {
-        Set<OWLObjectPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLObjectPropertyExpression> iterator = descriptions
+        Iterator<OWLObjectPropertyExpression> iterator = axiom.properties()
                 .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
@@ -408,8 +404,8 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLEquivalentClassesAxiom axiom) {
-        Set<OWLClassExpression> descriptions = axiom.getClassExpressions();
-        Iterator<OWLClassExpression> iterator = descriptions.iterator();
+        Iterator<OWLClassExpression> iterator = axiom.classExpressions()
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -447,7 +443,7 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLSameIndividualAxiom axiom) {
-        Iterator<OWLIndividual> iterator = axiom.getIndividuals().iterator();
+        Iterator<OWLIndividual> iterator = axiom.individuals().iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -468,7 +464,7 @@ public abstract class AbstractVariableDetector implements
 
     @Override
     public Boolean visit(OWLInverseObjectPropertiesAxiom axiom) {
-        Iterator<OWLObjectPropertyExpression> iterator = axiom.getProperties()
+        Iterator<OWLObjectPropertyExpression> iterator = axiom.properties()
                 .iterator();
         boolean found = false;
         while (found && iterator.hasNext()) {
