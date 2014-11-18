@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.OPPLQuery;
 import org.coode.oppl.OPPLScript;
@@ -61,15 +63,34 @@ import org.coode.oppl.variabletypes.VariableTypeFactory;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
 import org.coode.parsers.ErrorListener;
 import org.coode.patterns.utils.Utils;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLAxiomChange;
+import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+import org.semanticweb.owlapi.model.OWLEquivalentDataPropertiesAxiom;
+import org.semanticweb.owlapi.model.OWLEquivalentObjectPropertiesAxiom;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLPropertyExpression;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 
-import javax.annotation.Nonnull;
-
 /** @author Luigi Iannone Jun 10, 2008 */
 public class PatternModel implements OPPLScript, PatternOPPLScript {
-    private final static class PatternOPPLScriptValidator implements OPPLScriptValidator {
+
+    private final static class PatternOPPLScriptValidator implements
+            OPPLScriptValidator {
+
         public PatternOPPLScriptValidator() {}
 
         @Override
@@ -91,10 +112,12 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         }
     }
 
-    class ClassPatternDetector implements
-            OWLAxiomVisitorEx<Boolean>, OPPLScriptVisitorEx<Boolean> {
+    class ClassPatternDetector implements OWLAxiomVisitorEx<Boolean>,
+            OPPLScriptVisitorEx<Boolean> {
+
         private final OWLClass thisClass = ontologyManager.getOWLDataFactory()
-                .getOWLClass(getConstraintSystem().getThisClassVariable().getIRI());
+                .getOWLClass(
+                        getConstraintSystem().getThisClassVariable().getIRI());
 
         @Nonnull
         @Override
@@ -155,12 +178,14 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         }
     }
 
-    /** Extracts the definition
+    /**
+     * Extracts the definition
      * 
-     * @author Luigi Iannone Jun 26, 2008 */
-    static class DefinitorialExtractor
-            implements OWLAxiomVisitorEx<OWLObject>,
+     * @author Luigi Iannone Jun 26, 2008
+     */
+    static class DefinitorialExtractor implements OWLAxiomVisitorEx<OWLObject>,
             OPPLScriptVisitorEx<OWLClassExpression> {
+
         protected final Set<OWLClassExpression> extractedDescriptions = new HashSet<OWLClassExpression>();
         protected OWLPropertyExpression extractedProperty = null;
         protected OWLObject owlObject;
@@ -169,60 +194,74 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
 
         public OWLObject getExtractedObject() {
             OWLObject toReturn = null;
-            toReturn = variableType.accept(new VariableTypeVisitorEx<OWLObject>() {
-                @Override
-                public OWLObject visitCLASSVariableType(
-                        CLASSVariableType classVariableType) {
-                    return dataFactory.getOWLObjectIntersectionOf(extractedDescriptions);
-                }
+            toReturn = variableType
+                    .accept(new VariableTypeVisitorEx<OWLObject>() {
 
-                @Override
-                public OWLObject visitOBJECTPROPERTYVariableType(
-                        OBJECTPROPERTYVariableType objectpropertyVariableType) {
-                    return extractedProperty;
-                }
+                        @Override
+                        public OWLObject visitCLASSVariableType(
+                                CLASSVariableType classVariableType) {
+                            return dataFactory
+                                    .getOWLObjectIntersectionOf(extractedDescriptions);
+                        }
 
-                @Override
-                public OWLObject visitDATAPROPERTYVariableType(
-                        DATAPROPERTYVariableType datapropertyVariableType) {
-                    return extractedProperty;
-                }
+                        @Override
+                        public
+                                OWLObject
+                                visitOBJECTPROPERTYVariableType(
+                                        OBJECTPROPERTYVariableType objectpropertyVariableType) {
+                            return extractedProperty;
+                        }
 
-                @Override
-                public OWLObject visitINDIVIDUALVariableType(
-                        INDIVIDUALVariableType individualVariableType) {
-                    throw new RuntimeException("Unsupported variable type: "
-                            + individualVariableType
-                            + " for pattern used in functional mode");
-                }
+                        @Override
+                        public
+                                OWLObject
+                                visitDATAPROPERTYVariableType(
+                                        DATAPROPERTYVariableType datapropertyVariableType) {
+                            return extractedProperty;
+                        }
 
-                @Override
-                public OWLObject visitCONSTANTVariableType(
-                        CONSTANTVariableType constantVariableType) {
-                    throw new RuntimeException("Unsupported variable type: "
-                            + constantVariableType
-                            + " for pattern used in functional mode");
-                }
+                        @Override
+                        public OWLObject visitINDIVIDUALVariableType(
+                                INDIVIDUALVariableType individualVariableType) {
+                            throw new RuntimeException(
+                                    "Unsupported variable type: "
+                                            + individualVariableType
+                                            + " for pattern used in functional mode");
+                        }
 
-                @Override
-                public OWLObject visitANNOTATIONPROPERTYVariableType(
-                        ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
-                    throw new RuntimeException("Unsupported variable type: "
-                            + annotationpropertyVariableType
-                            + " for pattern used in functional mode");
-                }
-            });
+                        @Override
+                        public OWLObject visitCONSTANTVariableType(
+                                CONSTANTVariableType constantVariableType) {
+                            throw new RuntimeException(
+                                    "Unsupported variable type: "
+                                            + constantVariableType
+                                            + " for pattern used in functional mode");
+                        }
+
+                        @Override
+                        public
+                                OWLObject
+                                visitANNOTATIONPROPERTYVariableType(
+                                        ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
+                            throw new RuntimeException(
+                                    "Unsupported variable type: "
+                                            + annotationpropertyVariableType
+                                            + " for pattern used in functional mode");
+                        }
+                    });
             return toReturn;
         }
 
-        /** @param owlObject
-         *            owlObject
+        /**
+         * @param owlObject
+         *        owlObject
          * @param variableType
-         *            variableType
+         *        variableType
          * @param dataFactory
-         *            dataFactory */
-        public DefinitorialExtractor(OWLObject owlObject, VariableType<?> variableType,
-                OWLDataFactory dataFactory) {
+         *        dataFactory
+         */
+        public DefinitorialExtractor(OWLObject owlObject,
+                VariableType<?> variableType, OWLDataFactory dataFactory) {
             this.owlObject = owlObject;
             this.dataFactory = dataFactory;
             this.variableType = variableType;
@@ -236,34 +275,39 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
                         axiom.getClassExpressions());
                 descriptions.remove(owlObject);
                 extractedDescriptions.addAll(descriptions);
-                toReturn = !descriptions.isEmpty() ? descriptions.iterator().next()
-                        : null;
+                toReturn = !descriptions.isEmpty() ? descriptions.iterator()
+                        .next() : null;
             }
             return toReturn;
         }
 
         @Override
-        public OWLObjectPropertyExpression
-                visit(OWLEquivalentObjectPropertiesAxiom axiom) {
+        public OWLObjectPropertyExpression visit(
+                OWLEquivalentObjectPropertiesAxiom axiom) {
             OWLObjectPropertyExpression toReturn = null;
-            if (variableType == VariableTypeFactory.getOBJECTPROPERTYTypeVariableType()) {
+            if (variableType == VariableTypeFactory
+                    .getOBJECTPROPERTYTypeVariableType()) {
                 Set<OWLObjectPropertyExpression> properties = new HashSet<OWLObjectPropertyExpression>(
                         axiom.getProperties());
                 properties.remove(owlObject);
-                toReturn = !properties.isEmpty() ? properties.iterator().next() : null;
+                toReturn = !properties.isEmpty() ? properties.iterator().next()
+                        : null;
                 extractedProperty = toReturn;
             }
             return toReturn;
         }
 
         @Override
-        public OWLDataPropertyExpression visit(OWLEquivalentDataPropertiesAxiom axiom) {
+        public OWLDataPropertyExpression visit(
+                OWLEquivalentDataPropertiesAxiom axiom) {
             OWLDataPropertyExpression toReturn = null;
-            if (variableType == VariableTypeFactory.getDATAPROPERTYVariableType()) {
+            if (variableType == VariableTypeFactory
+                    .getDATAPROPERTYVariableType()) {
                 Set<OWLDataPropertyExpression> properties = new HashSet<OWLDataPropertyExpression>(
                         axiom.getProperties());
                 properties.remove(owlObject);
-                toReturn = !properties.isEmpty() ? properties.iterator().next() : null;
+                toReturn = !properties.isEmpty() ? properties.iterator().next()
+                        : null;
                 extractedProperty = toReturn;
             }
             return toReturn;
@@ -299,7 +343,9 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     }
 
     static class ReplacementExtractor {
-        public static List<List<Object>> permutations(List<List<Object>> elements) {
+
+        public static List<List<Object>> permutations(
+                List<List<Object>> elements) {
             return permutations(new ArrayList<Object>(), elements);
         }
 
@@ -346,20 +392,23 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return ontologyManager;
     }
 
-    /** @param opplScript
-     *            opplScript
+    /**
+     * @param opplScript
+     *        opplScript
      * @param ontologyManager
-     *            ontologyManager
+     *        ontologyManager
      * @param f
-     *            f
+     *        f
      * @throws UnsuitableOPPLScriptException
-     *             UnsuitableOPPLScriptException */
-    public PatternModel(OPPLScript opplScript, OWLOntologyManager ontologyManager,
-            AbstractPatternModelFactory f) throws UnsuitableOPPLScriptException {
+     *         UnsuitableOPPLScriptException
+     */
+    public PatternModel(OPPLScript opplScript,
+            OWLOntologyManager ontologyManager, AbstractPatternModelFactory f)
+            throws UnsuitableOPPLScriptException {
         checkNotNull(opplScript, "OPPL script");
         if (!getScriptValidator().accept(opplScript)) {
-            throw new UnsuitableOPPLScriptException(opplScript, getScriptValidator()
-                    .getValidationRuleDescription());
+            throw new UnsuitableOPPLScriptException(opplScript,
+                    getScriptValidator().getValidationRuleDescription());
         }
         opplStatement = opplScript;
         this.ontologyManager = checkNotNull(ontologyManager, "ontologyManager");
@@ -383,9 +432,11 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return String.format("%s %s", opplStatement, r).trim();
     }
 
-    /** @return the string rendering of this PatternModel. Override/use this
+    /**
+     * @return the string rendering of this PatternModel. Override/use this
      *         method in tools like Protege that have different strategies to
-     *         render OWL objects */
+     *         render OWL objects
+     */
     @Override
     public String render() {
         StringBuffer buffer = new StringBuffer(getOpplStatement().render());
@@ -409,7 +460,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     @Override
     public String render(ShortFormProvider shortFormProvider) {
         String r = rendering == null ? "" : rendering;
-        return String.format("%s %s", opplStatement.render(shortFormProvider), r).trim();
+        return String.format("%s %s", opplStatement.render(shortFormProvider),
+                r).trim();
     }
 
     @Override
@@ -417,8 +469,10 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return rendering;
     }
 
-    /** @param rendering
-     *            the rendering to set */
+    /**
+     * @param rendering
+     *        the rendering to set
+     */
     public void setRendering(String rendering) {
         this.rendering = rendering;
         StringTokenizer tokenizer = new StringTokenizer(rendering, " \n\t\r\f");
@@ -443,14 +497,18 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return valid;
     }
 
-    /** @param l
-     *            l */
+    /**
+     * @param l
+     *        l
+     */
     public void addChangeListener(PatternModelChangeListener l) {
         listeners.add(l);
     }
 
-    /** @param l
-     *            l */
+    /**
+     * @param l
+     *        l
+     */
     public void removeChangeListener(PatternModelChangeListener l) {
         listeners.remove(l);
     }
@@ -499,7 +557,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     @Override
     public OWLObject getDefinitorialPortion(
             Collection<? extends BindingNode> bindingNodes,
-            RuntimeExceptionHandler runtimeExceptionHandler) throws PatternException {
+            RuntimeExceptionHandler runtimeExceptionHandler)
+            throws PatternException {
         DefinitorialExtractor extractor = createDefinitorialExtractor(getReturnVariable());
         getConstraintSystem().setLeaves(new HashSet<BindingNode>(bindingNodes));
         for (BindingNode bindingNode : bindingNodes) {
@@ -507,8 +566,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
                     getConstraintSystem(), bindingNode, runtimeExceptionHandler);
             PartialOWLObjectInstantiator instantiator = new PartialOWLObjectInstantiator(
                     parameters);
-            ConstraintSystem newConstraintSystem = getConstraintSystem().getOPPLFactory()
-                    .createConstraintSystem();
+            ConstraintSystem newConstraintSystem = getConstraintSystem()
+                    .getOPPLFactory().createConstraintSystem();
             for (Variable<?> v : bindingNode.getAssignedVariables()) {
                 newConstraintSystem.importVariable(v);
             }
@@ -520,18 +579,22 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
                 Set<Variable<?>> remainingVariables = variableExtractor
                         .extractVariables(instantiatedAxiom);
                 boolean instantiate = !remainingVariables.isEmpty()
-                        && hasValuesFor(remainingVariables, bindingNode, parameters);
+                        && hasValuesFor(remainingVariables, bindingNode,
+                                parameters);
                 instantiator = new PartialOWLObjectInstantiator(
-                        new SimpleValueComputationParameters(newConstraintSystem,
-                                bindingNode, runtimeExceptionHandler));
+                        new SimpleValueComputationParameters(
+                                newConstraintSystem, bindingNode,
+                                runtimeExceptionHandler));
                 while (instantiate) {
                     instantiatedAxiom = instantiatedAxiom.accept(instantiator);
                     remainingVariables = variableExtractor
                             .extractVariables(instantiatedAxiom);
                     instantiate = !remainingVariables.isEmpty()
-                            && hasValuesFor(remainingVariables, bindingNode, parameters);
+                            && hasValuesFor(remainingVariables, bindingNode,
+                                    parameters);
                 }
-                instantiatedAxiom.accept((OWLObjectVisitor) extractor);
+                ((OWLAxiom) instantiatedAxiom)
+                        .accept((OWLAxiomVisitorEx) extractor);
             }
         }
         getConstraintSystem().setLeaves(null);
@@ -539,37 +602,45 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return extractedObject;
     }
 
-    private DefinitorialExtractor createDefinitorialExtractor(final Variable<?> variable) {
+    private DefinitorialExtractor createDefinitorialExtractor(
+            final Variable<?> variable) {
         final OWLDataFactory dataFactory = ontologyManager.getOWLDataFactory();
         OWLObject owlObject = null;
         VariableTypeVisitorEx<OWLObject> visitor = new VariableTypeVisitorEx<OWLObject>() {
+
             @Override
-            public OWLObject visitINDIVIDUALVariableType(INDIVIDUALVariableType t) {
+            public OWLObject visitINDIVIDUALVariableType(
+                    INDIVIDUALVariableType t) {
                 throw new RuntimeException("Unsupported variable type: "
-                        + variable.getType() + " for pattern used in functional mode");
+                        + variable.getType()
+                        + " for pattern used in functional mode");
             }
 
             @Override
-            public OWLObject visitDATAPROPERTYVariableType(DATAPROPERTYVariableType t) {
+            public OWLObject visitDATAPROPERTYVariableType(
+                    DATAPROPERTYVariableType t) {
                 return dataFactory.getOWLDataProperty(variable.getIRI());
             }
 
             @Override
-            public OWLObject
-                    visitOBJECTPROPERTYVariableType(OBJECTPROPERTYVariableType t) {
+            public OWLObject visitOBJECTPROPERTYVariableType(
+                    OBJECTPROPERTYVariableType t) {
                 return dataFactory.getOWLObjectProperty(variable.getIRI());
             }
 
             @Override
-            public OWLObject visitANNOTATIONPROPERTYVariableType(
-                    ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
+            public
+                    OWLObject
+                    visitANNOTATIONPROPERTYVariableType(
+                            ANNOTATIONPROPERTYVariableType annotationpropertyVariableType) {
                 return dataFactory.getOWLAnnotationProperty(variable.getIRI());
             }
 
             @Override
             public OWLObject visitCONSTANTVariableType(CONSTANTVariableType t) {
                 throw new RuntimeException("Unsupported variable type: "
-                        + variable.getType() + " for pattern used in functional mode");
+                        + variable.getType()
+                        + " for pattern used in functional mode");
             }
 
             @Override
@@ -578,13 +649,16 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
             }
         };
         owlObject = variable.getType().accept(visitor);
-        return new DefinitorialExtractor(owlObject, variable.getType(), dataFactory);
+        return new DefinitorialExtractor(owlObject, variable.getType(),
+                dataFactory);
     }
 
-    /** @param patternModel
-     *            patternModel
+    /**
+     * @param patternModel
+     *        patternModel
      * @return true if this PatternModel instance depends on the input one,
-     *         false otherwise */
+     *         false otherwise
+     */
     @Override
     public boolean dependsOn(PatternOPPLScript patternModel) {
         boolean toReturn = isDependent();
@@ -593,7 +667,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
             Iterator<PatternOPPLScript> it = dependencies.iterator();
             while (!toReturn && it.hasNext()) {
                 PatternOPPLScript aPatternModel = it.next();
-                toReturn = aPatternModel.getName().equals(patternModel.getName())
+                toReturn = aPatternModel.getName().equals(
+                        patternModel.getName())
                         || aPatternModel.dependsOn(patternModel);
             }
         }
@@ -605,23 +680,26 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return !dependencies.isEmpty();
     }
 
-    /** @param ontologies
-     *            ontologies
+    /**
+     * @param ontologies
+     *        ontologies
      * @param errorListener
-     *            errorListener
+     *        errorListener
      * @return the set of PatternModel instances that depend on this. Please
      *         notice that InstantiatedPatternModel instances will be returned
-     *         as well */
-    public Set<PatternOPPLScript> getDependingPatterns(Set<OWLOntology> ontologies,
-            ErrorListener errorListener) {
+     *         as well
+     */
+    public Set<PatternOPPLScript> getDependingPatterns(
+            Set<OWLOntology> ontologies, ErrorListener errorListener) {
         Set<PatternOPPLScript> toReturn = new HashSet<PatternOPPLScript>();
         for (OWLOntology ontology : ontologies) {
-            Set<PatternModel> existingPatterns = Utils.getExistingPatterns(ontology,
-                    factory);
+            Set<PatternModel> existingPatterns = Utils.getExistingPatterns(
+                    ontology, factory);
             for (PatternModel patternModel : existingPatterns) {
                 if (patternModel.dependsOn(this)) {
                     toReturn.add(patternModel);
-                    toReturn.addAll(patternModel.getInstantiations(errorListener));
+                    toReturn.addAll(patternModel
+                            .getInstantiations(errorListener));
                 }
             }
         }
@@ -629,19 +707,25 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return toReturn;
     }
 
-    /** @param errorListener
-     *            errorListener
-     * @return instantiations */
-    public Set<InstantiatedPatternModel> getInstantiations(ErrorListener errorListener) {
+    /**
+     * @param errorListener
+     *        errorListener
+     * @return instantiations
+     */
+    public Set<InstantiatedPatternModel> getInstantiations(
+            ErrorListener errorListener) {
         Set<InstantiatedPatternModel> toReturn = new HashSet<InstantiatedPatternModel>();
         Set<OWLOntology> ontologies = ontologyManager.getOntologies();
-        PatternExtractor patternExtractor = factory.getPatternExtractor(errorListener);
+        PatternExtractor patternExtractor = factory
+                .getPatternExtractor(errorListener);
         for (OWLOntology ontology : ontologies) {
             Set<OWLClass> referencedClasses = ontology.getClassesInSignature();
             for (OWLClass owlClass : referencedClasses) {
-                Set<OWLAnnotation> annotationAxioms = (Set<OWLAnnotation>) EntitySearcher.getAnnotations(owlClass, ontology);
+                Set<OWLAnnotation> annotationAxioms = (Set<OWLAnnotation>) EntitySearcher
+                        .getAnnotations(owlClass, ontology);
                 for (OWLAnnotation annotationAxiom : annotationAxioms) {
-                    OPPLScript extractedPatternModel = annotationAxiom.accept(patternExtractor);
+                    OPPLScript extractedPatternModel = annotationAxiom
+                            .accept(patternExtractor);
                     if (extractedPatternModel != null
                             && extractedPatternModel instanceof InstantiatedPatternModel
                             && ((InstantiatedPatternModel) extractedPatternModel)
@@ -656,12 +740,13 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     }
 
     @Override
-    public Set<OWLObject>
-            getOWLObjects(OWLOntology ontology, ErrorListener errorListener) {
+    public Set<OWLObject> getOWLObjects(OWLOntology ontology,
+            ErrorListener errorListener) {
         Set<OWLObject> toReturn = new HashSet<OWLObject>();
         boolean found = false;
         OWLAnnotation ontologyAnnotation = null;
-        Iterator<OWLAnnotation> annotationIterator = ontology.getAnnotations().iterator();
+        Iterator<OWLAnnotation> annotationIterator = ontology.getAnnotations()
+                .iterator();
         while (!found && annotationIterator.hasNext()) {
             ontologyAnnotation = annotationIterator.next();
             found = iri.equals(ontologyAnnotation.getProperty().getIRI());
@@ -682,8 +767,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         OWLAnnotation ontologyAnnotation = null;
         while (!found && it.hasNext()) {
             ontology = it.next();
-            Iterator<OWLAnnotation> annotationIterator = ontology.getAnnotations()
-                    .iterator();
+            Iterator<OWLAnnotation> annotationIterator = ontology
+                    .getAnnotations().iterator();
             while (!found && annotationIterator.hasNext()) {
                 ontologyAnnotation = annotationIterator.next();
                 found = iri.equals(ontologyAnnotation.getProperty().getIRI());
@@ -695,10 +780,12 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return toReturn;
     }
 
-    /** Sets the return variable
+    /**
+     * Sets the return variable
      * 
      * @param returnVariable
-     *            returnVariable */
+     *        returnVariable
+     */
     public void setReturnVariable(Variable<?> returnVariable) {
         this.returnVariable = returnVariable;
     }
@@ -713,8 +800,10 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         return returnVariable != null;
     }
 
-    /** @return true if the pattern is applicable to OWL classes (must edit the
-     *         semantics of the class it applies to), false otherwise */
+    /**
+     * @return true if the pattern is applicable to OWL classes (must edit the
+     *         semantics of the class it applies to), false otherwise
+     */
     @Override
     public boolean isClassPattern() {
         ClassPatternDetector classPatternDetector = new ClassPatternDetector();
@@ -744,8 +833,10 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
         while (!found && it.hasNext()) {
             Variable<?> v = it.next();
             found = v.accept(new VariableVisitorEx<Boolean>() {
+
                 @Override
-                public <P extends OWLObject> Boolean visit(GeneratedVariable<P> gv) {
+                public <P extends OWLObject> Boolean visit(
+                        GeneratedVariable<P> gv) {
                     return Boolean.FALSE;
                 }
 
@@ -801,7 +892,8 @@ public class PatternModel implements OPPLScript, PatternOPPLScript {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (opplStatement == null ? 0 : opplStatement.hashCode());
+        result = prime * result
+                + (opplStatement == null ? 0 : opplStatement.hashCode());
         return result;
     }
 

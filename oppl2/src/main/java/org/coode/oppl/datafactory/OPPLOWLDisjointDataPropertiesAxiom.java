@@ -6,30 +6,52 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.coode.oppl.function.inline.InlineSet;
-import org.semanticweb.owlapi.model.*;
-
 import javax.annotation.Nonnull;
+
+import org.coode.oppl.function.inline.InlineSet;
+import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLAxiomVisitor;
+import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLDisjointDataPropertiesAxiom;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectVisitor;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+import org.semanticweb.owlapi.model.OWLPairwiseVisitor;
 
 /** @author Luigi Iannone */
 public class OPPLOWLDisjointDataPropertiesAxiom extends
         AbstractInlineSetAxiom<OWLDataPropertyExpression> implements
         OWLDisjointDataPropertiesAxiom {
+
     private static final long serialVersionUID = 20100L;
     private final OWLDisjointDataPropertiesAxiom delegate;
     private final boolean shouldExpandAsPairWise;
 
-    /** @param dataFactory
-     *            dataFactory
+    /**
+     * @param dataFactory
+     *        dataFactory
      * @param propertyExpressions
-     *            propertyExpressions
+     *        propertyExpressions
      * @param annotations
-     *            annotations
+     *        annotations
      * @param shouldExpandAsPairWise
-     *            shouldExpandAsPairWise */
+     *        shouldExpandAsPairWise
+     */
     public OPPLOWLDisjointDataPropertiesAxiom(OPPLOWLDataFactory dataFactory,
             InlineSet<OWLDataPropertyExpression> propertyExpressions,
-            Set<? extends OWLAnnotation> annotations, boolean shouldExpandAsPairWise) {
+            Set<OWLAnnotation> annotations, boolean shouldExpandAsPairWise) {
         super(propertyExpressions);
         checkNotNull(dataFactory, "dataFactory");
         checkNotNull(propertyExpressions, "propertyExpressions");
@@ -56,8 +78,8 @@ public class OPPLOWLDisjointDataPropertiesAxiom extends
     }
 
     @Override
-    public Set<OWLDataPropertyExpression> getProperties() {
-        return delegate.getProperties();
+    public Stream<OWLDataPropertyExpression> properties() {
+        return delegate.properties();
     }
 
     @Override
@@ -78,13 +100,15 @@ public class OPPLOWLDisjointDataPropertiesAxiom extends
 
     @Nonnull
     @Override
-    public OWLAxiom getAnnotatedAxiom(@Nonnull Collection<OWLAnnotation> annotations) {
+    public OWLAxiom getAnnotatedAxiom(
+            @Nonnull Collection<OWLAnnotation> annotations) {
         return null;
     }
 
     @Nonnull
     @Override
-    public OWLAxiom getAnnotatedAxiom(@Nonnull Stream<OWLAnnotation> annotations) {
+    public OWLAxiom
+            getAnnotatedAxiom(@Nonnull Stream<OWLAnnotation> annotations) {
         return delegate.getAnnotatedAxiom(annotations);
     }
 
@@ -96,7 +120,8 @@ public class OPPLOWLDisjointDataPropertiesAxiom extends
 
     @Nonnull
     @Override
-    public <T> Collection<T> walkPairwise(OWLPairwiseVisitor<T, OWLDataPropertyExpression> visitor) {
+    public <T> Collection<T> walkPairwise(
+            OWLPairwiseVisitor<T, OWLDataPropertyExpression> visitor) {
         return walkPairwise(visitor);
     }
 
@@ -133,7 +158,8 @@ public class OPPLOWLDisjointDataPropertiesAxiom extends
     }
 
     @Override
-    public Set<OWLAnnotation> getAnnotations(OWLAnnotationProperty annotationProperty) {
+    public Set<OWLAnnotation> getAnnotations(
+            OWLAnnotationProperty annotationProperty) {
         return delegate.getAnnotations(annotationProperty);
     }
 

@@ -7,34 +7,57 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.coode.oppl.function.inline.InlineSet;
-import org.semanticweb.owlapi.model.*;
-
 import javax.annotation.Nonnull;
 
+import org.coode.oppl.function.inline.InlineSet;
+import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLAxiomVisitor;
+import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectVisitor;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+import org.semanticweb.owlapi.model.OWLPairwiseVisitor;
+import org.semanticweb.owlapi.model.OWLSameIndividualAxiom;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+
 /** @author Luigi Iannone */
-public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndividual>
-        implements OWLSameIndividualAxiom {
+public class OPPLOWLSameIndividualAxiom extends
+        AbstractInlineSetAxiom<OWLIndividual> implements OWLSameIndividualAxiom {
+
     private static final long serialVersionUID = 20100L;
     private final OWLSameIndividualAxiom delegate;
     private final boolean shouldExpandAsPairWise;
 
-    /** @param dataFactory
-     *            dataFactory
+    /**
+     * @param dataFactory
+     *        dataFactory
      * @param individuals
-     *            individuals
+     *        individuals
      * @param annotations
-     *            annotations
+     *        annotations
      * @param shouldExpandAsPairWise
-     *            shouldExpandAsPairWise */
+     *        shouldExpandAsPairWise
+     */
     public OPPLOWLSameIndividualAxiom(OPPLOWLDataFactory dataFactory,
             InlineSet<OWLIndividual> individuals,
-            Set<? extends OWLAnnotation> annotations, boolean shouldExpandAsPairWise) {
+            Set<OWLAnnotation> annotations, boolean shouldExpandAsPairWise) {
         super(individuals);
         checkNotNull(dataFactory, "dataFactory");
         checkNotNull(annotations, "annotations");
-        delegate = dataFactory.getDelegate().getOWLSameIndividualAxiom(individuals,
-                annotations);
+        delegate = dataFactory.getDelegate().getOWLSameIndividualAxiom(
+                individuals, annotations);
         this.shouldExpandAsPairWise = shouldExpandAsPairWise;
     }
 
@@ -54,8 +77,8 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
     }
 
     @Override
-    public Set<OWLIndividual> getIndividuals() {
-        return delegate.getIndividuals();
+    public Stream<OWLIndividual> individuals() {
+        return delegate.individuals();
     }
 
     @Override
@@ -90,7 +113,8 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
 
     @Nonnull
     @Override
-    public <T> Collection<T> walkPairwise(OWLPairwiseVisitor<T, OWLIndividual> visitor) {
+    public <T> Collection<T> walkPairwise(
+            OWLPairwiseVisitor<T, OWLIndividual> visitor) {
         return delegate.walkPairwise(visitor);
     }
 
@@ -142,13 +166,15 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
 
     @Nonnull
     @Override
-    public OWLAxiom getAnnotatedAxiom(@Nonnull Collection<OWLAnnotation> annotations) {
+    public OWLAxiom getAnnotatedAxiom(
+            @Nonnull Collection<OWLAnnotation> annotations) {
         return delegate.getAnnotatedAxiom(annotations);
     }
 
     @Nonnull
     @Override
-    public OWLAxiom getAnnotatedAxiom(@Nonnull Stream<OWLAnnotation> annotations) {
+    public OWLAxiom
+            getAnnotatedAxiom(@Nonnull Stream<OWLAnnotation> annotations) {
         return delegate.getAnnotatedAxiom(annotations);
     }
 
@@ -174,7 +200,8 @@ public class OPPLOWLSameIndividualAxiom extends AbstractInlineSetAxiom<OWLIndivi
     }
 
     @Override
-    public Set<OWLAnnotation> getAnnotations(OWLAnnotationProperty annotationProperty) {
+    public Set<OWLAnnotation> getAnnotations(
+            OWLAnnotationProperty annotationProperty) {
         return delegate.getAnnotations(annotationProperty);
     }
 

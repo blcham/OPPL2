@@ -22,7 +22,9 @@
  */
 package org.coode.oppl;
 
-import java.util.Set;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.contains;
+
+import java.util.stream.Stream;
 
 import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.generated.GeneratedVariable;
@@ -30,11 +32,12 @@ import org.coode.oppl.variabletypes.VariableType;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLProperty;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
-/** Represents a range limitations that could be added to a
+/**
+ * Represents a range limitations that could be added to a
  * {@link GeneratedVariable} instance with OBJECTPROERTY or DATAPROPERTY
  * {@link VariableType}, in particular this restricts the possible values to the
  * set of primitive object properties or data properties that are sub-properties
@@ -42,9 +45,11 @@ import org.semanticweb.owlapi.search.EntitySearcher;
  * 
  * @author Luigi Iannone
  * @param <P>
- *            type */
+ *        type
+ */
 public class SubPropertyVariableScope<P extends OWLPropertyExpression> extends
         PropertyVariableScope<P> {
+
     SubPropertyVariableScope(P property, VariableScopeChecker checker) {
         super(property, checker);
     }
@@ -53,11 +58,13 @@ public class SubPropertyVariableScope<P extends OWLPropertyExpression> extends
     public boolean check(OWLObject owlObject) throws OWLRuntimeException {
         return owlObject instanceof OWLProperty
                 && this.check(getProperty(), getChecker().getOntologyManager()
-                        .getOntologies());
+                        .ontologies());
     }
 
-    boolean check(P property, Set<OWLOntology> ontologies) {
-        return EntitySearcher.getSuperProperties(property, ontologies).contains(property);
+    boolean check(P property, Stream<OWLOntology> ontologies) {
+        return contains(
+                EntitySearcher.getSuperProperties(property, ontologies),
+                property);
     }
 
     @Override

@@ -91,11 +91,15 @@ import org.semanticweb.owlapi.model.SWRLSameIndividualAtom;
 import org.semanticweb.owlapi.model.SWRLVariable;
 
 /** @author Luigi Iannone */
-public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boolean> {
+public abstract class AbstractVariableDetector implements
+        OWLObjectVisitorEx<Boolean> {
+
     protected ConstraintSystem constraintSystem;
 
-    /** @param constraintSystem
-     *            constraintSystem */
+    /**
+     * @param constraintSystem
+     *        constraintSystem
+     */
     protected AbstractVariableDetector(ConstraintSystem constraintSystem) {
         this.constraintSystem = constraintSystem;
     }
@@ -103,7 +107,7 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
     @Override
     public Boolean visit(OWLObjectIntersectionOf desc) {
         boolean found = false;
-        Iterator<OWLClassExpression> it = desc.getOperands().iterator();
+        Iterator<? extends OWLClassExpression> it = desc.operands().iterator();
         OWLClassExpression operand;
         while (!found && it.hasNext()) {
             operand = it.next();
@@ -115,7 +119,7 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
     @Override
     public Boolean visit(OWLObjectUnionOf desc) {
         boolean found = false;
-        Iterator<OWLClassExpression> it = desc.getOperands().iterator();
+        Iterator<? extends OWLClassExpression> it = desc.operands().iterator();
         OWLClassExpression operand;
         while (!found && it.hasNext()) {
             operand = it.next();
@@ -131,20 +135,20 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLObjectSomeValuesFrom desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || desc.getFiller().accept(this);
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty()) || desc.getFiller().accept(this);
     }
 
     @Override
     public Boolean visit(OWLObjectAllValuesFrom desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || desc.getFiller().accept(this);
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty()) || desc.getFiller().accept(this);
     }
 
     @Override
     public Boolean visit(OWLObjectHasValue desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || desc.getValue().accept(this);
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty()) || desc.getValue().accept(this);
     }
 
     @Override
@@ -154,31 +158,38 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLObjectMinCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || (desc.getFiller() == null ? false : desc.getFiller().accept(this));
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty())
+                || (desc.getFiller() == null ? false : desc.getFiller().accept(
+                        this));
     }
 
     @Override
     public Boolean visit(OWLObjectExactCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || (desc.getFiller() == null ? false : desc.getFiller().accept(this));
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty())
+                || (desc.getFiller() == null ? false : desc.getFiller().accept(
+                        this));
     }
 
     @Override
     public Boolean visit(OWLObjectMaxCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty())
-                || (desc.getFiller() == null ? false : desc.getFiller().accept(this));
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty())
+                || (desc.getFiller() == null ? false : desc.getFiller().accept(
+                        this));
     }
 
     @Override
     public Boolean visit(OWLObjectHasSelf desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLObjectProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLObjectProperty());
     }
 
     @Override
     public Boolean visit(OWLObjectOneOf desc) {
         boolean found = false;
-        Iterator<OWLIndividual> it = desc.getIndividuals().iterator();
+        Iterator<? extends OWLIndividual> it = desc.individuals().iterator();
         OWLIndividual individual;
         while (!found && it.hasNext()) {
             individual = it.next();
@@ -189,42 +200,50 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDataSomeValuesFrom desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLDataAllValuesFrom desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLDataHasValue desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLDataMinCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLDataExactCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLDataMaxCardinality desc) {
-        return constraintSystem.isVariable(desc.getProperty().asOWLDataProperty());
+        return constraintSystem.isVariable(desc.getProperty()
+                .asOWLDataProperty());
     }
 
     @Override
     public Boolean visit(OWLSubClassOfAxiom axiom) {
-        return axiom.getSubClass().accept(this) || axiom.getSuperClass().accept(this);
+        return axiom.getSubClass().accept(this)
+                || axiom.getSuperClass().accept(this);
     }
 
     @Override
     public Boolean visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getSubject().accept(this)
+        return axiom.getProperty().accept(this)
+                || axiom.getSubject().accept(this)
                 || axiom.getObject().accept(this);
     }
 
@@ -251,18 +270,21 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDataPropertyDomainAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getDomain().accept(this);
+        return axiom.getProperty().accept(this)
+                || axiom.getDomain().accept(this);
     }
 
     @Override
     public Boolean visit(OWLObjectPropertyDomainAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getDomain().accept(this);
+        return axiom.getProperty().accept(this)
+                || axiom.getDomain().accept(this);
     }
 
     @Override
     public Boolean visit(OWLEquivalentObjectPropertiesAxiom axiom) {
         Set<OWLObjectPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLObjectPropertyExpression> iterator = descriptions.iterator();
+        Iterator<OWLObjectPropertyExpression> iterator = descriptions
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -272,7 +294,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLNegativeDataPropertyAssertionAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getSubject().accept(this)
+        return axiom.getProperty().accept(this)
+                || axiom.getSubject().accept(this)
                 || axiom.getObject().accept(this);
     }
 
@@ -301,7 +324,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
     @Override
     public Boolean visit(OWLDisjointObjectPropertiesAxiom axiom) {
         Set<OWLObjectPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLObjectPropertyExpression> iterator = descriptions.iterator();
+        Iterator<OWLObjectPropertyExpression> iterator = descriptions
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -311,12 +335,14 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLObjectPropertyRangeAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getRange().accept(this);
+        return axiom.getProperty().accept(this)
+                || axiom.getRange().accept(this);
     }
 
     @Override
     public Boolean visit(OWLObjectPropertyAssertionAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getSubject().accept(this)
+        return axiom.getProperty().accept(this)
+                || axiom.getSubject().accept(this)
                 || axiom.getObject().accept(this);
     }
 
@@ -333,8 +359,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDisjointUnionAxiom axiom) {
-        Set<OWLClassExpression> descriptions = axiom.getClassExpressions();
-        Iterator<OWLClassExpression> iterator = descriptions.iterator();
+        Iterator<? extends OWLClassExpression> iterator = axiom
+                .classExpressions().iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -354,7 +380,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDataPropertyRangeAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getRange().accept(this);
+        return axiom.getProperty().accept(this)
+                || axiom.getRange().accept(this);
     }
 
     @Override
@@ -364,8 +391,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLEquivalentDataPropertiesAxiom axiom) {
-        Set<OWLDataPropertyExpression> descriptions = axiom.getProperties();
-        Iterator<OWLDataPropertyExpression> iterator = descriptions.iterator();
+        Iterator<OWLDataPropertyExpression> iterator = axiom.properties()
+                .iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -392,7 +419,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDataPropertyAssertionAxiom axiom) {
-        return axiom.getProperty().accept(this) || axiom.getSubject().accept(this)
+        return axiom.getProperty().accept(this)
+                || axiom.getSubject().accept(this)
                 || axiom.getObject().accept(this);
     }
 
@@ -429,8 +457,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLSubPropertyChainOfAxiom axiom) {
-        Iterator<OWLObjectPropertyExpression> iterator = axiom.getPropertyChain()
-                .iterator();
+        Iterator<OWLObjectPropertyExpression> iterator = axiom
+                .getPropertyChain().iterator();
         boolean found = false;
         while (found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -440,7 +468,8 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLInverseObjectPropertiesAxiom axiom) {
-        Iterator<OWLObjectPropertyExpression> iterator = axiom.getProperties().iterator();
+        Iterator<OWLObjectPropertyExpression> iterator = axiom.getProperties()
+                .iterator();
         boolean found = false;
         while (found && iterator.hasNext()) {
             found = iterator.next().accept(this);
@@ -465,7 +494,7 @@ public abstract class AbstractVariableDetector implements OWLObjectVisitorEx<Boo
 
     @Override
     public Boolean visit(OWLDataOneOf node) {
-        Iterator<OWLLiteral> iterator = node.getValues().iterator();
+        Iterator<? extends OWLLiteral> iterator = node.values().iterator();
         boolean found = false;
         while (!found && iterator.hasNext()) {
             found = iterator.next().accept(this);
