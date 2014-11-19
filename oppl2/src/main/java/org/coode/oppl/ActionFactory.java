@@ -22,10 +22,13 @@
  */
 package org.coode.oppl;
 
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asList;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.exceptions.RuntimeExceptionHandler;
@@ -36,25 +39,30 @@ import org.semanticweb.owlapi.model.OWLAxiomChange;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 
-/** Adapts actions to appropriate changes
+/**
+ * Adapts actions to appropriate changes
  * 
- * @author Luigi Iannone */
+ * @author Luigi Iannone
+ */
 public class ActionFactory {
-    /** @param actionType
-     *            actionType
+
+    /**
+     * @param actionType
+     *        actionType
      * @param axiom
-     *            axiom
+     *        axiom
      * @param cs
-     *            cs
+     *        cs
      * @param ontology
-     *            ontology
+     *        ontology
      * @param runtimeExcpetionHandler
-     *            runtimeExcpetionHandler
-     * @return list of changes */
+     *        runtimeExcpetionHandler
+     * @return list of changes
+     */
     public static List<OWLAxiomChange> createChanges(ActionType actionType,
             OWLAxiom axiom, ConstraintSystem cs, OWLOntology ontology,
             RuntimeExceptionHandler runtimeExcpetionHandler) {
-        Set<OWLAxiomChange> toReturn = new HashSet<OWLAxiomChange>();
+        Set<OWLAxiomChange> toReturn = new HashSet<>();
         Set<BindingNode> leaves = cs.getLeaves();
         if (leaves != null) {
             for (BindingNode bindingNode : leaves) {
@@ -62,13 +70,15 @@ public class ActionFactory {
                         cs, bindingNode, runtimeExcpetionHandler);
                 PartialOWLObjectInstantiator instatiator = new PartialOWLObjectInstantiator(
                         parameters);
-                OWLAxiom instantiatedAxiom = (OWLAxiom) axiom.accept(instatiator);
+                OWLAxiom instantiatedAxiom = (OWLAxiom) axiom
+                        .accept(instatiator);
                 switch (actionType) {
                     case ADD:
                         toReturn.add(new AddAxiom(ontology, instantiatedAxiom));
                         break;
                     case REMOVE:
-                        toReturn.add(new RemoveAxiom(ontology, instantiatedAxiom));
+                        toReturn.add(new RemoveAxiom(ontology,
+                                instantiatedAxiom));
                         break;
                     default:
                         break;
@@ -86,28 +96,27 @@ public class ActionFactory {
                     break;
             }
         }
-        return new ArrayList<OWLAxiomChange>(toReturn);
+        return new ArrayList<>(toReturn);
     }
 
-    /** @param actionType
-     *            actionType
+    /**
+     * @param actionType
+     *        actionType
      * @param axiom
-     *            axiom
+     *        axiom
      * @param cs
-     *            cs
+     *        cs
      * @param ontologies
-     *            ontologies
+     *        ontologies
      * @param runtimeExceptionHandler
-     *            runtimeExceptionHandler
-     * @return the List of OWLAxiomChange */
+     *        runtimeExceptionHandler
+     * @return the List of OWLAxiomChange
+     */
     public static List<OWLAxiomChange> createChanges(ActionType actionType,
-            OWLAxiom axiom, ConstraintSystem cs, Set<OWLOntology> ontologies,
+            OWLAxiom axiom, ConstraintSystem cs,
+            Stream<OWLOntology> ontologies,
             RuntimeExceptionHandler runtimeExceptionHandler) {
-        List<OWLAxiomChange> toReturn = new ArrayList<OWLAxiomChange>();
-        for (OWLOntology ontology : ontologies) {
-            toReturn.addAll(createChanges(actionType, axiom, cs, ontology,
-                    runtimeExceptionHandler));
-        }
-        return toReturn;
+        return asList(ontologies.flatMap(o -> createChanges(actionType, axiom,
+                cs, o, runtimeExceptionHandler).stream()));
     }
 }

@@ -1,16 +1,39 @@
 package org.coode.oppl.queryplanner;
 
-import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLDataAllValuesFrom;
+import org.semanticweb.owlapi.model.OWLDataExactCardinality;
+import org.semanticweb.owlapi.model.OWLDataHasValue;
+import org.semanticweb.owlapi.model.OWLDataMaxCardinality;
+import org.semanticweb.owlapi.model.OWLDataMinCardinality;
+import org.semanticweb.owlapi.model.OWLDataSomeValuesFrom;
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
+import org.semanticweb.owlapi.model.OWLObjectComplementOf;
+import org.semanticweb.owlapi.model.OWLObjectExactCardinality;
+import org.semanticweb.owlapi.model.OWLObjectHasSelf;
+import org.semanticweb.owlapi.model.OWLObjectHasValue;
+import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
+import org.semanticweb.owlapi.model.OWLObjectMaxCardinality;
+import org.semanticweb.owlapi.model.OWLObjectMinCardinality;
+import org.semanticweb.owlapi.model.OWLObjectOneOf;
+import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
+import org.semanticweb.owlapi.model.OWLObjectUnionOf;
+import org.semanticweb.owlapi.model.OWLObjectVisitor;
+import org.semanticweb.owlapi.model.OWLQuantifiedRestriction;
 
 /** @author Luigi Iannone */
 public class ConstantExtractor implements OWLObjectVisitor {
+
     private final Set<OWLLiteral> toReturn;
 
-    /** @param toReturn
-     *            toReturn */
+    /**
+     * @param toReturn
+     *        toReturn
+     */
     public ConstantExtractor(Set<OWLLiteral> toReturn) {
         this.toReturn = toReturn;
     }
@@ -78,7 +101,7 @@ public class ConstantExtractor implements OWLObjectVisitor {
 
     @Override
     public void visit(OWLDataHasValue desc) {
-        toReturn.add(desc.getValue());
+        toReturn.add(desc.getFiller());
     }
 
     @Override
@@ -91,19 +114,18 @@ public class ConstantExtractor implements OWLObjectVisitor {
         desc.getOperand().accept(this);
     }
 
-    protected void visitOWLObjectCollection(Collection<? extends OWLObject> collection) {
-        for (OWLObject owlObject : collection) {
-            owlObject.accept(this);
-        }
+    protected void visitOWLObjectCollection(
+            Stream<? extends OWLObject> collection) {
+        collection.forEach(o -> o.accept(this));
     }
 
     @Override
     public void visit(OWLObjectUnionOf desc) {
-        visitOWLObjectCollection(desc.getOperands());
+        visitOWLObjectCollection(desc.operands());
     }
 
     @Override
     public void visit(OWLObjectIntersectionOf desc) {
-        visitOWLObjectCollection(desc.getOperands());
+        visitOWLObjectCollection(desc.operands());
     }
 }

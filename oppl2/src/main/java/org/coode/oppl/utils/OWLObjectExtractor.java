@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -14,7 +16,6 @@ import org.semanticweb.owlapi.model.OWLAsymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLCardinalityRestriction;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataAllValuesFrom;
 import org.semanticweb.owlapi.model.OWLDataComplementOf;
 import org.semanticweb.owlapi.model.OWLDataExactCardinality;
@@ -41,7 +42,6 @@ import org.semanticweb.owlapi.model.OWLEquivalentObjectPropertiesAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLHasValueRestriction;
-import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLInverseFunctionalObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
 import org.semanticweb.owlapi.model.OWLIrreflexiveObjectPropertyAxiom;
@@ -87,14 +87,16 @@ import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLUnaryPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
 
-import javax.annotation.Nonnull;
-
-/** Extracts from an OWLObject a particular kind of OWLObject component.
+/**
+ * Extracts from an OWLObject a particular kind of OWLObject component.
  * 
  * @author Luigi Iannone
  * @param <O>
- *            type */
-public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectVisitorEx<Set<O>> {
+ *        type
+ */
+public final class OWLObjectExtractor<O extends OWLObject> implements
+        OWLObjectVisitorEx<Set<O>> {
+
     private final OWLObjectVisitorEx<Boolean> selector;
 
     @Nonnull
@@ -103,8 +105,10 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return Collections.<O> emptySet();
     }
 
-    /** @param selector
-     *            selector */
+    /**
+     * @param selector
+     *        selector
+     */
     private OWLObjectExtractor(OWLObjectVisitorEx<Boolean> selector) {
         this.selector = checkNotNull(selector, "selector");
     }
@@ -116,7 +120,7 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLAnnotationAssertionAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getSubject().accept(this));
         toReturn.addAll(axiom.getAnnotation().accept(this));
         return toReturn;
@@ -124,7 +128,7 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLAnnotation annotation) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(annotation.getProperty().accept(this));
         toReturn.addAll(annotation.getValue().accept(this));
         return toReturn;
@@ -132,7 +136,7 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLSubClassOfAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getSubClass().accept(this));
         toReturn.addAll(axiom.getSuperClass().accept(this));
         return toReturn;
@@ -143,11 +147,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLPropertyAssertionAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
-    private Set<O> visitOWLPropertyAssertionAxiom(OWLPropertyAssertionAxiom<?, ?> axiom) {
-        Set<O> toReturn = new HashSet<O>();
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
+    private Set<O> visitOWLPropertyAssertionAxiom(
+            OWLPropertyAssertionAxiom<?, ?> axiom) {
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getProperty().accept(this));
         toReturn.addAll(axiom.getSubject().accept(this));
         toReturn.addAll(axiom.getObject().accept(this));
@@ -159,9 +166,11 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitCharacteristicAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitCharacteristicAxiom(OWLUnaryPropertyAxiom<?> axiom) {
         return axiom.getProperty().accept(this);
     }
@@ -176,14 +185,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLNAryClassAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitOWLNAryClassAxiom(OWLNaryClassAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLClassExpression owlDescription : axiom.getClassExpressions()) {
-            toReturn.addAll(owlDescription.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        axiom.classExpressions().forEach(c -> toReturn.addAll(c.accept(this)));
         return toReturn;
     }
 
@@ -192,11 +201,13 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLPropertyDomainAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitOWLPropertyDomainAxiom(OWLPropertyDomainAxiom<?> axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getProperty().accept(this));
         toReturn.addAll(axiom.getDomain().accept(this));
         return toReturn;
@@ -212,14 +223,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLNaryPropertyAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitOWLNaryPropertyAxiom(OWLNaryPropertyAxiom<?> axiom) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLObject p : axiom.getProperties()) {
-            toReturn.addAll(p.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        axiom.properties().forEach(p -> toReturn.addAll(p.accept(this)));
         return toReturn;
     }
 
@@ -233,14 +244,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLNaryIndividualAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitOWLNaryIndividualAxiom(OWLNaryIndividualAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLIndividual individual : axiom.getIndividuals()) {
-            toReturn.addAll(individual.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        axiom.individuals().forEach(i -> toReturn.addAll(i.accept(this)));
         return toReturn;
     }
 
@@ -259,11 +270,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLPropertyRangeAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
-    private Set<O> visitOWLPropertyRangeAxiom(OWLPropertyRangeAxiom<?, ?> axiom) {
-        Set<O> toReturn = new HashSet<O>();
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
+    private Set<O>
+            visitOWLPropertyRangeAxiom(OWLPropertyRangeAxiom<?, ?> axiom) {
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getProperty().accept(this));
         toReturn.addAll(axiom.getRange().accept(this));
         return toReturn;
@@ -284,11 +298,13 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLSubPropertyAxiom(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return set of objects */
+    /**
+     * @param axiom
+     *        axiom
+     * @return set of objects
+     */
     private Set<O> visitOWLSubPropertyAxiom(OWLSubPropertyAxiom<?> axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getSubProperty().accept(this));
         toReturn.addAll(axiom.getSuperProperty().accept(this));
         return toReturn;
@@ -296,10 +312,8 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLDisjointUnionAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLClassExpression owlDescription : axiom.getClassExpressions()) {
-            toReturn.addAll(owlDescription.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        axiom.classExpressions().forEach(c -> toReturn.addAll(c.accept(this)));
         return toReturn;
     }
 
@@ -325,7 +339,7 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLClassAssertionAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getClassExpression().accept(this));
         toReturn.addAll(axiom.getIndividual().accept(this));
         return toReturn;
@@ -368,7 +382,7 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLSubPropertyChainOfAxiom axiom) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(axiom.getSuperProperty().accept(this));
         for (OWLObject owlObject : axiom.getPropertyChain()) {
             toReturn.addAll(owlObject.accept(this));
@@ -396,12 +410,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitPrimitive(property);
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return set of objects */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return set of objects
+     */
     @SuppressWarnings("unchecked")
     private Set<O> visitPrimitive(OWLObject owlObject) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         if (owlObject.accept(getSelector())) {
             toReturn.add((O) owlObject);
         }
@@ -413,14 +429,15 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLNaryBooleanExpression(desc);
     }
 
-    /** @param desc
-     *            desc
-     * @return set of objects */
-    private Set<O> visitOWLNaryBooleanExpression(OWLNaryBooleanClassExpression desc) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLObject owlObject : desc.getOperands()) {
-            toReturn.addAll(owlObject.accept(this));
-        }
+    /**
+     * @param desc
+     *        desc
+     * @return set of objects
+     */
+    private Set<O> visitOWLNaryBooleanExpression(
+            OWLNaryBooleanClassExpression desc) {
+        Set<O> toReturn = new HashSet<>();
+        desc.operands().forEach(o -> toReturn.addAll(o.accept(this)));
         return toReturn;
     }
 
@@ -439,11 +456,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLQuantifiedRestriction(desc);
     }
 
-    /** @param desc
-     *            desc
-     * @return set of objects */
-    private Set<O> visitOWLQuantifiedRestriction(OWLQuantifiedRestriction<?> desc) {
-        Set<O> toReturn = new HashSet<O>();
+    /**
+     * @param desc
+     *        desc
+     * @return set of objects
+     */
+    private Set<O> visitOWLQuantifiedRestriction(
+            OWLQuantifiedRestriction<?> desc) {
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(desc.getProperty().accept(this));
         toReturn.addAll(desc.getFiller().accept(this));
         return toReturn;
@@ -459,13 +479,15 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLValueRestriction(desc);
     }
 
-    /** @param desc
-     *            desc
-     * @return set of objects */
+    /**
+     * @param desc
+     *        desc
+     * @return set of objects
+     */
     private Set<O> visitOWLValueRestriction(OWLHasValueRestriction<?> desc) {
-        Set<O> toReturn = new HashSet<O>();
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(desc.getProperty().accept(this));
-        toReturn.addAll(desc.getValue().accept(this));
+        toReturn.addAll(desc.getFiller().accept(this));
         return toReturn;
     }
 
@@ -484,12 +506,14 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return visitOWLCardinalityRestriction(desc);
     }
 
-    /** @param desc
-     *            desc
-     * @return set of objects */
-    private Set<O>
-            visitOWLCardinalityRestriction(OWLCardinalityRestriction<?> desc) {
-        Set<O> toReturn = new HashSet<O>();
+    /**
+     * @param desc
+     *        desc
+     * @return set of objects
+     */
+    private Set<O> visitOWLCardinalityRestriction(
+            OWLCardinalityRestriction<?> desc) {
+        Set<O> toReturn = new HashSet<>();
         toReturn.addAll(desc.getProperty().accept(this));
         if (desc.getFiller() != null) {
             toReturn.addAll(desc.getFiller().accept(this));
@@ -504,10 +528,8 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLObjectOneOf desc) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLObject owlObject : desc.getIndividuals()) {
-            toReturn.addAll(owlObject.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        desc.individuals().forEach(i -> toReturn.addAll(i.accept(this)));
         return toReturn;
     }
 
@@ -553,10 +575,8 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
 
     @Override
     public Set<O> visit(OWLDataOneOf node) {
-        Set<O> toReturn = new HashSet<O>();
-        for (OWLObject owlObject : node.getValues()) {
-            toReturn.addAll(owlObject.accept(this));
-        }
+        Set<O> toReturn = new HashSet<>();
+        node.values().forEach(v -> toReturn.addAll(v.accept(this)));
         return toReturn;
     }
 
@@ -590,75 +610,98 @@ public final class OWLObjectExtractor<O extends OWLObject> implements OWLObjectV
         return selector;
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all classes */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all classes
+     */
     public static Set<OWLClass> getAllClasses(OWLObject owlObject) {
         return getAll(owlObject, getAllOWLClassSelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all object properties */
-    public static Set<OWLObjectProperty> getAllOWLObjectProperties(OWLObject owlObject) {
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all object properties
+     */
+    public static Set<OWLObjectProperty> getAllOWLObjectProperties(
+            OWLObject owlObject) {
         return getAll(owlObject, getAllOWLObjectPropertySelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all data properties */
-    public static Set<OWLDataProperty> getAllOWLDataProperties(OWLObject owlObject) {
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all data properties
+     */
+    public static Set<OWLDataProperty> getAllOWLDataProperties(
+            OWLObject owlObject) {
         return getAll(owlObject, getAllOWLDataPropertySelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all individuals */
-    public static Set<OWLNamedIndividual> getAllOWLIndividuals(OWLObject owlObject) {
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all individuals
+     */
+    public static Set<OWLNamedIndividual> getAllOWLIndividuals(
+            OWLObject owlObject) {
         return getAll(owlObject, getAllOWLIndividualSelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all datatypes */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all datatypes
+     */
     public static Set<OWLDatatype> getAllOWLDatatypes(OWLObject owlObject) {
         return getAll(owlObject, getAllOWLDatatypeSelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all literals */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all literals
+     */
     public static Set<OWLLiteral> getAllOWLLiterals(OWLObject owlObject) {
         return getAll(owlObject, getAllOWLConstantSelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all all entities */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all all entities
+     */
     public static Set<OWLEntity> getAllOWLEntities(OWLObject owlObject) {
         return getAll(owlObject, getAllOWLEntitySelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all primitives */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all primitives
+     */
     public static Set<OWLObject> getAllOWLPrimitives(OWLObject owlObject) {
         return getAll(owlObject, getAllPrimitiveSelector());
     }
 
-    /** @param owlObject
-     *            owlObject
-     * @return all annotation properties */
+    /**
+     * @param owlObject
+     *        owlObject
+     * @return all annotation properties
+     */
     public static Set<OWLAnnotationProperty> getAllAnnotationProperties(
             OWLObject owlObject) {
         return getAll(owlObject, getAllOWLAnnotationPropertySelector());
     }
 
-    /** @param owlObject
-     *            owlObject
+    /**
+     * @param owlObject
+     *        owlObject
      * @param extractor
-     *            extractor
-     * @return all types of owl objects */
+     *        extractor
+     * @return all types of owl objects
+     */
     private static <T extends OWLObject> Set<T> getAll(OWLObject owlObject,
             OWLObjectVisitorEx<Boolean> extractor) {
         return owlObject.accept(new OWLObjectExtractor<T>(extractor));

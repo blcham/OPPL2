@@ -42,16 +42,21 @@ import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 
-/** This ConstraintVisitor implementation verifies if the visited Constraint
+/**
+ * This ConstraintVisitor implementation verifies if the visited Constraint
  * holds
  * 
- * @author Luigi Iannone */
+ * @author Luigi Iannone
+ */
 public class ConstraintChecker implements ConstraintVisitorEx<Boolean> {
+
     private final ValueComputationParameters parameters;
     private final OWLObjectInstantiator instantiator;
 
-    /** @param parameters
-     *            parameters */
+    /**
+     * @param parameters
+     *        parameters
+     */
     public ConstraintChecker(ValueComputationParameters parameters) {
         this.parameters = checkNotNull(parameters, "parameters");
         instantiator = new OWLObjectInstantiator(getParameters());
@@ -67,17 +72,17 @@ public class ConstraintChecker implements ConstraintVisitorEx<Boolean> {
         OWLObject expression = c.getExpression();
         OWLObject instantiatedObject = expression.accept(instantiator);
         Variable<?> variable = c.getVariable();
-        OWLObject assignedValue = getParameters().getBindingNode().getAssignmentValue(
-                variable, getParameters());
+        OWLObject assignedValue = getParameters().getBindingNode()
+                .getAssignmentValue(variable, getParameters());
         return !assignedValue.equals(instantiatedObject);
     }
 
     @Override
     public Boolean visit(InCollectionConstraint<? extends OWLObject> c) {
         Set<? extends OWLObject> collection = c.getCollection();
-        OWLObject assignedValue = getParameters().getBindingNode().getAssignmentValue(
-                c.getVariable(), getParameters());
-        Set<OWLObject> instantiatedObjects = new HashSet<OWLObject>(collection.size());
+        OWLObject assignedValue = getParameters().getBindingNode()
+                .getAssignmentValue(c.getVariable(), getParameters());
+        Set<OWLObject> instantiatedObjects = new HashSet<>(collection.size());
         for (OWLObject owlObject : collection) {
             instantiatedObjects.add(owlObject.accept(instantiator));
         }
@@ -91,8 +96,8 @@ public class ConstraintChecker implements ConstraintVisitorEx<Boolean> {
 
     @Override
     public Boolean visit(NAFConstraint nafConstraint) {
-        OWLAxiom instantiatedAxiom = (OWLAxiom) nafConstraint.getAxiom().accept(
-                instantiator);
+        OWLAxiom instantiatedAxiom = (OWLAxiom) nafConstraint.getAxiom()
+                .accept(instantiator);
         boolean toReturn = false;
         try {
             if (getParameters().getConstraintSystem().getReasoner() != null
@@ -101,8 +106,9 @@ public class ConstraintChecker implements ConstraintVisitorEx<Boolean> {
                         .isEntailed(instantiatedAxiom);
             } else {
                 boolean found = false;
-                Iterator<OWLOntology> iterator = getParameters().getConstraintSystem()
-                        .getOntologyManager().getOntologies().iterator();
+                Iterator<OWLOntology> iterator = getParameters()
+                        .getConstraintSystem().getOntologyManager()
+                        .ontologies().iterator();
                 while (!found && iterator.hasNext()) {
                     OWLOntology ontology = iterator.next();
                     found = ontology.containsAxiom(instantiatedAxiom);
@@ -110,9 +116,10 @@ public class ConstraintChecker implements ConstraintVisitorEx<Boolean> {
                 toReturn = !found;
             }
         } catch (OWLRuntimeException e) {
-            Logging.getQueryLogger().log(
-                    "OWLReasonerException caught whilst checking the constraint ",
-                    nafConstraint, getParameters().getConstraintSystem(), e);
+            Logging.getQueryLogger()
+                    .log("OWLReasonerException caught whilst checking the constraint ",
+                            nafConstraint,
+                            getParameters().getConstraintSystem(), e);
         }
         return toReturn;
     }

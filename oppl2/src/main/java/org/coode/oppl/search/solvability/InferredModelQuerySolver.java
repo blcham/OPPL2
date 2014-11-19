@@ -1,6 +1,7 @@
 package org.coode.oppl.search.solvability;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.*;
 
 import java.util.Set;
 
@@ -13,18 +14,22 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 /** @author Luigi Iannone */
 public final class InferredModelQuerySolver implements QuerySolver {
+
     private final OWLReasoner reasoner;
 
-    /** @param reasoner
-     *            reasoner */
+    /**
+     * @param reasoner
+     *        reasoner
+     */
     public InferredModelQuerySolver(OWLReasoner reasoner) {
         this.reasoner = checkNotNull(reasoner, "reasoner");
     }
 
     @Override
     public Set<OWLClass> getSubClasses(OWLClassExpression superClass) {
-        Set<OWLClass> toReturn = reasoner.getSubClasses(superClass, false).getFlattened();
-        toReturn.addAll(reasoner.getEquivalentClasses(superClass).getEntities());
+        Set<OWLClass> toReturn = asSet(reasoner
+                .getSubClasses(superClass, false).entities());
+        add(toReturn, reasoner.getEquivalentClasses(superClass).entities());
         if (!superClass.isAnonymous()) {
             toReturn.add(superClass.asOWLClass());
         }
@@ -33,8 +38,9 @@ public final class InferredModelQuerySolver implements QuerySolver {
 
     @Override
     public Set<OWLClass> getSuperClasses(OWLClassExpression subClass) {
-        Set<OWLClass> toReturn = reasoner.getSuperClasses(subClass, false).getFlattened();
-        toReturn.addAll(reasoner.getEquivalentClasses(subClass).getEntities());
+        Set<OWLClass> toReturn = asSet(reasoner
+                .getSuperClasses(subClass, false).entities());
+        add(toReturn, reasoner.getEquivalentClasses(subClass).entities());
         if (!subClass.isAnonymous()) {
             toReturn.add(subClass.asOWLClass());
         }
@@ -43,29 +49,31 @@ public final class InferredModelQuerySolver implements QuerySolver {
 
     @Override
     public boolean hasNoSubClass(OWLClassExpression superClass) {
-        Set<OWLClass> subClasses = reasoner.getSubClasses(superClass, false)
-                .getFlattened();
-        subClasses.addAll(reasoner.getEquivalentClasses(superClass).getEntities());
+        Set<OWLClass> subClasses = asSet(reasoner.getSubClasses(superClass,
+                false).entities());
+        add(subClasses, reasoner.getEquivalentClasses(superClass).entities());
         subClasses.remove(superClass);
-        subClasses.removeAll(reasoner.getBottomClassNode().getEntities());
+        reasoner.getBottomClassNode().entities()
+                .forEach(c -> subClasses.remove(c));
         return subClasses.isEmpty();
     }
 
     @Override
     public boolean hasNoSuperClass(OWLClassExpression subClass) {
-        Set<OWLClass> superClasses = reasoner.getSubClasses(subClass, false)
-                .getFlattened();
-        superClasses.addAll(reasoner.getEquivalentClasses(subClass).getEntities());
+        Set<OWLClass> superClasses = asSet(reasoner.getSubClasses(subClass,
+                false).entities());
+        add(superClasses, reasoner.getEquivalentClasses(subClass).entities());
         superClasses.remove(subClass);
-        superClasses.removeAll(reasoner.getTopClassNode().getEntities());
+        reasoner.getTopClassNode().entities()
+                .forEach(c -> superClasses.remove(c));
         return superClasses.isEmpty();
     }
 
     @Override
     public Set<OWLNamedIndividual> getNamedFillers(OWLNamedIndividual subject,
             OWLObjectPropertyExpression objectProperty) {
-        NodeSet<OWLNamedIndividual> fillers = reasoner.getObjectPropertyValues(subject,
-                objectProperty);
-        return fillers.getFlattened();
+        NodeSet<OWLNamedIndividual> fillers = reasoner.getObjectPropertyValues(
+                subject, objectProperty);
+        return asSet(fillers.entities());
     }
 }

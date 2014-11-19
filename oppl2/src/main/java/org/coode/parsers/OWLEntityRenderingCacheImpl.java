@@ -2,12 +2,12 @@ package org.coode.parsers;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiomChange;
@@ -26,26 +26,31 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /** @author Luigi Iannone */
 public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
-    protected Map<String, OWLClass> owlClassMap = new HashMap<String, OWLClass>();
-    protected Map<String, OWLObjectProperty> owlObjectPropertyMap = new HashMap<String, OWLObjectProperty>();
-    protected Map<String, OWLDataProperty> owlDataPropertyMap = new HashMap<String, OWLDataProperty>();
-    protected Map<String, OWLNamedIndividual> owlIndividualMap = new HashMap<String, OWLNamedIndividual>();
-    protected Map<String, OWLDatatype> owlDatatypeMap = new HashMap<String, OWLDatatype>();
-    protected Map<String, OWLAnnotationProperty> owlAnnotationPropertyMap = new HashMap<String, OWLAnnotationProperty>();
-    protected Map<OWLEntity, String> entityRenderingMap = new HashMap<OWLEntity, String>();
+
+    protected Map<String, OWLClass> owlClassMap = new HashMap<>();
+    protected Map<String, OWLObjectProperty> owlObjectPropertyMap = new HashMap<>();
+    protected Map<String, OWLDataProperty> owlDataPropertyMap = new HashMap<>();
+    protected Map<String, OWLNamedIndividual> owlIndividualMap = new HashMap<>();
+    protected Map<String, OWLDatatype> owlDatatypeMap = new HashMap<>();
+    protected Map<String, OWLAnnotationProperty> owlAnnotationPropertyMap = new HashMap<>();
+    protected Map<OWLEntity, String> entityRenderingMap = new HashMap<>();
     protected final OWLOntologyManager manager;
     protected final OWLEntityRenderer entityRenderer;
     protected OWLOntologyChangeListener listener = new OWLOntologyChangeListener() {
+
         @Override
-        public void ontologiesChanged(List<? extends OWLOntologyChange> changes) {
+        public void
+                ontologiesChanged(List<? extends OWLOntologyChange> changes) {
             OWLEntityRenderingCacheImpl.this.processChanges(changes);
         }
     };
 
-    /** @param manager
-     *            manager
+    /**
+     * @param manager
+     *        manager
      * @param entityRenderer
-     *            entityRenderer */
+     *        entityRenderer
+     */
     public OWLEntityRenderingCacheImpl(OWLOntologyManager manager,
             OWLEntityRenderer entityRenderer) {
         this.manager = checkNotNull(manager, "manager");
@@ -58,9 +63,7 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
         for (OWLOntologyChange change : changes) {
             if (change instanceof OWLAxiomChange) {
                 OWLAxiomChange chg = (OWLAxiomChange) change;
-                for (OWLEntity ent : chg.getSignature()) {
-                    updateRendering(ent);
-                }
+                chg.signature().forEach(e -> updateRendering(e));
             }
         }
     }
@@ -74,27 +77,20 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
         OWLClass nothing = manager.getOWLDataFactory().getOWLNothing();
         entityRenderingMap.put(nothing, entityRenderer.render(nothing));
         owlClassMap.put(entityRenderer.render(nothing), nothing);
-        for (OWLOntology ont : manager.getOntologies()) {
-            for (OWLClass cls : ont.getClassesInSignature()) {
-                this.addRendering(cls, owlClassMap);
-            }
-            for (OWLObjectProperty prop : ont.getObjectPropertiesInSignature()) {
-                this.addRendering(prop, owlObjectPropertyMap);
-            }
-            for (OWLDataProperty prop : ont.getDataPropertiesInSignature()) {
-                this.addRendering(prop, owlDataPropertyMap);
-            }
-            for (OWLNamedIndividual ind : ont.getIndividualsInSignature()) {
-                this.addRendering(ind, owlIndividualMap);
-            }
-            // datatypes
-            EnumSet<OWL2Datatype> allDataTypes = EnumSet.allOf(OWL2Datatype.class);
-            for (OWL2Datatype dt : allDataTypes) {
-                OWLDatatype owlDatatype = manager.getOWLDataFactory().getOWLDatatype(
-                        dt.getIRI());
-                this.addRendering(owlDatatype, owlDatatypeMap);
-            }
-        }
+        manager.ontologies().forEach(o -> addRenderings(o));
+        Stream.of(OWL2Datatype.values()).forEach(
+                v -> this.addRendering(manager.getOWLDataFactory()
+                        .getOWLDatatype(v.getIRI()), owlDatatypeMap));
+    }
+
+    protected void addRenderings(OWLOntology o) {
+        o.classesInSignature().forEach(e -> this.addRendering(e, owlClassMap));
+        o.objectPropertiesInSignature().forEach(
+                e -> this.addRendering(e, owlObjectPropertyMap));
+        o.dataPropertiesInSignature().forEach(
+                e -> this.addRendering(e, owlDataPropertyMap));
+        o.individualsInSignature().forEach(
+                e -> this.addRendering(e, owlIndividualMap));
     }
 
     /** remove change listener */
@@ -171,9 +167,11 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
     @Override
     public void addRendering(OWLEntity owlEntity) {
         owlEntity.accept(new OWLEntityVisitor() {
+
             @Override
             public void visit(OWLDataProperty entity) {
-                OWLEntityRenderingCacheImpl.this.addRendering(entity, owlDataPropertyMap);
+                OWLEntityRenderingCacheImpl.this.addRendering(entity,
+                        owlDataPropertyMap);
             }
 
             @Override
@@ -184,17 +182,20 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
 
             @Override
             public void visit(OWLNamedIndividual entity) {
-                OWLEntityRenderingCacheImpl.this.addRendering(entity, owlIndividualMap);
+                OWLEntityRenderingCacheImpl.this.addRendering(entity,
+                        owlIndividualMap);
             }
 
             @Override
             public void visit(OWLClass entity) {
-                OWLEntityRenderingCacheImpl.this.addRendering(entity, owlClassMap);
+                OWLEntityRenderingCacheImpl.this.addRendering(entity,
+                        owlClassMap);
             }
 
             @Override
             public void visit(OWLDatatype entity) {
-                OWLEntityRenderingCacheImpl.this.addRendering(entity, owlDatatypeMap);
+                OWLEntityRenderingCacheImpl.this.addRendering(entity,
+                        owlDatatypeMap);
             }
 
             @Override
@@ -205,7 +206,8 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
         });
     }
 
-    protected <T extends OWLEntity> void addRendering(T entity, Map<String, T> map) {
+    protected <T extends OWLEntity> void addRendering(T entity,
+            Map<String, T> map) {
         if (!entityRenderingMap.containsKey(entity)) {
             String rendering = entityRenderer.render(entity);
             map.put(rendering, entity);
@@ -218,6 +220,7 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
         final String oldRendering = entityRenderingMap.get(owlEntity);
         entityRenderingMap.remove(owlEntity);
         owlEntity.accept(new OWLEntityVisitor() {
+
             @Override
             public void visit(OWLClass entity) {
                 owlClassMap.remove(oldRendering);
@@ -251,15 +254,11 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
     }
 
     @Override
-    public void updateRendering(final OWLEntity ent) {
-        boolean updateRendering = false;
-        for (OWLOntology ont : manager.getOntologies()) {
-            if (ont.containsEntityInSignature(ent)) {
-                updateRendering = true;
-                break;
-            }
-        }
-        removeRendering(ent); // always remove the old rendering
+    public void updateRendering(OWLEntity ent) {
+        boolean updateRendering = manager.ontologies().anyMatch(
+                o -> o.containsEntityInSignature(ent));
+        removeRendering(ent);
+        // always remove the old rendering
         if (updateRendering) {
             this.addRendering(ent);
         }
@@ -292,7 +291,7 @@ public class OWLEntityRenderingCacheImpl implements OWLEntityRenderingCache {
 
     @Override
     public Set<String> getOWLEntityRenderings() {
-        Set<String> renderings = new HashSet<String>(owlClassMap.size()
+        Set<String> renderings = new HashSet<>(owlClassMap.size()
                 + owlObjectPropertyMap.size() + owlDataPropertyMap.size()
                 + owlIndividualMap.size() + owlDatatypeMap.size());
         renderings.addAll(owlClassMap.keySet());
