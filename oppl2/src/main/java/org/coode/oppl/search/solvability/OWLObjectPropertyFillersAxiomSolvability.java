@@ -1,25 +1,27 @@
 package org.coode.oppl.search.solvability;
 
+import javax.annotation.Nonnull;
+
 import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.Variable;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.utils.VariableExtractor;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
-
-import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class OWLObjectPropertyFillersAxiomSolvability extends
         QuerySolverBasedAbstractAxiomSolvability {
-    /** @param constraintSystem
-     *            constraintSystem
+
+    /**
+     * @param constraintSystem
+     *        constraintSystem
      * @param querySolver
-     *            querySolver */
-    public OWLObjectPropertyFillersAxiomSolvability(ConstraintSystem constraintSystem,
-            QuerySolver querySolver) {
+     *        querySolver
+     */
+    public OWLObjectPropertyFillersAxiomSolvability(
+            ConstraintSystem constraintSystem, QuerySolver querySolver) {
         super(constraintSystem, querySolver);
     }
 
@@ -29,6 +31,7 @@ public class OWLObjectPropertyFillersAxiomSolvability extends
         final VariableExtractor variableExtractor = new VariableExtractor(
                 getConstraintSystem(), true);
         return owlAxiom.accept(new OWLObjectVisitorEx<SolvabilitySearchNode>() {
+
             @Nonnull
             @Override
             public SolvabilitySearchNode doDefault(@Nonnull Object object) {
@@ -36,22 +39,27 @@ public class OWLObjectPropertyFillersAxiomSolvability extends
             }
 
             @Override
-            public SolvabilitySearchNode visit(OWLObjectPropertyAssertionAxiom axiom) {
-                SolvabilitySearchNode toReturn = new UnsolvableSearchNode(axiom,
-                        bindingNode);
+            public SolvabilitySearchNode visit(
+                    OWLObjectPropertyAssertionAxiom axiom) {
+                SolvabilitySearchNode toReturn = new UnsolvableSearchNode(
+                        axiom, bindingNode);
                 boolean isSolvable = variableExtractor.extractVariables(
                         axiom.getSubject()).isEmpty()
                         && axiom.getSubject().isNamed()
-                        && variableExtractor.extractVariables(axiom.getProperty())
-                                .isEmpty()
-                        && variableExtractor.extractVariables(axiom.getObject()).size() == 1;
+                        && variableExtractor.extractVariables(
+                                axiom.getProperty()).isEmpty()
+                        && variableExtractor
+                                .extractVariables(axiom.getObject()).size() == 1;
                 if (isSolvable) {
                     Variable<?> variable = variableExtractor
-                            .extractVariables(axiom.getObject()).iterator().next();
-                    toReturn = new SolvableSearchNode(variable, axiom, bindingNode,
+                            .extractVariables(axiom.getObject()).iterator()
+                            .next();
+                    toReturn = new SolvableSearchNode(variable, axiom,
+                            bindingNode,
                             OWLObjectPropertyFillersAxiomSolvability.this
                                     .getQuerySolver().getNamedFillers(
-                                            axiom.getSubject().asOWLNamedIndividual(),
+                                            axiom.getSubject()
+                                                    .asOWLNamedIndividual(),
                                             axiom.getProperty()));
                 }
                 return toReturn;

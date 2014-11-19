@@ -195,7 +195,6 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     @Override
     public void displayRecognitionError(String[] t, RecognitionException e) {}
 
-    @SuppressWarnings("unused")
     protected void mismatch(IntStream in, int ttype, BitSet follow) {}
 
     @Override

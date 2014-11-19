@@ -1,22 +1,24 @@
 package org.coode.oppl.search.solvability;
 
+import javax.annotation.Nonnull;
+
 import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.utils.VariableExtractor;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-import javax.annotation.Nonnull;
-
 /** @author Luigi Iannone */
-public class NoResultsAxiomSolvability extends QuerySolverBasedAbstractAxiomSolvability
-        implements AxiomSolvability {
-    /** @param constraintSystem
-     *            constraintSystem
+public class NoResultsAxiomSolvability extends
+        QuerySolverBasedAbstractAxiomSolvability implements AxiomSolvability {
+
+    /**
+     * @param constraintSystem
+     *        constraintSystem
      * @param querySolver
-     *            querySolver */
+     *        querySolver
+     */
     public NoResultsAxiomSolvability(ConstraintSystem constraintSystem,
             QuerySolver querySolver) {
         super(constraintSystem, querySolver);
@@ -28,6 +30,7 @@ public class NoResultsAxiomSolvability extends QuerySolverBasedAbstractAxiomSolv
         final VariableExtractor variableExtractor = new VariableExtractor(
                 getConstraintSystem(), true);
         return owlAxiom.accept(new OWLObjectVisitorEx<SolvabilitySearchNode>() {
+
             @Nonnull
             @Override
             public SolvabilitySearchNode doDefault(@Nonnull Object object) {
@@ -36,17 +39,18 @@ public class NoResultsAxiomSolvability extends QuerySolverBasedAbstractAxiomSolv
 
             @Override
             public SolvabilitySearchNode visit(OWLSubClassOfAxiom axiom) {
-                SolvabilitySearchNode toReturn = new UnsolvableSearchNode(axiom,
-                        bindingNode);
+                SolvabilitySearchNode toReturn = new UnsolvableSearchNode(
+                        axiom, bindingNode);
                 // Solvable sub-class axioms are in the form <subClass>
                 // subClassOf <superClass>
                 // where either superClass or subClass is variable free
-                boolean variableFreeSuperClass = variableExtractor.extractVariables(
-                        axiom.getSuperClass()).isEmpty();
-                boolean variableFreeSubClass = variableExtractor.extractVariables(
-                        axiom.getSubClass()).isEmpty();
+                boolean variableFreeSuperClass = variableExtractor
+                        .extractVariables(axiom.getSuperClass()).isEmpty();
+                boolean variableFreeSubClass = variableExtractor
+                        .extractVariables(axiom.getSubClass()).isEmpty();
                 boolean canBeSolved = variableFreeSubClass
-                        && axiom.getSuperClass().isAnonymous() || variableFreeSuperClass
+                        && axiom.getSuperClass().isAnonymous()
+                        || variableFreeSuperClass
                         && axiom.getSubClass().isAnonymous();
                 if (canBeSolved && variableFreeSubClass) {
                     toReturn = NoResultsAxiomSolvability.this.getQuerySolver()

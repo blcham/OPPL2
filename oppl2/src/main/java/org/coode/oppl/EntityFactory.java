@@ -104,20 +104,19 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
 
     @Override
     public OWLEntityCreationSet<OWLClass> createOWLClass(String shortName,
-            IRI baseIRI) throws OWLEntityCreationException {
+            IRI baseIRI) {
         return this.createOWLEntity(OWLClass.class, shortName, baseIRI);
     }
 
     @Override
     public OWLEntityCreationSet<OWLDataProperty> createOWLDataProperty(
-            String shortName, IRI baseIRI) throws OWLEntityCreationException {
+            String shortName, IRI baseIRI) {
         return this.createOWLEntity(OWLDataProperty.class, shortName, baseIRI);
     }
 
     @Override
     public <T extends OWLEntity> OWLEntityCreationSet<T> createOWLEntity(
-            Class<T> type, String shortName, IRI baseIRI)
-            throws OWLEntityCreationException {
+            Class<T> type, String shortName, IRI baseIRI) {
         String label = buildLabelString(shortName);
         String realShortName = buildFragment(label);
         IRI anIRI = buildIRI(realShortName);
@@ -147,22 +146,21 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
 
     @Override
     public OWLEntityCreationSet<OWLNamedIndividual> createOWLIndividual(
-            String shortName, IRI baseIRI) throws OWLEntityCreationException {
+            String shortName, IRI baseIRI) {
         return this.createOWLEntity(OWLNamedIndividual.class, shortName,
                 baseIRI);
     }
 
     @Override
     public OWLEntityCreationSet<OWLObjectProperty> createOWLObjectProperty(
-            String shortName, IRI baseIRI) throws OWLEntityCreationException {
+            String shortName, IRI baseIRI) {
         return this
                 .createOWLEntity(OWLObjectProperty.class, shortName, baseIRI);
     }
 
     @Override
     public OWLEntityCreationSet<OWLAnnotationProperty>
-            createOWLAnnotationProperty(String shortName, IRI baseIRI)
-                    throws OWLEntityCreationException {
+            createOWLAnnotationProperty(String shortName, IRI baseIRI) {
         return this.createOWLEntity(OWLAnnotationProperty.class, shortName,
                 baseIRI);
     }
@@ -181,21 +179,21 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
         return null;
     }
 
-    private <T extends OWLEntity> boolean isValidNewID(IRI baseIRI) {
+    private boolean isValidNewID(IRI baseIRI) {
         return baseIRI.equals(factory.getOntology().getOntologyID()
                 .getOntologyIRI());
     }
 
     @Override
     public <T extends OWLEntity> OWLEntityCreationSet<T> preview(Class<T> type,
-            String shortName, IRI baseIRI) throws OWLEntityCreationException {
+            String shortName, IRI baseIRI) {
         return this.createOWLEntity(type, shortName, baseIRI);
     }
 
     @Override
     public void tryCreate(Class<? extends OWLEntity> type, String shortName,
             IRI baseIRI) throws OWLEntityCreationException {
-        if (!this.isValidNewID(baseIRI)) {
+        if (!isValidNewID(baseIRI)) {
             throw new OWLEntityCreationException("Invalid name: " + shortName
                     + "for an " + type.getName());
         }

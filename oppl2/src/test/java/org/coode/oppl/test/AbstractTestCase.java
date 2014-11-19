@@ -30,6 +30,7 @@ import uk.ac.manchester.cs.jfact.JFactFactory;
 
 @SuppressWarnings("javadoc")
 public abstract class AbstractTestCase {
+
     private static final int TOLERANCE = 3;
     private final static RuntimeExceptionHandler HANDLER = new QuickFailRuntimeExceptionHandler();
     // ontology manager
@@ -56,7 +57,8 @@ public abstract class AbstractTestCase {
             StringWriter resultWriter = new StringWriter();
             if (script.getConstraintSystem().getLeaves() != null
                     && !script.getConstraintSystem().getLeaves().isEmpty()) {
-                for (BindingNode bindingNode : script.getConstraintSystem().getLeaves()) {
+                for (BindingNode bindingNode : script.getConstraintSystem()
+                        .getLeaves()) {
                     ValueComputationParameters parameters = new SimpleValueComputationParameters(
                             script.getConstraintSystem(), bindingNode, HANDLER);
                     PartialOWLObjectInstantiator partialOWLObjectInstantiator = new PartialOWLObjectInstantiator(
@@ -70,8 +72,9 @@ public abstract class AbstractTestCase {
                     }
                 }
             }
-            assertEquals("Query " + script.toString() + "\n" + resultWriter.toString(),
-                    expected, matches.size());
+            assertEquals(
+                    "Query " + script.toString() + "\n"
+                            + resultWriter.toString(), expected, matches.size());
         } catch (Exception e) {
             log(e);
         }
@@ -90,7 +93,8 @@ public abstract class AbstractTestCase {
         return toReturn;
     }
 
-    protected OWLReasoner initReasoner(OWLOntology ontology) throws OWLRuntimeException {
+    protected OWLReasoner initReasoner(OWLOntology ontology)
+            throws OWLRuntimeException {
         OWLReasonerFactory reasonerFactory = new JFactFactory();
         OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
         return reasoner;
@@ -119,10 +123,12 @@ public abstract class AbstractTestCase {
         return null;
     }
 
-    protected OPPLScript parse(String script, OWLOntology ontology, OWLReasoner reasoner) {
+    protected OPPLScript parse(String script, OWLOntology ontology,
+            OWLReasoner reasoner) {
         try {
-            OPPLParser parser = new ParserFactory(ontology.getOWLOntologyManager(),
-                    ontology, reasoner).build(errorListener);
+            OPPLParser parser = new ParserFactory(
+                    ontology.getOWLOntologyManager(), ontology, reasoner)
+                    .build(errorListener);
             return parser.parse(script);
         } catch (Exception e) {
             if (longStackTrace) {
@@ -168,14 +174,17 @@ public abstract class AbstractTestCase {
                         // then the position is close enough
                     } else {
                         fail("ExhaustingTestCase The error type is correct but the column does not match the expected one. Expected error column: "
-                                + expectedIndex + "\n actual stacktrace: " + stackTrace);
+                                + expectedIndex
+                                + "\n actual stacktrace: "
+                                + stackTrace);
                     }
                 } catch (NumberFormatException e) {
                     fail("ExhaustingTestCase.checkProperStackTrace() Could not parse a column number to verify the correctness of the stack trace:\nExpected error type: "
                             + expected
                             + "\nExpected error column: "
                             + expectedIndex
-                            + "\n actual stacktrace: " + stackTrace);
+                            + "\n actual stacktrace: "
+                            + stackTrace + "\n" + e.getMessage());
                 }
             } else {
                 // there is no full stop after the expected string. No column

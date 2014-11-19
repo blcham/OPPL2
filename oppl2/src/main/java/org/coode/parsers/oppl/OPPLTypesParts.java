@@ -41,35 +41,40 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class OPPLTypesParts extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "AT", "ESCLAMATION_MARK", "MATCH",
-            "ATTRIBUTE_SELECTOR", "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION",
-            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT" };
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "AT", "ESCLAMATION_MARK", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES",
+            "RENDERING", "GROUPS", "STRING_OPERATION", "VARIABLE_NAME",
+            "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT" };
     public static final int COMMA = 37;
     public static final int ASSERTED = 76;
     public static final int VARIABLE_DEFINITIONS = 102;
@@ -224,7 +229,8 @@ public class OPPLTypesParts extends TreeFilter {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
         this.opplFactory = checkNotNull(opplFactory, "opplFactory");
     }
 
@@ -258,13 +264,14 @@ public class OPPLTypesParts extends TreeFilter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
@@ -272,7 +279,7 @@ public class OPPLTypesParts extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:123:1:
     // bottomup : ( constraint | opplFunction | regexp );
     @Override
-    public final void bottomup() throws RecognitionException {
+    public final void bottomup() {
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:124:5:
             // ( constraint | opplFunction | regexp )
@@ -300,7 +307,8 @@ public class OPPLTypesParts extends TreeFilter {
                         state.failed = true;
                         return;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 1, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 1,
+                            0, input);
                     throw nvae;
             }
             switch (alt1) {
@@ -411,7 +419,8 @@ public class OPPLTypesParts extends TreeFilter {
                                 state.failed = true;
                                 return value;
                             }
-                            EarlyExitException eee = new EarlyExitException(2, input);
+                            EarlyExitException eee = new EarlyExitException(2,
+                                    input);
                             throw eee;
                     }
                     cnt2++;
@@ -474,8 +483,8 @@ public class OPPLTypesParts extends TreeFilter {
                                     state.failed = true;
                                     return value;
                                 }
-                                NoViableAltException nvae = new NoViableAltException("",
-                                        3, 5, input);
+                                NoViableAltException nvae = new NoViableAltException(
+                                        "", 3, 5, input);
                                 throw nvae;
                             }
                         } else {
@@ -483,8 +492,8 @@ public class OPPLTypesParts extends TreeFilter {
                                 state.failed = true;
                                 return value;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 3,
-                                    4, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 3, 4, input);
                             throw nvae;
                         }
                     } else {
@@ -492,8 +501,8 @@ public class OPPLTypesParts extends TreeFilter {
                             state.failed = true;
                             return value;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 3, 3,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 3, 3, input);
                         throw nvae;
                     }
                 } else {
@@ -501,7 +510,8 @@ public class OPPLTypesParts extends TreeFilter {
                         state.failed = true;
                         return value;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 3, 2, input);
+                    NoViableAltException nvae = new NoViableAltException("", 3,
+                            2, input);
                     throw nvae;
                 }
             } else {
@@ -509,7 +519,8 @@ public class OPPLTypesParts extends TreeFilter {
                     state.failed = true;
                     return value;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 3, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 3, 0,
+                        input);
                 throw nvae;
             }
             switch (alt3) {
@@ -532,7 +543,8 @@ public class OPPLTypesParts extends TreeFilter {
                 // ^( IDENTIFIER VARIABLE_NAME DOT GROUPS ^( ATTRIBUTE_SELECTOR
                 // INTEGER ) )
                 {
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_stringExpression194);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_stringExpression194);
                     if (state.failed) {
                         return value;
                     }
@@ -540,7 +552,8 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.failed) {
                         return value;
                     }
-                    VARIABLE_NAME2 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME2 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_stringExpression196);
                     if (state.failed) {
                         return value;
@@ -576,8 +589,10 @@ public class OPPLTypesParts extends TreeFilter {
                         return value;
                     }
                     if (state.backtracking == 1) {
-                        value = getSymbolTable().defineGroupAttributeReferenceSymbol(
-                                VARIABLE_NAME2, INTEGER3, getConstraintSystem());
+                        value = getSymbolTable()
+                                .defineGroupAttributeReferenceSymbol(
+                                        VARIABLE_NAME2, INTEGER3,
+                                        getConstraintSystem());
                     }
                 }
                     break;
@@ -585,7 +600,8 @@ public class OPPLTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:153:7:
                 // ^( IDENTIFIER VARIABLE_NAME DOT RENDERING )
                 {
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_stringExpression224);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_stringExpression224);
                     if (state.failed) {
                         return value;
                     }
@@ -593,7 +609,8 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.failed) {
                         return value;
                     }
-                    VARIABLE_NAME4 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME4 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_stringExpression227);
                     if (state.failed) {
                         return value;
@@ -602,7 +619,8 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.failed) {
                         return value;
                     }
-                    match(input, RENDERING, FOLLOW_RENDERING_in_stringExpression233);
+                    match(input, RENDERING,
+                            FOLLOW_RENDERING_in_stringExpression233);
                     if (state.failed) {
                         return value;
                     }
@@ -611,8 +629,9 @@ public class OPPLTypesParts extends TreeFilter {
                         return value;
                     }
                     if (state.backtracking == 1) {
-                        value = getSymbolTable().defineRenderingAttributeReferenceSymbol(
-                                VARIABLE_NAME4, getConstraintSystem());
+                        value = getSymbolTable()
+                                .defineRenderingAttributeReferenceSymbol(
+                                        VARIABLE_NAME4, getConstraintSystem());
                     }
                 }
                     break;
@@ -631,6 +650,7 @@ public class OPPLTypesParts extends TreeFilter {
 
     // $ANTLR end "stringExpression"
     public static class regexp_return extends TreeRuleReturnScope {
+
         public Variable<?> variable;
     }
 
@@ -668,13 +688,15 @@ public class OPPLTypesParts extends TreeFilter {
                 if (state.backtracking == 1) {
                     if (getVariable() != null) {
                         RegexpGeneratedVariable<?> v = getConstraintSystem()
-                                .createRegexpGeneratedVariable(getVariable().getName(),
+                                .createRegexpGeneratedVariable(
+                                        getVariable().getName(),
                                         getVariable().getType(),
                                         Adapter.buildRegexpPatternAdapter(se));
                         retval.variable = v;
                     } else {
-                        getErrorListener().illegalToken((OPPLSyntaxTree) retval.start,
-                                "No variable type to evaluate this OPPL Function");
+                        getErrorListener()
+                                .illegalToken((OPPLSyntaxTree) retval.start,
+                                        "No variable type to evaluate this OPPL Function");
                     }
                 }
             }
@@ -695,6 +717,7 @@ public class OPPLTypesParts extends TreeFilter {
 
     // $ANTLR end "regexp"
     public static class opplFunction_return extends TreeRuleReturnScope {
+
         public Variable<?> variable;
     }
 
@@ -734,7 +757,8 @@ public class OPPLTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 4, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 4,
+                            0, input);
                     throw nvae;
             }
             switch (alt4) {
@@ -764,12 +788,14 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         if (getVariable() != null) {
                             retval.variable = constraintSystem
-                                    .createStringGeneratedVariable(getVariable()
-                                            .getName(), getVariable().getType(), value);
+                                    .createStringGeneratedVariable(
+                                            getVariable().getName(),
+                                            getVariable().getType(), value);
                         } else {
-                            getErrorListener().illegalToken(
-                                    (OPPLSyntaxTree) retval.start,
-                                    "No variable type to evaluate this OPPL Function");
+                            getErrorListener()
+                                    .illegalToken(
+                                            (OPPLSyntaxTree) retval.start,
+                                            "No variable type to evaluate this OPPL Function");
                         }
                     }
                 }
@@ -802,17 +828,21 @@ public class OPPLTypesParts extends TreeFilter {
                         if (getVariable() != null) {
                             Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> aggregandumCollection = getSymbolTable()
                                     .getAggregandumCollection(
-                                            VariableTypeFactory.getCLASSVariableType(),
-                                            va.list, va.tokenList, CREATE_INTERSECTION5);
+                                            VariableTypeFactory
+                                                    .getCLASSVariableType(),
+                                            va.list, va.tokenList,
+                                            CREATE_INTERSECTION5);
                             retval.variable = getConstraintSystem()
                                     .createIntersectionGeneratedVariable(
                                             getVariable().getName(),
-                                            VariableTypeFactory.getCLASSVariableType(),
+                                            VariableTypeFactory
+                                                    .getCLASSVariableType(),
                                             aggregandumCollection);
                         } else {
-                            getErrorListener().illegalToken(
-                                    (OPPLSyntaxTree) retval.start,
-                                    "No variable name to build this OPPL Function");
+                            getErrorListener()
+                                    .illegalToken(
+                                            (OPPLSyntaxTree) retval.start,
+                                            "No variable name to build this OPPL Function");
                         }
                     }
                 }
@@ -845,17 +875,21 @@ public class OPPLTypesParts extends TreeFilter {
                         if (getVariable() != null) {
                             Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> aggregandumCollection = getSymbolTable()
                                     .getAggregandumCollection(
-                                            VariableTypeFactory.getCLASSVariableType(),
-                                            va.list, va.tokenList, CREATE_DISJUNCTION6);
+                                            VariableTypeFactory
+                                                    .getCLASSVariableType(),
+                                            va.list, va.tokenList,
+                                            CREATE_DISJUNCTION6);
                             retval.variable = getConstraintSystem()
                                     .createUnionGeneratedVariable(
                                             getVariable().getName(),
-                                            VariableTypeFactory.getCLASSVariableType(),
+                                            VariableTypeFactory
+                                                    .getCLASSVariableType(),
                                             aggregandumCollection);
                         } else {
-                            getErrorListener().illegalToken(
-                                    (OPPLSyntaxTree) retval.start,
-                                    "No variable name to build this OPPL Function");
+                            getErrorListener()
+                                    .illegalToken(
+                                            (OPPLSyntaxTree) retval.start,
+                                            "No variable name to build this OPPL Function");
                         }
                     }
                 }
@@ -878,6 +912,7 @@ public class OPPLTypesParts extends TreeFilter {
 
     // $ANTLR end "opplFunction"
     public static class constraint_return extends TreeRuleReturnScope {
+
         public AbstractConstraint constraint;
     }
 
@@ -928,7 +963,8 @@ public class OPPLTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 6, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 6,
+                            0, input);
                     throw nvae;
             }
             switch (alt6) {
@@ -974,8 +1010,8 @@ public class OPPLTypesParts extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.constraint = symtab.getInequalityConstraint(
-                                (OPPLSyntaxTree) retval.start, IDENTIFIER7, expression,
-                                getConstraintSystem());
+                                (OPPLSyntaxTree) retval.start, IDENTIFIER7,
+                                expression, getConstraintSystem());
                     }
                 }
                     break;
@@ -1029,7 +1065,8 @@ public class OPPLTypesParts extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(5, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        5, input);
                                 throw eee;
                         }
                         cnt5++;
@@ -1039,11 +1076,11 @@ public class OPPLTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.constraint = symtab
-                                .getInSetConstraint((OPPLSyntaxTree) retval.start, v,
-                                        constraintSystem, identifiers
-                                                .toArray(new OPPLSyntaxTree[identifiers
-                                                        .size()]));
+                        retval.constraint = symtab.getInSetConstraint(
+                                (OPPLSyntaxTree) retval.start, v,
+                                constraintSystem, identifiers
+                                        .toArray(new OPPLSyntaxTree[identifiers
+                                                .size()]));
                     }
                 }
                     break;
@@ -1089,7 +1126,8 @@ public class OPPLTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:241:5:
                 // ^( NAF_CONSTRAINT a= . )
                 {
-                    match(input, NAF_CONSTRAINT, FOLLOW_NAF_CONSTRAINT_in_constraint476);
+                    match(input, NAF_CONSTRAINT,
+                            FOLLOW_NAF_CONSTRAINT_in_constraint476);
                     if (state.failed) {
                         return retval;
                     }
@@ -1109,15 +1147,16 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         OWLObject axiom = a.getOWLObject();
                         if (axiom instanceof OWLAxiom) {
-                            retval.constraint = new NAFConstraint((OWLAxiom) axiom,
-                                    getConstraintSystem());
+                            retval.constraint = new NAFConstraint(
+                                    (OWLAxiom) axiom, getConstraintSystem());
                         }
                     }
                 }
                     break;
             }
             if (state.backtracking == 1) {
-                ((OPPLSyntaxTree) retval.start).setOPPLContent(retval.constraint);
+                ((OPPLSyntaxTree) retval.start)
+                        .setOPPLContent(retval.constraint);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1133,6 +1172,7 @@ public class OPPLTypesParts extends TreeFilter {
 
     // $ANTLR end "constraint"
     public static class aggregandums_return extends TreeRuleReturnScope {
+
         public List<Aggregandum<?>> list;
         public List<OPPLSyntaxTree> tokenList;
     }
@@ -1187,7 +1227,8 @@ public class OPPLTypesParts extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            EarlyExitException eee = new EarlyExitException(7, input);
+                            EarlyExitException eee = new EarlyExitException(7,
+                                    input);
                             throw eee;
                     }
                     cnt7++;
@@ -1207,6 +1248,7 @@ public class OPPLTypesParts extends TreeFilter {
 
     // $ANTLR end "aggregandums"
     public static class aggregandum_return extends TreeRuleReturnScope {
+
         public Aggregandum<?> a;
         public OPPLSyntaxTree node;
     }
@@ -1236,7 +1278,8 @@ public class OPPLTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 8, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("", 8,
+                            1, input);
                     throw nvae;
                 }
             } else {
@@ -1244,7 +1287,8 @@ public class OPPLTypesParts extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 8, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 8, 0,
+                        input);
                 throw nvae;
             }
             switch (alt8) {
@@ -1252,7 +1296,8 @@ public class OPPLTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:268:2:
                 // ^( IDENTIFIER VARIABLE_NAME DOT VALUES )
                 {
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_aggregandum534);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_aggregandum534);
                     if (state.failed) {
                         return retval;
                     }
@@ -1260,7 +1305,8 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    VARIABLE_NAME9 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME9 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_aggregandum537);
                     if (state.failed) {
                         return retval;
@@ -1278,9 +1324,11 @@ public class OPPLTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = Adapter.buildSingletonAggregandum(getSymbolTable()
-                                .defineValuesAttributeReferenceSymbol(VARIABLE_NAME9,
-                                        getConstraintSystem()));
+                        retval.a = Adapter
+                                .buildSingletonAggregandum(getSymbolTable()
+                                        .defineValuesAttributeReferenceSymbol(
+                                                VARIABLE_NAME9,
+                                                getConstraintSystem()));
                     }
                 }
                     break;
@@ -1296,8 +1344,9 @@ public class OPPLTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         Symbol symbol = getSymbolTable().resolve(IDENTIFIER10);
                         if (symbol != null) {
-                            retval.a = Adapter.buildAggregandumOfCollection(IDENTIFIER10
-                                    .getOWLObject());
+                            retval.a = Adapter
+                                    .buildAggregandumOfCollection(IDENTIFIER10
+                                            .getOWLObject());
                         } else {
                             getErrorListener().unrecognisedSymbol(IDENTIFIER10);
                         }
@@ -1338,12 +1387,14 @@ public class OPPLTypesParts extends TreeFilter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_VARIABLE_NAME_in_stringExpression196 = new BitSet(
             new long[] { 0x0000000000000000L, 0x0000000000004000L });
-    public static final BitSet FOLLOW_DOT_in_stringExpression198 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000001000000000L });
+    public static final BitSet FOLLOW_DOT_in_stringExpression198 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000001000000000L });
     public static final BitSet FOLLOW_GROUPS_in_stringExpression200 = new BitSet(
-            new long[] { 0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000008000000L });
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000008000000L });
     public static final BitSet FOLLOW_ATTRIBUTE_SELECTOR_in_stringExpression203 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_INTEGER_in_stringExpression205 = new BitSet(
@@ -1352,9 +1403,10 @@ public class OPPLTypesParts extends TreeFilter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_VARIABLE_NAME_in_stringExpression227 = new BitSet(
             new long[] { 0x0000000000000000L, 0x0000000000004000L });
-    public static final BitSet FOLLOW_DOT_in_stringExpression229 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000800000000L });
+    public static final BitSet FOLLOW_DOT_in_stringExpression229 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000800000000L });
     public static final BitSet FOLLOW_RENDERING_in_stringExpression233 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_MATCH_in_regexp270 = new BitSet(
@@ -1388,8 +1440,9 @@ public class OPPLTypesParts extends TreeFilter {
     public static final BitSet FOLLOW_REGEXP_CONSTRAINT_in_constraint456 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_constraint458 = new BitSet(
-            new long[] { 0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000400L });
     public static final BitSet FOLLOW_stringOperation_in_constraint464 = new BitSet(
             new long[] { 0x0000000000000008L });
@@ -1401,9 +1454,10 @@ public class OPPLTypesParts extends TreeFilter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_VARIABLE_NAME_in_aggregandum537 = new BitSet(
             new long[] { 0x0000000000000000L, 0x0000000000004000L });
-    public static final BitSet FOLLOW_DOT_in_aggregandum539 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000400000000L });
+    public static final BitSet FOLLOW_DOT_in_aggregandum539 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000400000000L });
     public static final BitSet FOLLOW_VALUES_in_aggregandum542 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_IDENTIFIER_in_aggregandum559 = new BitSet(

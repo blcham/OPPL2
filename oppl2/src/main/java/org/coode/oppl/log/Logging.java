@@ -6,29 +6,33 @@ import java.util.logging.LogManager;
 
 /** @author Luigi Iannone */
 public class Logging {
+
     private static final String LOG_FILE_PRPERTY_NAME = "org.coode.oppl.log.Logging.FileName";
     static {
         try {
             String logFileName = System.getProperty(LOG_FILE_PRPERTY_NAME);
-            InputStream in = logFileName == null ? null : Logging.class.getClassLoader()
-                    .getResourceAsStream(logFileName);
+            InputStream in = logFileName == null ? null : Logging.class
+                    .getClassLoader().getResourceAsStream(logFileName);
             if (in == null) {
-                in = Logging.class.getResourceAsStream("/oppl-logging.properties");
+                in = Logging.class
+                        .getResourceAsStream("/oppl-logging.properties");
             }
             if (in != null) {
                 LogManager.getLogManager().readConfiguration(in);
                 in.close();
             }
-        } catch (SecurityException e) {
+        } catch (@SuppressWarnings("unused") SecurityException e) {
             System.out.println("No local log configuration file found");
-        } catch (IOException e) {
+        } catch (@SuppressWarnings("unused") IOException e) {
             System.out.println("No local log configuration file found");
         }
     }
-    private static final Logger profiling = new Logger("org.coode.oppl.profiling");
+    private static final Logger profiling = new Logger(
+            "org.coode.oppl.profiling");
     private static final Logger main = new Logger("org.coode.oppl");
     private static final Logger query = new Logger("org.coode.oppl.query");
-    private static final Logger queryTest = new Logger("org.coode.oppl.query.test");
+    private static final Logger queryTest = new Logger(
+            "org.coode.oppl.query.test");
     private static final Logger parseTest = new Logger("org.coode.oppl.test");
     private static final Logger parse = new Logger("org.coode.oppl.test");
 

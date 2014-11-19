@@ -82,7 +82,6 @@ public class TestCaseTestOntologies {
         return axioms;
     }
 
-    @SuppressWarnings("unchecked")
     public static OWLOntology pizza(OWLOntologyManager m) {
         String ns = "http://pizza.com/pizza.owl#";
         try {

@@ -30,37 +30,43 @@ import org.coode.parsers.Type;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class OPPLTypeEnforcement extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "AT", "SET", "DISJOINT_CLASSES", "DISJOINT_PROPERTIES",
-            "SAME_INDIVIDUAL", "DIFFERENT_INDIVIDUALS", "TO_LOWER_CASE", "TO_UPPER_CASE",
-            "ESCLAMATION_MARK", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES", "RENDERING",
-            "GROUPS", "STRING_OPERATION", "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL",
-            "NAF_CONSTRAINT", "LESS_THAN", "LESS_THAN_EQUAL", "GREATER_THAN",
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "AT", "SET", "DISJOINT_CLASSES", "DISJOINT_PROPERTIES",
+            "SAME_INDIVIDUAL", "DIFFERENT_INDIVIDUALS", "TO_LOWER_CASE",
+            "TO_UPPER_CASE", "ESCLAMATION_MARK", "MATCH", "ATTRIBUTE_SELECTOR",
+            "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION",
+            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT",
+            "LESS_THAN", "LESS_THAN_EQUAL", "GREATER_THAN",
             "GREATER_THAN_EQUAL" };
     public static final int HAS_KEY = 109;
     public static final int VALUE_RESTRICTION = 63;
@@ -245,13 +251,14 @@ public class OPPLTypeEnforcement extends TreeFilter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
@@ -259,7 +266,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:91:1:
     // bottomup : ( expressionRoot | axiom );
     @Override
-    public final void bottomup() throws RecognitionException {
+    public final void bottomup() {
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:92:5:
             // ( expressionRoot | axiom )
@@ -277,7 +284,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     state.failed = true;
                     return;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 1, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 1, 0,
+                        input);
                 throw nvae;
             }
             switch (alt1) {
@@ -352,7 +360,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 }
                 if (state.backtracking == 1) {
                     EXPRESSION1
-                            .setEvalType(expression2 != null ? expression2.type : null);
+                            .setEvalType(expression2 != null ? expression2.type
+                                    : null);
                 }
             }
         } catch (RecognitionException exception) {
@@ -369,6 +378,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "expressionRoot"
     public static class axiom_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -453,7 +463,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // ^( SUB_CLASS_AXIOM ^( EXPRESSION subClass= expression ) ^(
                 // EXPRESSION superClass= expression ) )
                 {
-                    match(input, SUB_CLASS_AXIOM, FOLLOW_SUB_CLASS_AXIOM_in_axiom158);
+                    match(input, SUB_CLASS_AXIOM,
+                            FOLLOW_SUB_CLASS_AXIOM_in_axiom158);
                     if (state.failed) {
                         return retval;
                     }
@@ -567,9 +578,11 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = getSymbolTable().getEquivalentAxiomType(
-                                (OPPLSyntaxTree) retval.start, lhs.node, rhs.node);
+                                (OPPLSyntaxTree) retval.start, lhs.node,
+                                rhs.node);
                         getTypesEnforcer().enforceEquivalentToAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, lhs.node, rhs.node);
+                                (OPPLSyntaxTree) retval.start, lhs.node,
+                                rhs.node);
                     }
                 }
                     break;
@@ -626,9 +639,11 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = getSymbolTable().getInverseOfAxiomType(
-                                (OPPLSyntaxTree) retval.start, p, anotherProperty);
+                                (OPPLSyntaxTree) retval.start, p,
+                                anotherProperty);
                         getTypesEnforcer().enforceIverserOfAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, p, anotherProperty);
+                                (OPPLSyntaxTree) retval.start, p,
+                                anotherProperty);
                     }
                 }
                     break;
@@ -688,9 +703,11 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = getSymbolTable().getDisjointAxiomType(
-                                (OPPLSyntaxTree) retval.start, lhs.node, rhs.node);
+                                (OPPLSyntaxTree) retval.start, lhs.node,
+                                rhs.node);
                         getTypesEnforcer().enforceDisjointWithAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, lhs.node, rhs.node);
+                                (OPPLSyntaxTree) retval.start, lhs.node,
+                                rhs.node);
                     }
                 }
                     break;
@@ -750,11 +767,11 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = getSymbolTable().getSubPropertyAxiomType(
-                                (OPPLSyntaxTree) retval.start, subProperty.node,
-                                superProperty.node);
+                                (OPPLSyntaxTree) retval.start,
+                                subProperty.node, superProperty.node);
                         getTypesEnforcer().enforceSubPropertyAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, subProperty.node,
-                                superProperty.node);
+                                (OPPLSyntaxTree) retval.start,
+                                subProperty.node, superProperty.node);
                     }
                 }
                     break;
@@ -764,7 +781,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // EXPRESSION predicate= propertyExpression ) ^( EXPRESSION
                 // object= unary ) )
                 {
-                    match(input, ROLE_ASSERTION, FOLLOW_ROLE_ASSERTION_in_axiom326);
+                    match(input, ROLE_ASSERTION,
+                            FOLLOW_ROLE_ASSERTION_in_axiom326);
                     if (state.failed) {
                         return retval;
                     }
@@ -830,12 +848,13 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getRoleAssertionAxiomType(
-                                (OPPLSyntaxTree) retval.start, subject, predicate.node,
-                                object.node);
+                        retval.type = getSymbolTable()
+                                .getRoleAssertionAxiomType(
+                                        (OPPLSyntaxTree) retval.start, subject,
+                                        predicate.node, object.node);
                         getTypesEnforcer().enforceRoleAssertionAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, subject, predicate.node,
-                                object.node);
+                                (OPPLSyntaxTree) retval.start, subject,
+                                predicate.node, object.node);
                     }
                 }
                     break;
@@ -844,7 +863,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // ^( TYPE_ASSERTION ^( EXPRESSION description= expression ) ^(
                 // EXPRESSION subject= IDENTIFIER ) )
                 {
-                    match(input, TYPE_ASSERTION, FOLLOW_TYPE_ASSERTION_in_axiom367);
+                    match(input, TYPE_ASSERTION,
+                            FOLLOW_TYPE_ASSERTION_in_axiom367);
                     if (state.failed) {
                         return retval;
                     }
@@ -892,10 +912,13 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getClassAssertionAxiomType(
-                                (OPPLSyntaxTree) retval.start, description.node, subject);
+                        retval.type = getSymbolTable()
+                                .getClassAssertionAxiomType(
+                                        (OPPLSyntaxTree) retval.start,
+                                        description.node, subject);
                         getTypesEnforcer().enforceTypeAssertionAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, description.node, subject);
+                                (OPPLSyntaxTree) retval.start,
+                                description.node, subject);
                     }
                 }
                     break;
@@ -1024,7 +1047,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // ^( SAME_AS_AXIOM ^( EXPRESSION anIndividual= IDENTIFIER ) ^(
                 // EXPRESSION anotherIndividual= IDENTIFIER ) )
                 {
-                    match(input, SAME_AS_AXIOM, FOLLOW_SAME_AS_AXIOM_in_axiom465);
+                    match(input, SAME_AS_AXIOM,
+                            FOLLOW_SAME_AS_AXIOM_in_axiom465);
                     if (state.failed) {
                         return retval;
                     }
@@ -1057,8 +1081,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    anotherIndividual = (OPPLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_axiom483);
+                    anotherIndividual = (OPPLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_axiom483);
                     if (state.failed) {
                         return retval;
                     }
@@ -1071,9 +1095,10 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getSameIndividualsAxiomType(
-                                (OPPLSyntaxTree) retval.start, anIndividual,
-                                anotherIndividual);
+                        retval.type = getSymbolTable()
+                                .getSameIndividualsAxiomType(
+                                        (OPPLSyntaxTree) retval.start,
+                                        anIndividual, anotherIndividual);
                         getTypesEnforcer().enforceSameIndividualsAxiomTypes(
                                 (OPPLSyntaxTree) retval.start, anIndividual,
                                 anotherIndividual);
@@ -1119,8 +1144,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    anotherIndividual = (OPPLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_axiom517);
+                    anotherIndividual = (OPPLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_axiom517);
                     if (state.failed) {
                         return retval;
                     }
@@ -1133,12 +1158,14 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getDifferentIndividualsAxiomType(
-                                (OPPLSyntaxTree) retval.start, anIndividual,
-                                anotherIndividual);
-                        getTypesEnforcer().enforceDifferentIndividualsAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, anIndividual,
-                                anotherIndividual);
+                        retval.type = getSymbolTable()
+                                .getDifferentIndividualsAxiomType(
+                                        (OPPLSyntaxTree) retval.start,
+                                        anIndividual, anotherIndividual);
+                        getTypesEnforcer()
+                                .enforceDifferentIndividualsAxiomTypes(
+                                        (OPPLSyntaxTree) retval.start,
+                                        anIndividual, anotherIndividual);
                     }
                 }
                     break;
@@ -1180,8 +1207,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getFunctionalPropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getFunctionalPropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
                         getTypesEnforcer().enforceFunctionalPropertyAxiomTypes(
                                 (OPPLSyntaxTree) retval.start, p);
                     }
@@ -1227,10 +1255,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getInverseFunctionalPropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
-                        getTypesEnforcer().enforceInverseFunctionalPropertyAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getInverseFunctionalPropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
+                        getTypesEnforcer()
+                                .enforceInverseFunctionalPropertyAxiomTypes(
+                                        (OPPLSyntaxTree) retval.start, p);
                     }
                 }
                     break;
@@ -1272,10 +1302,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getIrreflexivePropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
-                        getTypesEnforcer().enforceIrreflexivePropertyAxiomTypes(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getIrreflexivePropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
+                        getTypesEnforcer()
+                                .enforceIrreflexivePropertyAxiomTypes(
+                                        (OPPLSyntaxTree) retval.start, p);
                     }
                 }
                     break;
@@ -1317,8 +1349,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getReflexivePropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getReflexivePropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
                         getTypesEnforcer().enforceReflexivePropertyAxiomTypes(
                                 (OPPLSyntaxTree) retval.start, p);
                     }
@@ -1362,8 +1395,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getSymmetricPropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getSymmetricPropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
                         getTypesEnforcer().enforceSymmetricPropertyAxiomTypes(
                                 (OPPLSyntaxTree) retval.start, p);
                     }
@@ -1407,8 +1441,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getTransitivePropertyType(
-                                (OPPLSyntaxTree) retval.start, p);
+                        retval.type = getSymbolTable()
+                                .getTransitivePropertyType(
+                                        (OPPLSyntaxTree) retval.start, p);
                         getTypesEnforcer().enforceTransitivePropertyAxiomTypes(
                                 (OPPLSyntaxTree) retval.start, p);
                     }
@@ -1418,7 +1453,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:192:6:
                 // ^( NEGATED_ASSERTION a= axiom )
                 {
-                    match(input, NEGATED_ASSERTION, FOLLOW_NEGATED_ASSERTION_in_axiom688);
+                    match(input, NEGATED_ASSERTION,
+                            FOLLOW_NEGATED_ASSERTION_in_axiom688);
                     if (state.failed) {
                         return retval;
                     }
@@ -1463,6 +1499,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "axiom"
     public static class expression_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -1519,7 +1556,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 5, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 5,
+                            0, input);
                     throw nvae;
             }
             switch (alt5) {
@@ -1527,7 +1565,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:206:4:
                 // ^( DISJUNCTION (disjuncts+= conjunction )+ )
                 {
-                    match(input, DISJUNCTION, FOLLOW_DISJUNCTION_in_expression729);
+                    match(input, DISJUNCTION,
+                            FOLLOW_DISJUNCTION_in_expression729);
                     if (state.failed) {
                         return retval;
                     }
@@ -1542,7 +1581,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         int alt3 = 2;
                         int LA3_0 = input.LA(1);
                         if (LA3_0 >= IDENTIFIER && LA3_0 <= ENTITY_REFERENCE
-                                || LA3_0 == CONJUNCTION || LA3_0 == NEGATED_EXPRESSION
+                                || LA3_0 == CONJUNCTION
+                                || LA3_0 == NEGATED_EXPRESSION
                                 || LA3_0 >= SOME_RESTRICTION && LA3_0 <= ONE_OF
                                 || LA3_0 == CONSTANT) {
                             alt3 = 1;
@@ -1569,7 +1609,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(3, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        3, input);
                                 throw eee;
                         }
                         cnt3++;
@@ -1586,10 +1627,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         }
                         retval.type = getSymbolTable().getDisjunctionType(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         getTypesEnforcer().enforceDisjunctionTypes(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -1597,7 +1640,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:215:6:
                 // ^( PROPERTY_CHAIN (chainItems+= expression )+ )
                 {
-                    match(input, PROPERTY_CHAIN, FOLLOW_PROPERTY_CHAIN_in_expression751);
+                    match(input, PROPERTY_CHAIN,
+                            FOLLOW_PROPERTY_CHAIN_in_expression751);
                     if (state.failed) {
                         return retval;
                     }
@@ -1612,7 +1656,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         int alt4 = 2;
                         int LA4_0 = input.LA(1);
                         if (LA4_0 >= IDENTIFIER && LA4_0 <= ENTITY_REFERENCE
-                                || LA4_0 >= DISJUNCTION && LA4_0 <= NEGATED_EXPRESSION
+                                || LA4_0 >= DISJUNCTION
+                                && LA4_0 <= NEGATED_EXPRESSION
                                 || LA4_0 >= SOME_RESTRICTION && LA4_0 <= ONE_OF
                                 || LA4_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                                 || LA4_0 == CONSTANT) {
@@ -1640,7 +1685,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(4, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        4, input);
                                 throw eee;
                         }
                         cnt4++;
@@ -1657,10 +1703,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         }
                         retval.type = getSymbolTable().getPropertyChainType(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         getTypesEnforcer().enforcePropertyChainTypes(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -1675,7 +1723,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = conjunction3 != null ? conjunction3.type : null;
+                        retval.type = conjunction3 != null ? conjunction3.type
+                                : null;
                     }
                 }
                     break;
@@ -1714,6 +1763,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "expression"
     public static class conjunction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -1744,7 +1794,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 7, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 7, 0,
+                        input);
                 throw nvae;
             }
             switch (alt7) {
@@ -1752,7 +1803,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:244:2:
                 // ^( CONJUNCTION (conjuncts+= unary )+ )
                 {
-                    match(input, CONJUNCTION, FOLLOW_CONJUNCTION_in_conjunction819);
+                    match(input, CONJUNCTION,
+                            FOLLOW_CONJUNCTION_in_conjunction819);
                     if (state.failed) {
                         return retval;
                     }
@@ -1794,7 +1846,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(6, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        6, input);
                                 throw eee;
                         }
                         cnt6++;
@@ -1811,10 +1864,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         }
                         retval.type = getSymbolTable().getConjunctionType(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         getTypesEnforcer().enforceConjunctionTypes(
                                 (OPPLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -1852,6 +1907,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "conjunction"
     public static class unary_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -1904,7 +1960,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 9, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 9,
+                            0, input);
                     throw nvae;
             }
             switch (alt9) {
@@ -1947,8 +2004,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getNegatedClassExpressionType(
-                                (OPPLSyntaxTree) retval.start, e.node);
+                        retval.type = getSymbolTable()
+                                .getNegatedClassExpressionType(
+                                        (OPPLSyntaxTree) retval.start, e.node);
                         getTypesEnforcer().enforceNegatedClassExpression(
                                 (OPPLSyntaxTree) retval.start, e.node);
                     }
@@ -1974,13 +2032,15 @@ public class OPPLTypeEnforcement extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:283:5:
                 // ENTITY_REFERENCE
                 {
-                    ENTITY_REFERENCE8 = (OPPLSyntaxTree) match(input, ENTITY_REFERENCE,
+                    ENTITY_REFERENCE8 = (OPPLSyntaxTree) match(input,
+                            ENTITY_REFERENCE,
                             FOLLOW_ENTITY_REFERENCE_in_unary909);
                     if (state.failed) {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        Symbol symbol = getSymbolTable().resolve(ENTITY_REFERENCE8);
+                        Symbol symbol = getSymbolTable().resolve(
+                                ENTITY_REFERENCE8);
                         retval.type = symbol == null ? null : symbol.getType();
                     }
                 }
@@ -2014,7 +2074,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:289:38:
                         // constantType= IDENTIFIER
                         {
-                            match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_unary933);
+                            match(input, IDENTIFIER,
+                                    FOLLOW_IDENTIFIER_in_unary933);
                             if (state.failed) {
                                 return retval;
                             }
@@ -2049,6 +2110,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "unary"
     public static class propertyExpression_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2057,7 +2119,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:296:1:
     // propertyExpression returns [Type type, ManchesterOWLSyntaxTree node] : (
     // IDENTIFIER | complexPropertyExpression );
-    public final OPPLTypeEnforcement.propertyExpression_return propertyExpression() {
+    public final OPPLTypeEnforcement.propertyExpression_return
+            propertyExpression() {
         OPPLTypeEnforcement.propertyExpression_return retval = new OPPLTypeEnforcement.propertyExpression_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree IDENTIFIER9 = null;
@@ -2076,7 +2139,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 10, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 10, 0,
+                        input);
                 throw nvae;
             }
             switch (alt10) {
@@ -2129,7 +2193,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
     }
 
     // $ANTLR end "propertyExpression"
-    public static class complexPropertyExpression_return extends TreeRuleReturnScope {
+    public static class complexPropertyExpression_return extends
+            TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2166,8 +2232,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                             state.failed = true;
                             return retval;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 11, 2,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 11, 2, input);
                         throw nvae;
                     }
                 } else {
@@ -2175,7 +2241,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 11, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            11, 1, input);
                     throw nvae;
                 }
             } else {
@@ -2183,7 +2250,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 11, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 11, 0,
+                        input);
                 throw nvae;
             }
             switch (alt11) {
@@ -2269,6 +2337,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "complexPropertyExpression"
     public static class qualifiedRestriction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2279,7 +2348,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
     // ( ^( SOME_RESTRICTION p= propertyExpression f= expression ) | ^(
     // ALL_RESTRICTION p= propertyExpression f= expression ) |
     // cardinalityRestriction | oneOf | valueRestriction );
-    public final OPPLTypeEnforcement.qualifiedRestriction_return qualifiedRestriction() {
+    public final OPPLTypeEnforcement.qualifiedRestriction_return
+            qualifiedRestriction() {
         OPPLTypeEnforcement.qualifiedRestriction_return retval = new OPPLTypeEnforcement.qualifiedRestriction_return();
         retval.start = input.LT(1);
         OPPLTypeEnforcement.propertyExpression_return p = null;
@@ -2319,7 +2389,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 12, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            12, 0, input);
                     throw nvae;
             }
             switch (alt12) {
@@ -2353,8 +2424,10 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getSomeValueRestrictionType(
-                                (OPPLSyntaxTree) retval.start, p.node, f.node);
+                        retval.type = getSymbolTable()
+                                .getSomeValueRestrictionType(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        f.node);
                         getTypesEnforcer().enforceSomeValueRestrictionTypes(
                                 (OPPLSyntaxTree) retval.start, p.node, f.node);
                     }
@@ -2390,8 +2463,10 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getAllValueRestrictionType(
-                                (OPPLSyntaxTree) retval.start, p.node, f.node);
+                        retval.type = getSymbolTable()
+                                .getAllValueRestrictionType(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        f.node);
                         getTypesEnforcer().enforceAllValueRestrictionTypes(
                                 (OPPLSyntaxTree) retval.start, p.node, f.node);
                     }
@@ -2462,7 +2537,9 @@ public class OPPLTypeEnforcement extends TreeFilter {
     }
 
     // $ANTLR end "qualifiedRestriction"
-    public static class cardinalityRestriction_return extends TreeRuleReturnScope {
+    public static class cardinalityRestriction_return extends
+            TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2510,8 +2587,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 16,
-                                    2, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 16, 2, input);
                             throw nvae;
                     }
                 } else {
@@ -2519,7 +2596,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 16, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            16, 1, input);
                     throw nvae;
                 }
             } else {
@@ -2527,7 +2605,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 16, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 16, 0,
+                        input);
                 throw nvae;
             }
             switch (alt16) {
@@ -2565,7 +2644,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     int alt13 = 2;
                     int LA13_0 = input.LA(1);
                     if (LA13_0 >= IDENTIFIER && LA13_0 <= ENTITY_REFERENCE
-                            || LA13_0 >= DISJUNCTION && LA13_0 <= NEGATED_EXPRESSION
+                            || LA13_0 >= DISJUNCTION
+                            && LA13_0 <= NEGATED_EXPRESSION
                             || LA13_0 >= SOME_RESTRICTION && LA13_0 <= ONE_OF
                             || LA13_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA13_0 == CONSTANT) {
@@ -2590,13 +2670,15 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getMinCardinalityRestrictionType(
-                                (OPPLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
-                        int cardinality = Integer.parseInt(i.token.getText());
-                        getTypesEnforcer().enforceMinCardinalityRestrictionTypes(
-                                (OPPLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
+                        retval.type = getSymbolTable()
+                                .getMinCardinalityRestrictionType(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        filler == null ? null : filler.node);
+                        Integer.parseInt(i.token.getText());
+                        getTypesEnforcer()
+                                .enforceMinCardinalityRestrictionTypes(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        filler == null ? null : filler.node);
                     }
                 }
                     break;
@@ -2634,7 +2716,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     int alt14 = 2;
                     int LA14_0 = input.LA(1);
                     if (LA14_0 >= IDENTIFIER && LA14_0 <= ENTITY_REFERENCE
-                            || LA14_0 >= DISJUNCTION && LA14_0 <= NEGATED_EXPRESSION
+                            || LA14_0 >= DISJUNCTION
+                            && LA14_0 <= NEGATED_EXPRESSION
                             || LA14_0 >= SOME_RESTRICTION && LA14_0 <= ONE_OF
                             || LA14_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA14_0 == CONSTANT) {
@@ -2659,13 +2742,15 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getMaxCardinalityRestrictionType(
-                                (OPPLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
-                        int cardinality = Integer.parseInt(i.token.getText());
-                        getTypesEnforcer().enforceMaxCardinalityRestrictionTypes(
-                                (OPPLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
+                        retval.type = getSymbolTable()
+                                .getMaxCardinalityRestrictionType(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        filler == null ? null : filler.node);
+                        Integer.parseInt(i.token.getText());
+                        getTypesEnforcer()
+                                .enforceMaxCardinalityRestrictionTypes(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        filler == null ? null : filler.node);
                     }
                 }
                     break;
@@ -2683,7 +2768,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXACTLY, FOLLOW_EXACTLY_in_cardinalityRestriction1276);
+                    match(input, EXACTLY,
+                            FOLLOW_EXACTLY_in_cardinalityRestriction1276);
                     if (state.failed) {
                         return retval;
                     }
@@ -2703,7 +2789,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     int alt15 = 2;
                     int LA15_0 = input.LA(1);
                     if (LA15_0 >= IDENTIFIER && LA15_0 <= ENTITY_REFERENCE
-                            || LA15_0 >= DISJUNCTION && LA15_0 <= NEGATED_EXPRESSION
+                            || LA15_0 >= DISJUNCTION
+                            && LA15_0 <= NEGATED_EXPRESSION
                             || LA15_0 >= SOME_RESTRICTION && LA15_0 <= ONE_OF
                             || LA15_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA15_0 == CONSTANT) {
@@ -2732,10 +2819,11 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                 .getExactCardinalityRestrictionType(
                                         (OPPLSyntaxTree) retval.start, p.node,
                                         filler == null ? null : filler.node);
-                        int cardinality = Integer.parseInt(i.token.getText());
-                        getTypesEnforcer().enforceExactCardinalityRestrictionTypes(
-                                (OPPLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
+                        Integer.parseInt(i.token.getText());
+                        getTypesEnforcer()
+                                .enforceExactCardinalityRestrictionTypes(
+                                        (OPPLSyntaxTree) retval.start, p.node,
+                                        filler == null ? null : filler.node);
                     }
                 }
                     break;
@@ -2758,6 +2846,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "cardinalityRestriction"
     public static class oneOf_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2799,8 +2888,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:402:23:
                         // individuals+= IDENTIFIER
                         {
-                            individuals = (OPPLSyntaxTree) match(input, IDENTIFIER,
-                                    FOLLOW_IDENTIFIER_in_oneOf1334);
+                            individuals = (OPPLSyntaxTree) match(input,
+                                    IDENTIFIER, FOLLOW_IDENTIFIER_in_oneOf1334);
                             if (state.failed) {
                                 return retval;
                             }
@@ -2815,7 +2904,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            EarlyExitException eee = new EarlyExitException(17, input);
+                            EarlyExitException eee = new EarlyExitException(17,
+                                    input);
                             throw eee;
                     }
                     cnt17++;
@@ -2832,9 +2922,12 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     }
                     retval.type = getSymbolTable().getOneOfType(
                             (OPPLSyntaxTree) retval.start,
-                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
-                    getTypesEnforcer().enforceOneOfTypes((OPPLSyntaxTree) retval.start,
-                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                    .size()]));
+                    getTypesEnforcer().enforceOneOfTypes(
+                            (OPPLSyntaxTree) retval.start,
+                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                    .size()]));
                 }
             }
             if (state.backtracking == 1) {
@@ -2855,6 +2948,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
 
     // $ANTLR end "oneOf"
     public static class valueRestriction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
     }
@@ -2934,13 +3028,15 @@ public class OPPLTypeEnforcement extends TreeFilter {
     static final String DFA2_specialS = "\25\uffff}>";
     static final String[] DFA2_transitionS = {
             "\1\3\1\uffff\1\10\1\11\23\uffff\1\1\1\2\1\4\1\5\1\12\1\13\1"
-                    + "\14\4\uffff\1\15\6\uffff\1\7\1\6", "", "", "", "", "", "", "", "",
-            "", "", "", "\1\16", "", "\1\17\1\23\1\uffff\1\22\1\21\1\24\1\20", "", "",
-            "", "", "", "" };
+                    + "\14\4\uffff\1\15\6\uffff\1\7\1\6", "", "", "", "", "",
+            "", "", "", "", "", "", "\1\16", "",
+            "\1\17\1\23\1\uffff\1\22\1\21\1\24\1\20", "", "", "", "", "", "" };
     static final short[] DFA2_eot = DFA.unpackEncodedString(DFA2_eotS);
     static final short[] DFA2_eof = DFA.unpackEncodedString(DFA2_eofS);
-    static final char[] DFA2_min = DFA.unpackEncodedStringToUnsignedChars(DFA2_minS);
-    static final char[] DFA2_max = DFA.unpackEncodedStringToUnsignedChars(DFA2_maxS);
+    static final char[] DFA2_min = DFA
+            .unpackEncodedStringToUnsignedChars(DFA2_minS);
+    static final char[] DFA2_max = DFA
+            .unpackEncodedStringToUnsignedChars(DFA2_maxS);
     static final short[] DFA2_accept = DFA.unpackEncodedString(DFA2_acceptS);
     static final short[] DFA2_special = DFA.unpackEncodedString(DFA2_specialS);
     static final short[][] DFA2_transition;
@@ -2953,6 +3049,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
     }
 
     class DFA2 extends DFA {
+
         public DFA2(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             decisionNumber = 2;
@@ -3095,8 +3192,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom531 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_FUNCTIONAL_in_axiom533 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_FUNCTIONAL_in_axiom533 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom536 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom542 = new BitSet(
@@ -3111,32 +3208,32 @@ public class OPPLTypeEnforcement extends TreeFilter {
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom582 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_IRREFLEXIVE_in_axiom584 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_IRREFLEXIVE_in_axiom584 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom587 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom593 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom608 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_REFLEXIVE_in_axiom610 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_REFLEXIVE_in_axiom610 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom613 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom619 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom634 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_SYMMETRIC_in_axiom636 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_SYMMETRIC_in_axiom636 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom639 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom645 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom662 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_TRANSITIVE_in_axiom664 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_TRANSITIVE_in_axiom664 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom667 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom673 = new BitSet(
@@ -3159,8 +3256,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_CONJUNCTION_in_conjunction819 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_unary_in_conjunction824 = new BitSet(new long[] {
-            0xE500300000000008L, 0x0000000000000043L });
+    public static final BitSet FOLLOW_unary_in_conjunction824 = new BitSet(
+            new long[] { 0xE500300000000008L, 0x0000000000000043L });
     public static final BitSet FOLLOW_unary_in_conjunction835 = new BitSet(
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_IDENTIFIER_in_unary862 = new BitSet(

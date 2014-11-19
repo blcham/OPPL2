@@ -33,7 +33,8 @@ import javax.swing.text.JTextComponent;
 
 import org.coode.parsers.ui.autocompletionmatcher.AutoCompletionMatcher;
 
-/** Author: Matthew Horridge<br>
+/**
+ * Author: Matthew Horridge<br>
  * The University Of Manchester<br>
  * Medical Informatics Group<br>
  * Date: May 4, 2006<br>
@@ -41,8 +42,10 @@ import org.coode.parsers.ui.autocompletionmatcher.AutoCompletionMatcher;
  * <br>
  * matthew.horridge@cs.man.ac.uk<br>
  * www.cs.man.ac.uk/~horridgm<br>
- * <br> */
+ * <br>
+ */
 public final class AutoCompleter {
+
     private static final int DEFAULT_MAX_ENTRIES = 100;
     protected final JTextComponent textComponent;
     private final Set<String> wordDelimeters;
@@ -54,6 +57,7 @@ public final class AutoCompleter {
     protected String lastTextUpdate = "*";
     private final int maxEntries = DEFAULT_MAX_ENTRIES;
     private final KeyListener keyListener = new KeyAdapter() {
+
         @Override
         public void keyPressed(KeyEvent e) {
             AutoCompleter.this.processKeyPressed(e);
@@ -61,16 +65,19 @@ public final class AutoCompleter {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_DOWN) {
+            if (e.getKeyCode() != KeyEvent.VK_UP
+                    && e.getKeyCode() != KeyEvent.VK_DOWN) {
                 if (popupWindow.isVisible()
                         && !lastTextUpdate.equals(textComponent.getText())) {
                     lastTextUpdate = textComponent.getText();
-                    AutoCompleter.this.updatePopup(AutoCompleter.this.getMatches());
+                    AutoCompleter.this.updatePopup(AutoCompleter.this
+                            .getMatches());
                 }
             }
         }
     };
     protected final ComponentAdapter componentListener = new ComponentAdapter() {
+
         @Override
         public void componentHidden(ComponentEvent event) {
             AutoCompleter.this.hidePopup();
@@ -87,6 +94,7 @@ public final class AutoCompleter {
         }
     };
     private final HierarchyListener hierarchyListener = new HierarchyListener() {
+
         @Override
         public void hierarchyChanged(HierarchyEvent e) {
             if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
@@ -99,6 +107,7 @@ public final class AutoCompleter {
         }
     };
     private final MouseListener mouseListener = new MouseAdapter() {
+
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
@@ -107,21 +116,24 @@ public final class AutoCompleter {
         }
     };
     private final FocusListener focusListener = new FocusAdapter() {
+
         @Override
         public void focusLost(FocusEvent event) {
             AutoCompleter.this.hidePopup();
         }
     };
 
-    /** @param tc
-     *            tc
+    /**
+     * @param tc
+     *        tc
      * @param matcher
-     *            matcher */
+     *        matcher
+     */
     public AutoCompleter(JTextComponent tc, AutoCompletionMatcher matcher) {
         this.matcher = checkNotNull(matcher, "matcher");
         textComponent = checkNotNull(tc, "tc");
-        wordDelimeters = new HashSet<>(Arrays.asList(" ", "\n", "[", "]", "{", "}",
-                "(", ")", ",", "^"));
+        wordDelimeters = new HashSet<>(Arrays.asList(" ", "\n", "[", "]", "{",
+                "}", "(", ")", ",", "^"));
         popupList = new JList();
         popupList.setAutoscrolls(true);
         popupList.addMouseListener(mouseListener);
@@ -286,7 +298,8 @@ public final class AutoCompleter {
                 selIndex = 0;
             }
             popupList.setSelectedIndex(selIndex);
-            popupList.scrollRectToVisible(popupList.getCellBounds(selIndex, selIndex));
+            popupList.scrollRectToVisible(popupList.getCellBounds(selIndex,
+                    selIndex));
         }
     }
 
@@ -298,7 +311,8 @@ public final class AutoCompleter {
                 selIndex = popupList.getModel().getSize() - 1;
             }
             popupList.setSelectedIndex(selIndex);
-            popupList.scrollRectToVisible(popupList.getCellBounds(selIndex, selIndex));
+            popupList.scrollRectToVisible(popupList.getCellBounds(selIndex,
+                    selIndex));
         }
     }
 
@@ -315,7 +329,8 @@ public final class AutoCompleter {
     private int getEscapedWordIndex() {
         try {
             int caretPos = Math.max(0, getEffectiveCaretPosition() - 1);
-            String expression = textComponent.getDocument().getText(0, caretPos);
+            String expression = textComponent.getDocument()
+                    .getText(0, caretPos);
             int escapeEnd = -1;
             do {
                 int escapeStart = expression.indexOf("'", escapeEnd + 1);
@@ -339,8 +354,8 @@ public final class AutoCompleter {
             int caretPos = Math.max(0, getEffectiveCaretPosition() - 1);
             if (caretPos > 0) {
                 for (int index = caretPos; index > -1; index--) {
-                    if (wordDelimeters.contains(textComponent.getDocument().getText(
-                            index, 1))) {
+                    if (wordDelimeters.contains(textComponent.getDocument()
+                            .getText(index, 1))) {
                         return index + 1;
                     }
                     if (index == 0) {
@@ -358,8 +373,9 @@ public final class AutoCompleter {
         try {
             int index = getWordIndex();
             int caretIndex = getEffectiveCaretPosition();
-            return textComponent.getDocument().getText(index, caretIndex - index);
-        } catch (BadLocationException e) {
+            return textComponent.getDocument().getText(index,
+                    caretIndex - index);
+        } catch (@SuppressWarnings("unused") BadLocationException e) {
             return "";
         }
     }

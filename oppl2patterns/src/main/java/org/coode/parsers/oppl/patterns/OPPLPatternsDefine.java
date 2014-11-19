@@ -23,37 +23,43 @@ import org.coode.patterns.PatternConstraintSystem;
 
 @SuppressWarnings("javadoc")
 public class OPPLPatternsDefine extends TreeRewriter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "ARGUMENT", "AT", "ESCLAMATION_MARK",
-            "CREATE_IDENTIFIER", "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR",
-            "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
-            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE", "SEMICOLON",
-            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT" };
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "ARGUMENT", "AT", "ESCLAMATION_MARK", "CREATE_IDENTIFIER",
+            "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES",
+            "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
+            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE",
+            "SEMICOLON", "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL",
+            "NAF_CONSTRAINT" };
     public static final int COMMA = 37;
     public static final int ASSERTED = 76;
     public static final int VARIABLE_DEFINITIONS = 102;
@@ -222,14 +228,15 @@ public class OPPLPatternsDefine extends TreeRewriter {
     private PatternConstraintSystem constraintSystem;
     private PatternReferenceResolver patternReferenceResolver;
 
-    public OPPLPatternsDefine(TreeNodeStream input, OPPLPatternsSymbolTable symtab,
-            ErrorListener errorListener,
+    public OPPLPatternsDefine(TreeNodeStream input,
+            OPPLPatternsSymbolTable symtab, ErrorListener errorListener,
             PatternReferenceResolver patternReferenceResolver,
             PatternConstraintSystem constraintSystem) {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
         this.patternReferenceResolver = checkNotNull(patternReferenceResolver,
                 "patternReferenceResolver");
     }
@@ -256,17 +263,19 @@ public class OPPLPatternsDefine extends TreeRewriter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
     public static class bottomup_return extends TreeRuleReturnScope {
+
         OPPLSyntaxTree tree;
 
         @Override
@@ -279,8 +288,7 @@ public class OPPLPatternsDefine extends TreeRewriter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsDefine.g:90:1:
     // bottomup : thisClass ;
     @Override
-    public final OPPLPatternsDefine.bottomup_return bottomup()
-            throws RecognitionException {
+    public final OPPLPatternsDefine.bottomup_return bottomup() {
         OPPLPatternsDefine.bottomup_return retval = new OPPLPatternsDefine.bottomup_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree _first_0 = null;
@@ -305,7 +313,8 @@ public class OPPLPatternsDefine extends TreeRewriter {
                     retval.tree = _first_0;
                     if (adaptor.getParent(retval.tree) != null
                             && adaptor.isNil(adaptor.getParent(retval.tree))) {
-                        retval.tree = (OPPLSyntaxTree) adaptor.getParent(retval.tree);
+                        retval.tree = (OPPLSyntaxTree) adaptor
+                                .getParent(retval.tree);
                     }
                 }
             }
@@ -319,6 +328,7 @@ public class OPPLPatternsDefine extends TreeRewriter {
 
     // $ANTLR end "bottomup"
     public static class thisClass_return extends TreeRuleReturnScope {
+
         OPPLSyntaxTree tree;
 
         @Override
@@ -337,10 +347,10 @@ public class OPPLPatternsDefine extends TreeRewriter {
         OPPLSyntaxTree _last = null;
         OPPLSyntaxTree i = null;
         OPPLSyntaxTree THIS_CLASS2 = null;
-        RewriteRuleNodeStream stream_IDENTIFIER = new RewriteRuleNodeStream(adaptor,
-                "token IDENTIFIER");
-        RewriteRuleNodeStream stream_THIS_CLASS = new RewriteRuleNodeStream(adaptor,
-                "token THIS_CLASS");
+        RewriteRuleNodeStream stream_IDENTIFIER = new RewriteRuleNodeStream(
+                adaptor, "token IDENTIFIER");
+        RewriteRuleNodeStream stream_THIS_CLASS = new RewriteRuleNodeStream(
+                adaptor, "token THIS_CLASS");
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsDefine.g:97:3:
             // ( ^(i= IDENTIFIER THIS_CLASS ) -> ^( $i) )
@@ -390,21 +400,23 @@ public class OPPLPatternsDefine extends TreeRewriter {
                 // wildcard labels:
                 if (state.backtracking == 1) {
                     retval.tree = root_0;
-                    RewriteRuleNodeStream stream_i = new RewriteRuleNodeStream(adaptor,
-                            "token i", i);
+                    RewriteRuleNodeStream stream_i = new RewriteRuleNodeStream(
+                            adaptor, "token i", i);
                     root_0 = (OPPLSyntaxTree) adaptor.nil();
                     // 103:5: -> ^( $i)
                     {
                         // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsDefine.g:104:5:
                         // ^( $i)
                         {
-                            OPPLSyntaxTree root_1 = (OPPLSyntaxTree) adaptor.nil();
+                            OPPLSyntaxTree root_1 = (OPPLSyntaxTree) adaptor
+                                    .nil();
                             root_1 = (OPPLSyntaxTree) adaptor.becomeRoot(
                                     stream_i.nextNode(), root_1);
                             adaptor.addChild(root_0, root_1);
                         }
                     }
-                    retval.tree = (OPPLSyntaxTree) adaptor.rulePostProcessing(root_0);
+                    retval.tree = (OPPLSyntaxTree) adaptor
+                            .rulePostProcessing(root_0);
                     input.replaceChildren(adaptor.getParent(retval.start),
                             adaptor.getChildIndex(retval.start),
                             adaptor.getChildIndex(_last), retval.tree);

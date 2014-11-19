@@ -26,37 +26,43 @@ import org.coode.patterns.UnsuitableOPPLScriptException;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class OPPLPatternsTypes extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "ARGUMENT", "AT", "ESCLAMATION_MARK",
-            "CREATE_IDENTIFIER", "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR",
-            "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
-            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE", "SEMICOLON",
-            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT" };
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "ARGUMENT", "AT", "ESCLAMATION_MARK", "CREATE_IDENTIFIER",
+            "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES",
+            "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
+            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE",
+            "SEMICOLON", "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL",
+            "NAF_CONSTRAINT" };
     public static final int COMMA = 37;
     public static final int ASSERTED = 76;
     public static final int VARIABLE_DEFINITIONS = 102;
@@ -215,13 +221,15 @@ public class OPPLPatternsTypes extends TreeFilter {
     private PatternConstraintSystem constraintSystem;
     private AbstractPatternModelFactory patternModelFactory;
 
-    public OPPLPatternsTypes(TreeNodeStream input, OPPLPatternsSymbolTable symtab,
-            ErrorListener errorListener, PatternConstraintSystem constraintSystem,
+    public OPPLPatternsTypes(TreeNodeStream input,
+            OPPLPatternsSymbolTable symtab, ErrorListener errorListener,
+            PatternConstraintSystem constraintSystem,
             AbstractPatternModelFactory patternModelFactory) {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
         this.patternModelFactory = checkNotNull(patternModelFactory,
                 "patternModelFactory");
     }
@@ -248,13 +256,14 @@ public class OPPLPatternsTypes extends TreeFilter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
@@ -262,7 +271,7 @@ public class OPPLPatternsTypes extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsTypes.g:95:1:
     // bottomup : pattern ;
     @Override
-    public final void bottomup() throws RecognitionException {
+    public final void bottomup() {
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsTypes.g:96:5:
             // ( pattern )
@@ -403,14 +412,16 @@ public class OPPLPatternsTypes extends TreeFilter {
                     if (s.getOPPLContent() instanceof OPPLScript) {
                         try {
                             PatternModel patternModel = getPatternModelFactory()
-                                    .createPatternModel((OPPLScript) s.getOPPLContent());
+                                    .createPatternModel(
+                                            (OPPLScript) s.getOPPLContent());
                             if (rc != null) {
                                 patternModel.setReturnVariable(rc);
                             }
                             if (ren != null) {
                                 patternModel.setRendering(ren);
                             }
-                            ((OPPLSyntaxTree) retval.start).setOPPLContent(patternModel);
+                            ((OPPLSyntaxTree) retval.start)
+                                    .setOPPLContent(patternModel);
                         } catch (UnsuitableOPPLScriptException e) {
                             getErrorListener().illegalToken(
                                     s,
@@ -461,7 +472,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                     int alt4 = 2;
                     int LA4_0 = input.LA(1);
                     if (LA4_0 == IDENTIFIER || LA4_0 == THIS_CLASS
-                            || LA4_0 >= VARIABLE_NAME && LA4_0 <= REGEXP_CONSTRAINT) {
+                            || LA4_0 >= VARIABLE_NAME
+                            && LA4_0 <= REGEXP_CONSTRAINT) {
                         alt4 = 1;
                     }
                     switch (alt4) {
@@ -485,7 +497,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                                 state.failed = true;
                                 return string;
                             }
-                            EarlyExitException eee = new EarlyExitException(4, input);
+                            EarlyExitException eee = new EarlyExitException(4,
+                                    input);
                             throw eee;
                     }
                     cnt4++;
@@ -542,7 +555,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                         state.failed = true;
                         return;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 5, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 5,
+                            0, input);
                     throw nvae;
             }
             switch (alt5) {
@@ -550,7 +564,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsTypes.g:133:7:
                 // IDENTIFIER
                 {
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_renderingPart182);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_renderingPart182);
                     if (state.failed) {
                         return;
                     }
@@ -560,14 +575,15 @@ public class OPPLPatternsTypes extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsTypes.g:134:7:
                 // VARIABLE_NAME
                 {
-                    VARIABLE_NAME2 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME2 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_renderingPart190);
                     if (state.failed) {
                         return;
                     }
                     if (state.backtracking == 1) {
-                        Variable<?> variable = getConstraintSystem().getVariable(
-                                VARIABLE_NAME2.getText());
+                        Variable<?> variable = getConstraintSystem()
+                                .getVariable(VARIABLE_NAME2.getText());
                         if (variable == null) {
                             if (getErrorListener() != null) {
                                 getErrorListener().illegalToken(VARIABLE_NAME2,
@@ -581,7 +597,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsTypes.g:143:7:
                 // THIS_CLASS
                 {
-                    match(input, THIS_CLASS, FOLLOW_THIS_CLASS_in_renderingPart206);
+                    match(input, THIS_CLASS,
+                            FOLLOW_THIS_CLASS_in_renderingPart206);
                     if (state.failed) {
                         return;
                     }
@@ -637,8 +654,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                             state.failed = true;
                             return variable;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 6, 2,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 6, 2, input);
                         throw nvae;
                     }
                 } else {
@@ -646,7 +663,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                         state.failed = true;
                         return variable;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 6, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("", 6,
+                            1, input);
                     throw nvae;
                 }
             } else {
@@ -654,7 +672,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                     state.failed = true;
                     return variable;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 6, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 6, 0,
+                        input);
                 throw nvae;
             }
             switch (alt6) {
@@ -670,7 +689,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                     if (state.failed) {
                         return variable;
                     }
-                    VARIABLE_NAME3 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME3 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_returnClause244);
                     if (state.failed) {
                         return variable;
@@ -703,7 +723,8 @@ public class OPPLPatternsTypes extends TreeFilter {
                     if (state.failed) {
                         return variable;
                     }
-                    match(input, THIS_CLASS, FOLLOW_THIS_CLASS_in_returnClause264);
+                    match(input, THIS_CLASS,
+                            FOLLOW_THIS_CLASS_in_returnClause264);
                     if (state.failed) {
                         return variable;
                     }
@@ -737,17 +758,19 @@ public class OPPLPatternsTypes extends TreeFilter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_OPPL_STATEMENT_in_pattern106 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_rendering_in_pattern116 = new BitSet(new long[] {
-            0x0000000000000008L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000080000000L });
+    public static final BitSet FOLLOW_rendering_in_pattern116 = new BitSet(
+            new long[] { 0x0000000000000008L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000080000000L });
     public static final BitSet FOLLOW_returnClause_in_pattern123 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_RENDERING_in_rendering153 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_renderingPart_in_rendering155 = new BitSet(
-            new long[] { 0x0000100000000008L, 0x0000000000000000L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000100000000008L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000100000000L, 0x0000000000030000L });
     public static final BitSet FOLLOW_IDENTIFIER_in_renderingPart182 = new BitSet(
             new long[] { 0x0000000000000002L });

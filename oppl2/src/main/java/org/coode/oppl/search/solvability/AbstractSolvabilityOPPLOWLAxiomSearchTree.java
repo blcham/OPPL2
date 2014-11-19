@@ -41,70 +41,18 @@ import org.coode.oppl.variabletypes.OBJECTPROPERTYVariableType;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLAxiomVisitor;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLClassExpressionVisitor;
 import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 /** @author Luigi Iannone */
 public abstract class AbstractSolvabilityOPPLOWLAxiomSearchTree extends
         SearchTree<SolvabilitySearchNode> {
-
-    /** test */
-    private final class ConstantCollector implements OWLAxiomVisitor {
-
-        private final Set<OWLLiteral> toReturn;
-        private final OWLClassExpressionVisitor constantExtractor;
-
-        ConstantCollector(Set<OWLLiteral> toReturn,
-                OWLClassExpressionVisitor constantExtractor) {
-            this.toReturn = toReturn;
-            this.constantExtractor = constantExtractor;
-        }
-
-        @Override
-        public void visit(OWLClassAssertionAxiom axiom) {
-            axiom.getClassExpression().accept(constantExtractor);
-        }
-
-        @Override
-        public void visit(OWLDataPropertyAssertionAxiom axiom) {
-            toReturn.add(axiom.getObject());
-        }
-
-        @Override
-        public void visit(OWLDisjointClassesAxiom axiom) {
-            axiom.classExpressions().forEach(d -> d.accept(constantExtractor));
-        }
-
-        @Override
-        public void visit(OWLEquivalentClassesAxiom axiom) {
-            axiom.classExpressions().forEach(d -> d.accept(constantExtractor));
-        }
-
-        @Override
-        public void visit(OWLNegativeDataPropertyAssertionAxiom axiom) {
-            toReturn.add(axiom.getObject());
-        }
-
-        @Override
-        public void visit(OWLSubClassOfAxiom axiom) {
-            axiom.getSubClass().accept(constantExtractor);
-            axiom.getSuperClass().accept(constantExtractor);
-        }
-    }
 
     private final ConstraintSystem constraintSystem;
     private final RuntimeExceptionHandler runtimeExceptionHandler;

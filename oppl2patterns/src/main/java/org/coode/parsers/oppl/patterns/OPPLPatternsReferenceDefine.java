@@ -33,37 +33,43 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class OPPLPatternsReferenceDefine extends TreeRewriter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "ARGUMENT", "AT", "ESCLAMATION_MARK",
-            "CREATE_IDENTIFIER", "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR",
-            "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
-            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE", "SEMICOLON",
-            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT" };
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "ARGUMENT", "AT", "ESCLAMATION_MARK", "CREATE_IDENTIFIER",
+            "PLAIN_IDENTIFIER", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES",
+            "RENDERING", "GROUPS", "STRING_OPERATION", "DOLLAR", "RETURN",
+            "THIS_CLASS", "ARGUMENTS", "OPPL_PATTERN", "PATTERN_REFERENCE",
+            "SEMICOLON", "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL",
+            "NAF_CONSTRAINT" };
     public static final int COMMA = 37;
     public static final int ASSERTED = 76;
     public static final int VARIABLE_DEFINITIONS = 102;
@@ -203,7 +209,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
         this(input, new RecognizerSharedState());
     }
 
-    public OPPLPatternsReferenceDefine(TreeNodeStream input, RecognizerSharedState state) {
+    public OPPLPatternsReferenceDefine(TreeNodeStream input,
+            RecognizerSharedState state) {
         super(input, state);
     }
 
@@ -239,7 +246,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
         this.patternReferenceResolver = checkNotNull(patternReferenceResolver,
                 "patternReferenceResolver");
     }
@@ -266,17 +274,19 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
     public static class bottomup_return extends TreeRuleReturnScope {
+
         OPPLSyntaxTree tree;
 
         @Override
@@ -289,8 +299,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:96:1:
     // bottomup : patternReference ;
     @Override
-    public final OPPLPatternsReferenceDefine.bottomup_return bottomup()
-            throws RecognitionException {
+    public final OPPLPatternsReferenceDefine.bottomup_return bottomup() {
         OPPLPatternsReferenceDefine.bottomup_return retval = new OPPLPatternsReferenceDefine.bottomup_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree _first_0 = null;
@@ -315,7 +324,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                     retval.tree = _first_0;
                     if (adaptor.getParent(retval.tree) != null
                             && adaptor.isNil(adaptor.getParent(retval.tree))) {
-                        retval.tree = (OPPLSyntaxTree) adaptor.getParent(retval.tree);
+                        retval.tree = (OPPLSyntaxTree) adaptor
+                                .getParent(retval.tree);
                     }
                 }
             }
@@ -329,6 +339,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
 
     // $ANTLR end "bottomup"
     public static class patternReference_return extends TreeRuleReturnScope {
+
         OPPLSyntaxTree tree;
 
         @Override
@@ -341,7 +352,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:101:1:
     // patternReference : ^(pr= IDENTIFIER PATTERN_REFERENCE (args= arguments )?
     // ) -> ^( $pr) ;
-    public final OPPLPatternsReferenceDefine.patternReference_return patternReference() {
+    public final OPPLPatternsReferenceDefine.patternReference_return
+            patternReference() {
         OPPLPatternsReferenceDefine.patternReference_return retval = new OPPLPatternsReferenceDefine.patternReference_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree root_0 = null;
@@ -350,12 +362,12 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
         OPPLSyntaxTree pr = null;
         OPPLSyntaxTree PATTERN_REFERENCE2 = null;
         OPPLPatternsReferenceDefine.arguments_return args = null;
-        RewriteRuleNodeStream stream_IDENTIFIER = new RewriteRuleNodeStream(adaptor,
-                "token IDENTIFIER");
+        RewriteRuleNodeStream stream_IDENTIFIER = new RewriteRuleNodeStream(
+                adaptor, "token IDENTIFIER");
         RewriteRuleNodeStream stream_PATTERN_REFERENCE = new RewriteRuleNodeStream(
                 adaptor, "token PATTERN_REFERENCE");
-        RewriteRuleSubtreeStream stream_arguments = new RewriteRuleSubtreeStream(adaptor,
-                "rule arguments");
+        RewriteRuleSubtreeStream stream_arguments = new RewriteRuleSubtreeStream(
+                adaptor, "rule arguments");
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:102:2:
             // ( ^(pr= IDENTIFIER PATTERN_REFERENCE (args= arguments )? ) -> ^(
@@ -383,7 +395,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                         return retval;
                     }
                     _last = (OPPLSyntaxTree) input.LT(1);
-                    PATTERN_REFERENCE2 = (OPPLSyntaxTree) match(input, PATTERN_REFERENCE,
+                    PATTERN_REFERENCE2 = (OPPLSyntaxTree) match(input,
+                            PATTERN_REFERENCE,
                             FOLLOW_PATTERN_REFERENCE_in_patternReference101);
                     if (state.failed) {
                         return retval;
@@ -416,7 +429,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                             if (state.backtracking == 1) {
                                 retval.tree = _first_0;
                                 if (adaptor.getParent(retval.tree) != null
-                                        && adaptor.isNil(adaptor.getParent(retval.tree))) {
+                                        && adaptor.isNil(adaptor
+                                                .getParent(retval.tree))) {
                                     retval.tree = (OPPLSyntaxTree) adaptor
                                             .getParent(retval.tree);
                                 }
@@ -433,12 +447,12 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                 if (state.backtracking == 1) {
                     if (args == null) {
                         getPatternReferenceResolver().resolvePattern(pr,
-                                PATTERN_REFERENCE2.getText(), getConstraintSystem(),
-                                getSymbolTable());
+                                PATTERN_REFERENCE2.getText(),
+                                getConstraintSystem(), getSymbolTable());
                     } else {
                         getPatternReferenceResolver().resolvePattern(pr,
-                                PATTERN_REFERENCE2.getText(), getConstraintSystem(),
-                                getSymbolTable(),
+                                PATTERN_REFERENCE2.getText(),
+                                getConstraintSystem(), getSymbolTable(),
                                 args.args.toArray(new List[args.args.size()]));
                     }
                 }
@@ -451,21 +465,23 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                 // wildcard labels:
                 if (state.backtracking == 1) {
                     retval.tree = root_0;
-                    RewriteRuleNodeStream stream_pr = new RewriteRuleNodeStream(adaptor,
-                            "token pr", pr);
+                    RewriteRuleNodeStream stream_pr = new RewriteRuleNodeStream(
+                            adaptor, "token pr", pr);
                     root_0 = (OPPLSyntaxTree) adaptor.nil();
                     // 111:3: -> ^( $pr)
                     {
                         // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:112:3:
                         // ^( $pr)
                         {
-                            OPPLSyntaxTree root_1 = (OPPLSyntaxTree) adaptor.nil();
+                            OPPLSyntaxTree root_1 = (OPPLSyntaxTree) adaptor
+                                    .nil();
                             root_1 = (OPPLSyntaxTree) adaptor.becomeRoot(
                                     stream_pr.nextNode(), root_1);
                             adaptor.addChild(root_0, root_1);
                         }
                     }
-                    retval.tree = (OPPLSyntaxTree) adaptor.rulePostProcessing(root_0);
+                    retval.tree = (OPPLSyntaxTree) adaptor
+                            .rulePostProcessing(root_0);
                     input.replaceChildren(adaptor.getParent(retval.start),
                             adaptor.getChildIndex(retval.start),
                             adaptor.getChildIndex(_last), retval.tree);
@@ -485,6 +501,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
 
     // $ANTLR end "patternReference"
     public static class arguments_return extends TreeRuleReturnScope {
+
         public List<List<Object>> args;
         OPPLSyntaxTree tree;
 
@@ -577,7 +594,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(2, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        2, input);
                                 throw eee;
                         }
                         cnt2++;
@@ -592,7 +610,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                     retval.tree = _first_0;
                     if (adaptor.getParent(retval.tree) != null
                             && adaptor.isNil(adaptor.getParent(retval.tree))) {
-                        retval.tree = (OPPLSyntaxTree) adaptor.getParent(retval.tree);
+                        retval.tree = (OPPLSyntaxTree) adaptor
+                                .getParent(retval.tree);
                     }
                 }
             }
@@ -610,6 +629,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
 
     // $ANTLR end "arguments"
     public static class argument_return extends TreeRuleReturnScope {
+
         public List<Object> argObjects;
         OPPLSyntaxTree tree;
 
@@ -653,7 +673,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                 int LA4_6 = input.LA(6);
                                 if (LA4_6 == DOWN) {
                                     alt4 = 1;
-                                } else if (LA4_6 >= UP && LA4_6 <= NAF_CONSTRAINT) {
+                                } else if (LA4_6 >= UP
+                                        && LA4_6 <= NAF_CONSTRAINT) {
                                     alt4 = 2;
                                 } else {
                                     if (state.backtracking > 0) {
@@ -673,8 +694,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                NoViableAltException nvae = new NoViableAltException("",
-                                        4, 5, input);
+                                NoViableAltException nvae = new NoViableAltException(
+                                        "", 4, 5, input);
                                 throw nvae;
                             }
                         } else if (LA4_3 >= UP && LA4_3 <= NAF_CONSTRAINT) {
@@ -684,8 +705,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 4,
-                                    3, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 4, 3, input);
                             throw nvae;
                         }
                     } else if (LA4_2 >= COMPOSITION
@@ -697,8 +718,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                             state.failed = true;
                             return retval;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 4, 2,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 4, 2, input);
                         throw nvae;
                     }
                 } else {
@@ -706,7 +727,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 4, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("", 4,
+                            1, input);
                     throw nvae;
                 }
             } else {
@@ -714,7 +736,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 4, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 4, 0,
+                        input);
                 throw nvae;
             }
             switch (alt4) {
@@ -743,7 +766,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                         {
                             OPPLSyntaxTree _save_last_2 = _last;
                             _last = (OPPLSyntaxTree) input.LT(1);
-                            match(input, EXPRESSION, FOLLOW_EXPRESSION_in_argument184);
+                            match(input, EXPRESSION,
+                                    FOLLOW_EXPRESSION_in_argument184);
                             if (state.failed) {
                                 return retval;
                             }
@@ -756,7 +780,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                 OPPLSyntaxTree _save_last_3 = _last;
                                 OPPLSyntaxTree _first_3 = null;
                                 _last = (OPPLSyntaxTree) input.LT(1);
-                                match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_argument189);
+                                match(input, IDENTIFIER,
+                                        FOLLOW_IDENTIFIER_in_argument189);
                                 if (state.failed) {
                                     return retval;
                                 }
@@ -818,14 +843,17 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                         Aggregandum<?> aggregandum = Adapter
                                 .buildSingletonAggregandum(getSymbolTable()
                                         .defineValuesAttributeReferenceSymbol(
-                                                VARIABLE_NAME7, getConstraintSystem()));
+                                                VARIABLE_NAME7,
+                                                getConstraintSystem()));
                         retval.argObjects.add(aggregandum);
                     }
                     if (state.backtracking == 1) {
                         retval.tree = _first_0;
                         if (adaptor.getParent(retval.tree) != null
-                                && adaptor.isNil(adaptor.getParent(retval.tree))) {
-                            retval.tree = (OPPLSyntaxTree) adaptor.getParent(retval.tree);
+                                && adaptor
+                                        .isNil(adaptor.getParent(retval.tree))) {
+                            retval.tree = (OPPLSyntaxTree) adaptor
+                                    .getParent(retval.tree);
                         }
                     }
                 }
@@ -886,16 +914,18 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                             if (v != null) {
                                                 retval.argObjects.add(v);
                                             } else {
-                                                getErrorListener().illegalToken(a,
-                                                        "Invalid argument");
+                                                getErrorListener()
+                                                        .illegalToken(a,
+                                                                "Invalid argument");
                                             }
                                         }
                                     }
                                     if (state.backtracking == 1) {
                                         retval.tree = _first_0;
                                         if (adaptor.getParent(retval.tree) != null
-                                                && adaptor.isNil(adaptor
-                                                        .getParent(retval.tree))) {
+                                                && adaptor
+                                                        .isNil(adaptor
+                                                                .getParent(retval.tree))) {
                                             retval.tree = (OPPLSyntaxTree) adaptor
                                                     .getParent(retval.tree);
                                         }
@@ -910,8 +940,8 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                                         state.failed = true;
                                         return retval;
                                     }
-                                    EarlyExitException eee = new EarlyExitException(3,
-                                            input);
+                                    EarlyExitException eee = new EarlyExitException(
+                                            3, input);
                                     throw eee;
                             }
                             cnt3++;
@@ -925,8 +955,10 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
                     if (state.backtracking == 1) {
                         retval.tree = _first_0;
                         if (adaptor.getParent(retval.tree) != null
-                                && adaptor.isNil(adaptor.getParent(retval.tree))) {
-                            retval.tree = (OPPLSyntaxTree) adaptor.getParent(retval.tree);
+                                && adaptor
+                                        .isNil(adaptor.getParent(retval.tree))) {
+                            retval.tree = (OPPLSyntaxTree) adaptor
+                                    .getParent(retval.tree);
                         }
                     }
                 }
@@ -951,15 +983,16 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
     public static final BitSet FOLLOW_IDENTIFIER_in_patternReference99 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_PATTERN_REFERENCE_in_patternReference101 = new BitSet(
-            new long[] { 0x0000000000000008L, 0x0000000000000000L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000000000000008L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000200000000L });
     public static final BitSet FOLLOW_arguments_in_patternReference106 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ARGUMENTS_in_arguments147 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_argument_in_arguments152 = new BitSet(new long[] {
-            0x0000000000000008L, 0x0002000000000000L });
+    public static final BitSet FOLLOW_argument_in_arguments152 = new BitSet(
+            new long[] { 0x0000000000000008L, 0x0002000000000000L });
     public static final BitSet FOLLOW_ARGUMENT_in_argument180 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_EXPRESSION_in_argument184 = new BitSet(
@@ -968,9 +1001,10 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_VARIABLE_NAME_in_argument191 = new BitSet(
             new long[] { 0x0000000000000000L, 0x0000000000004000L });
-    public static final BitSet FOLLOW_DOT_in_argument193 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000400000000L });
+    public static final BitSet FOLLOW_DOT_in_argument193 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000400000000L });
     public static final BitSet FOLLOW_VALUES_in_argument196 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ARGUMENT_in_argument206 = new BitSet(

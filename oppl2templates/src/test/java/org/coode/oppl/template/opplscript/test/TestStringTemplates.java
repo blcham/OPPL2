@@ -1,6 +1,6 @@
 package org.coode.oppl.template.opplscript.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,8 +12,8 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.RewriteEmptyStreamException;
 import org.coode.oppl.OPPLScript;
 import org.coode.oppl.template.ParsingStrategy;
-import org.coode.oppl.template.commons.StringFormatReplacementStrategy;
 import org.coode.oppl.template.commons.KeyBasedReplacementStrategy;
+import org.coode.oppl.template.commons.StringFormatReplacementStrategy;
 import org.coode.oppl.template.commons.StringTemplate;
 import org.coode.oppl.template.commons.opplscript.AnnotationBasedSimpleOPPLParserCreationStrategy;
 import org.coode.oppl.template.commons.opplscript.SimpleOPPLParserCreationStrategy;
@@ -29,20 +29,23 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 @SuppressWarnings("javadoc")
 public class TestStringTemplates {
+
     private static final ErrorListener ERROR_LISTENER = new ErrorListener() {
+
         @Override
         public void unrecognisedSymbol(CommonTree t) {
             throw new RuntimeException(t.toString());
         }
 
         @Override
-        public void
-                incompatibleSymbolType(CommonTree t, Type type, CommonTree expression) {
+        public void incompatibleSymbolType(CommonTree t, Type type,
+                CommonTree expression) {
             throw new RuntimeException(t.toString());
         }
 
         @Override
-        public void incompatibleSymbols(CommonTree parentExpression, CommonTree... trees) {
+        public void incompatibleSymbols(CommonTree parentExpression,
+                CommonTree... trees) {
             throw new RuntimeException(parentExpression.toString());
         }
 
@@ -57,7 +60,8 @@ public class TestStringTemplates {
         }
 
         @Override
-        public void recognitionException(RecognitionException e, String... tokenNames) {
+        public void recognitionException(RecognitionException e,
+                String... tokenNames) {
             throw new RuntimeException(e);
         }
 
@@ -67,62 +71,64 @@ public class TestStringTemplates {
         }
 
         @Override
-        public void reportThrowable(Throwable t, int line, int charPosInLine, int length) {
+        public void reportThrowable(Throwable t, int line, int charPosInLine,
+                int length) {
             throw new RuntimeException(t);
         }
     };
 
     @Test
-    public void shouldTestTemplateNoPlaceHolder() throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+    public void shouldTestTemplateNoPlaceHolder()
+            throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology emptyOntology = ontologyManager.createOntology();
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf Thing BEGIN ADD ?x subClassOf Thing END;";
         StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
-                template, new StringFormatReplacementStrategy(Collections.emptyList()),
-                parserCreationStrategy);
+                template, new StringFormatReplacementStrategy(
+                        Collections.emptyList()), parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
         assertNotNull(opplScript);
     }
 
     @Test
-    public void shouldTestTemplateOnePlaceHolder() throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+    public void shouldTestTemplateOnePlaceHolder()
+            throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology emptyOntology = ontologyManager.createOntology();
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf %s BEGIN ADD ?x subClassOf Thing END;";
         StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
-                template, new StringFormatReplacementStrategy(Arrays.asList("Thing")),
-                parserCreationStrategy);
+                template, new StringFormatReplacementStrategy(
+                        Arrays.asList("Thing")), parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
         assertNotNull(opplScript);
     }
 
-    @Test
-    public void shouldTestTemplateOnePlaceHolderButNoData() {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
-        try {
-            OWLOntology emptyOntology = ontologyManager.createOntology();
-            ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
-                    ontologyManager, emptyOntology, null, ERROR_LISTENER);
-            String template = "?x:CLASS SELECT ?x subClassOf %s BEGIN ADD ?x subClassOf Thing END;";
-            StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
-                    template, new StringFormatReplacementStrategy(
-                            Collections.emptyList()), parserCreationStrategy);
-            stringTemplate.replace();
-            fail("Should not get to here");
-        } catch (OWLOntologyCreationException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        } catch (MissingFormatArgumentException e) {}
+    @Test(expected = MissingFormatArgumentException.class)
+    public void shouldTestTemplateOnePlaceHolderButNoData()
+            throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
+        OWLOntology emptyOntology = ontologyManager.createOntology();
+        ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
+                ontologyManager, emptyOntology, null, ERROR_LISTENER);
+        String template = "?x:CLASS SELECT ?x subClassOf %s BEGIN ADD ?x subClassOf Thing END;";
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
+                template, new StringFormatReplacementStrategy(
+                        Collections.emptyList()), parserCreationStrategy);
+        stringTemplate.replace();
     }
 
     @Test
     public void shouldTestTestPropertyBasedStringTemplateOnePlaceholder()
             throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology emptyOntology = ontologyManager.createOntology();
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
@@ -137,9 +143,11 @@ public class TestStringTemplates {
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldTestTestPropertyBasedStringTemplateOnePlaceholderButNoData()
-            throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+    public void
+            shouldTestTestPropertyBasedStringTemplateOnePlaceholderButNoData()
+                    throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology emptyOntology = ontologyManager.createOntology();
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
@@ -152,9 +160,11 @@ public class TestStringTemplates {
     }
 
     @Test
-    public void shouldTestTestPropertyBasedStringTemplateOnePlaceholderUsedTwice()
-            throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+    public void
+            shouldTestTestPropertyBasedStringTemplateOnePlaceholderUsedTwice()
+                    throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology emptyOntology = ontologyManager.createOntology();
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
@@ -169,11 +179,13 @@ public class TestStringTemplates {
     }
 
     @Test
-    public void
+    public
+            void
             testTestPropertyBasedStringTemplateOnePlaceholderUsingAnnotationForParsing() {
         OWLOntology emptyOntology = TemplateTestOntologies.pizza;
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new AnnotationBasedSimpleOPPLParserCreationStrategy(
-                Arrays.asList(IRI.create("http://www.w3.org/2000/01/rdf-schema#label")),
+                Arrays.asList(IRI
+                        .create("http://www.w3.org/2000/01/rdf-schema#label")),
                 emptyOntology.getOWLOntologyManager(), emptyOntology, null,
                 ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf ${ValuePartition} BEGIN ADD ?x subClassOf Thing END;";
