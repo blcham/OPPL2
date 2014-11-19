@@ -47,9 +47,11 @@ import uk.ac.manchester.cs.jfact.JFactFactory;
 
 @SuppressWarnings("javadoc")
 public class SpecificInferenceQueries {
+
     private final static String TEST_NS = "http://www.co-ode.org/opp/test#";
     private final static RuntimeExceptionHandler HANDLER = new QuickFailRuntimeExceptionHandler();
     private final ErrorListener errorListener = new ErrorListener() {
+
         @Override
         public void unrecognisedSymbol(CommonTree t) {
             fail("Unrecognised symbol " + t);
@@ -61,13 +63,15 @@ public class SpecificInferenceQueries {
         }
 
         @Override
-        public void reportThrowable(Throwable t, int line, int charPosInLine, int length) {
-            fail(t.getMessage() + " at line " + line + " position " + charPosInLine
-                    + " length " + length);
+        public void reportThrowable(Throwable t, int line, int charPosInLine,
+                int length) {
+            fail(t.getMessage() + " at line " + line + " position "
+                    + charPosInLine + " length " + length);
         }
 
         @Override
-        public void recognitionException(RecognitionException e, String... tokenNames) {
+        public void recognitionException(RecognitionException e,
+                String... tokenNames) {
             fail(e.getMessage() + Arrays.toString(tokenNames));
         }
 
@@ -77,7 +81,8 @@ public class SpecificInferenceQueries {
         }
 
         @Override
-        public void incompatibleSymbols(CommonTree parentExpression, CommonTree... trees) {
+        public void incompatibleSymbols(CommonTree parentExpression,
+                CommonTree... trees) {
             StringBuilder out = new StringBuilder();
             out.append(String.format("Incompatible symbols in %s ",
                     parentExpression.getText()));
@@ -88,22 +93,25 @@ public class SpecificInferenceQueries {
         }
 
         @Override
-        public void
-                incompatibleSymbolType(CommonTree t, Type type, CommonTree expression) {
-            fail(String.format("Incompatible symbols type [%s] for %s  in %s ", type,
-                    t.getText(), expression.getText()));
+        public void incompatibleSymbolType(CommonTree t, Type type,
+                CommonTree expression) {
+            fail(String.format("Incompatible symbols type [%s] for %s  in %s ",
+                    type, t.getText(), expression.getText()));
         }
 
         @Override
         public void illegalToken(CommonTree t, String message) {
-            fail(String.format("Illegal token %s  additional information: [%s]", t,
+            fail(String.format(
+                    "Illegal token %s  additional information: [%s]", t,
                     message));
         }
     };
 
     @Test
-    public void shouldTestRedundantSubClasses() throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+    public void shouldTestRedundantSubClasses()
+            throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
         OWLOntology ontology = ontologyManager.createOntology();
         OWLDataFactory dataFactory = ontologyManager.getOWLDataFactory();
         OWLClass a = dataFactory.getOWLClass(IRI.create("blah#A"));
@@ -111,15 +119,21 @@ public class SpecificInferenceQueries {
         OWLClass c = dataFactory.getOWLClass(IRI.create("blah#C"));
         OWLClass d = dataFactory.getOWLClass(IRI.create("blah#D"));
         OWLClass e = dataFactory.getOWLClass(IRI.create("blah#E"));
-        List<AddAxiom> changes = Arrays.asList(
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(b, a)),
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(c, b)),
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(d, b)),
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(e, b)),
-                // Redundant
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(c, a)),
-                // Redundant
-                new AddAxiom(ontology, dataFactory.getOWLSubClassOfAxiom(d, a)));
+        List<AddAxiom> changes = Arrays
+                .asList(new AddAxiom(ontology, dataFactory
+                        .getOWLSubClassOfAxiom(b, a)),
+                        new AddAxiom(ontology, dataFactory
+                                .getOWLSubClassOfAxiom(c, b)),
+                        new AddAxiom(ontology, dataFactory
+                                .getOWLSubClassOfAxiom(d, b)),
+                        new AddAxiom(ontology, dataFactory
+                                .getOWLSubClassOfAxiom(e, b)),
+                        // Redundant
+                        new AddAxiom(ontology, dataFactory
+                                .getOWLSubClassOfAxiom(c, a)),
+                        // Redundant
+                        new AddAxiom(ontology, dataFactory
+                                .getOWLSubClassOfAxiom(d, a)));
         ontologyManager.applyChanges(changes);
         String xVariableName = "?x";
         String yVariableName = "?y";
@@ -128,19 +142,21 @@ public class SpecificInferenceQueries {
                         xVariableName, yVariableName);
         JFactFactory factory = new JFactFactory();
         OWLReasoner reasoner = factory.createReasoner(ontology);
-        ParserFactory parserFactory = new ParserFactory(ontologyManager, ontology,
-                reasoner);
+        ParserFactory parserFactory = new ParserFactory(ontologyManager,
+                ontology, reasoner);
         OPPLParser parser = parserFactory.build(new SilentListener());
         OPPLScript opplScript = parser.parse(opplScripString);
         ChangeExtractor changeExtractor = new ChangeExtractor(HANDLER, false);
-        List<OWLAxiomChange> extractedChanges = changeExtractor.visit(opplScript);
+        List<OWLAxiomChange> extractedChanges = changeExtractor
+                .visit(opplScript);
         assertTrue(extractedChanges.size() == 2);
         Set<BindingNode> leaves = opplScript.getConstraintSystem().getLeaves();
         assertNotNull(leaves);
         assertTrue(leaves.size() == 2);
         Map<String, Set<OWLObject>> assignments = new HashMap<String, Set<OWLObject>>();
         for (BindingNode bindingNode : leaves) {
-            Set<Variable<?>> assignedVariables = bindingNode.getAssignedVariables();
+            Set<Variable<?>> assignedVariables = bindingNode
+                    .getAssignedVariables();
             for (Variable<?> variable : assignedVariables) {
                 String name = variable.getName();
                 if (name.compareTo(xVariableName) == 0
@@ -153,7 +169,8 @@ public class SpecificInferenceQueries {
                     set.add(bindingNode.getAssignmentValue(
                             variable,
                             new SimpleValueComputationParameters(opplScript
-                                    .getConstraintSystem(), bindingNode, HANDLER)));
+                                    .getConstraintSystem(), bindingNode,
+                                    HANDLER)));
                 }
             }
         }
@@ -168,24 +185,27 @@ public class SpecificInferenceQueries {
     }
 
     @Test
-    public void shouldTestTransitiveSubClassClosure() throws OWLOntologyCreationException {
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
-        OWLOntology testOntology = ontologyManager.createOntology(IRI.create(TEST_NS));
+    public void shouldTestTransitiveSubClassClosure()
+            throws OWLOntologyCreationException {
+        OWLOntologyManager ontologyManager = OWLManager
+                .createOWLOntologyManager();
+        OWLOntology testOntology = ontologyManager.createOntology(IRI
+                .create(TEST_NS));
         OWLClass a = ontologyManager.getOWLDataFactory().getOWLClass(
                 IRI.create(TEST_NS, "A"));
         OWLClass b = ontologyManager.getOWLDataFactory().getOWLClass(
                 IRI.create(TEST_NS, "B"));
         OWLClass c = ontologyManager.getOWLDataFactory().getOWLClass(
                 IRI.create(TEST_NS, "C"));
-        ontologyManager.addAxiom(testOntology, ontologyManager.getOWLDataFactory()
-                .getOWLSubClassOfAxiom(a, b));
-        ontologyManager.addAxiom(testOntology, ontologyManager.getOWLDataFactory()
-                .getOWLSubClassOfAxiom(b, c));
+        ontologyManager.addAxiom(testOntology, ontologyManager
+                .getOWLDataFactory().getOWLSubClassOfAxiom(a, b));
+        ontologyManager.addAxiom(testOntology, ontologyManager
+                .getOWLDataFactory().getOWLSubClassOfAxiom(b, c));
         String opplString = "?x:CLASS SELECT  ?x subClassOf C BEGIN ADD ?x subClassOf A END;";
         OWLReasonerFactory factory = new JFactFactory();
         OWLReasoner reasoner = factory.createReasoner(testOntology);
-        OPPLScript opplScript = new ParserFactory(ontologyManager, testOntology, reasoner)
-                .build(errorListener).parse(opplString);
+        OPPLScript opplScript = new ParserFactory(ontologyManager,
+                testOntology, reasoner).build(errorListener).parse(opplString);
         ChangeExtractor changeExtractor = new ChangeExtractor(HANDLER, true);
         List<OWLAxiomChange> changes = changeExtractor.visit(opplScript);
         assertTrue(changes.size() > 0);
@@ -197,19 +217,22 @@ public class SpecificInferenceQueries {
         Logging.getQueryTestLogging().info(subClasses);
     }
 
-    private Set<OWLAxiom> getOPPLScriptInstantiatedAxioms(OPPLScript opplScript) {
+    private static Set<OWLAxiom> getOPPLScriptInstantiatedAxioms(
+            OPPLScript opplScript) {
         Set<OWLAxiom> toReturn = new HashSet<OWLAxiom>();
         Set<BindingNode> leaves = opplScript.getConstraintSystem().getLeaves();
         if (leaves != null) {
             for (BindingNode bindingNode : leaves) {
-                List<OWLAxiom> queryAxioms = opplScript.getQuery().getAssertedAxioms();
+                List<OWLAxiom> queryAxioms = opplScript.getQuery()
+                        .getAssertedAxioms();
                 queryAxioms.addAll(opplScript.getQuery().getAxioms());
                 ValueComputationParameters parameters = new SimpleValueComputationParameters(
                         opplScript.getConstraintSystem(), bindingNode, HANDLER);
                 PartialOWLObjectInstantiator partialOWLObjectInstantiator = new PartialOWLObjectInstantiator(
                         parameters);
                 for (OWLAxiom axiom : queryAxioms) {
-                    toReturn.add((OWLAxiom) axiom.accept(partialOWLObjectInstantiator));
+                    toReturn.add((OWLAxiom) axiom
+                            .accept(partialOWLObjectInstantiator));
                 }
             }
         }

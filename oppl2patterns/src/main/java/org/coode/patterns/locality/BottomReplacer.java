@@ -300,10 +300,8 @@ public class BottomReplacer implements OWLAxiomVisitor,
     }
 
     private void nullIfOutside(OWLAxiom axiom) {
-        for (OWLEntity e : axiom.getSignature()) {
-            if (!signature.contains(e)) {
-                return;
-            }
+        if (axiom.signature().anyMatch(e -> !signature.contains(e))) {
+            return;
         }
         newAxiom = axiom;
     }

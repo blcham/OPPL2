@@ -324,7 +324,7 @@ public class OPPLScriptTypesParserTest {
         assertNotNull(parsed.getOPPLContent());
     }
 
-    private void equalsIgnoreWhitespace(String a, Object b) {
+    private static void equalsIgnoreWhitespace(String a, Object b) {
         StringBuilder b1 = new StringBuilder(a.toUpperCase()
                 .replace("OWL:", "").replace("\"", "").replace("^^STRING", "")
                 .replace("TYPES", "TYPE").replace("?", "").replace("!", "")

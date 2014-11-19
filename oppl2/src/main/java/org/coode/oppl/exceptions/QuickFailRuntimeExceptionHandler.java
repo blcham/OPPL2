@@ -4,12 +4,16 @@ import java.util.regex.PatternSyntaxException;
 
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 
-/** This implementation simply re-throws the exception thrown or throws new
+/**
+ * This implementation simply re-throws the exception thrown or throws new
  * run-time ones to interrupt the exceution.
  * 
- * @author Luigi Iannone */
-public class QuickFailRuntimeExceptionHandler implements RuntimeExceptionHandler {
-    private void handleRuntimeException(RuntimeException e) {
+ * @author Luigi Iannone
+ */
+public class QuickFailRuntimeExceptionHandler implements
+        RuntimeExceptionHandler {
+
+    private static void handleRuntimeException(RuntimeException e) {
         throw e;
     }
 

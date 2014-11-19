@@ -8,18 +8,23 @@ import java.util.regex.Pattern;
 
 import org.coode.oppl.template.ReplacementStrategy;
 
-/** This strategy assumes that place-holders are also keys in a
+/**
+ * This strategy assumes that place-holders are also keys in a
  * {@link Properties} instance. It replaces them with their corresponding
  * values. The property names are the place-holders name <b>without</b> the
  * {@literal %} prefix
  * 
- * @author Luigi Iannone */
+ * @author Luigi Iannone
+ */
 public final class KeyBasedReplacementStrategy implements
         ReplacementStrategy<String, String> {
+
     private final Properties properties;
 
-    /** @param properties
-     *            properties */
+    /**
+     * @param properties
+     *        properties
+     */
     public KeyBasedReplacementStrategy(Properties properties) {
         this.properties = checkNotNull(properties, "properties");
     }
@@ -40,9 +45,9 @@ public final class KeyBasedReplacementStrategy implements
         return replacedString;
     }
 
-    private String encode(String placeholder) {
-        return placeholder.replaceAll("(\\$)", "\\\\$1").replaceAll("(\\{)", "\\\\$1")
-                .replaceAll("(\\})", "\\\\$1");
+    private static String encode(String placeholder) {
+        return placeholder.replaceAll("(\\$)", "\\\\$1")
+                .replaceAll("(\\{)", "\\\\$1").replaceAll("(\\})", "\\\\$1");
     }
 
     private String getReplacement(String placeholder) {

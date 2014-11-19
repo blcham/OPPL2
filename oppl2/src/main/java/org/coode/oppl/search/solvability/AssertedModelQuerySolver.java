@@ -1,107 +1,71 @@
 package org.coode.oppl.search.solvability;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 /** @author Luigi Iannone */
 public final class AssertedModelQuerySolver implements QuerySolver {
+
     private final OWLOntologyManager ontologyManager;
 
-    /** @param ontologyManager
-     *            ontologyManager */
+    /**
+     * @param ontologyManager
+     *        ontologyManager
+     */
     public AssertedModelQuerySolver(OWLOntologyManager ontologyManager) {
         this.ontologyManager = checkNotNull(ontologyManager, "ontologyManager");
     }
 
+    protected <T extends OWLAxiom> Stream<T> axioms(AxiomType<T> t) {
+        return ontologyManager.ontologies().flatMap(o -> o.axioms(t));
+    }
+
     @Override
     public Set<OWLClass> getSubClasses(OWLClassExpression superClass) {
-        Set<OWLClass> toReturn = new HashSet<OWLClass>();
-        for (OWLOntology ontology : ontologyManager.getOntologies()) {
-            for (OWLSubClassOfAxiom owlAxiom : ontology.getAxioms(AxiomType.SUBCLASS_OF)) {
-                if (owlAxiom.getSuperClass().equals(superClass)
-                        && !owlAxiom.getSubClass().isAnonymous()) {
-                    toReturn.add(owlAxiom.getSubClass().asOWLClass());
-                }
-            }
-        }
-        return toReturn;
+        return asSet(axioms(AxiomType.SUBCLASS_OF).filter(
+                ax -> ax.getSuperClass().equals(superClass)
+                        && !ax.getSubClass().isAnonymous()).map(
+                ax -> ax.getSubClass().asOWLClass()));
     }
 
     @Override
     public Set<OWLClass> getSuperClasses(OWLClassExpression subClass) {
-        Set<OWLClass> toReturn = new HashSet<OWLClass>();
-        for (OWLOntology ontology : ontologyManager.getOntologies()) {
-            for (OWLSubClassOfAxiom owlAxiom : ontology.getAxioms(AxiomType.SUBCLASS_OF)) {
-                if (owlAxiom.getSubClass().equals(subClass)
-                        && !owlAxiom.getSuperClass().isAnonymous()) {
-                    toReturn.add(owlAxiom.getSuperClass().asOWLClass());
-                }
-            }
-        }
-        return toReturn;
+        return asSet(axioms(AxiomType.SUBCLASS_OF).filter(
+                ax -> ax.getSubClass().equals(subClass)
+                        && !ax.getSuperClass().isAnonymous()).map(
+                ax -> ax.getSuperClass().asOWLClass()));
     }
 
     @Override
     public Set<OWLNamedIndividual> getNamedFillers(OWLNamedIndividual subject,
             OWLObjectPropertyExpression objectProperty) {
-        Set<OWLNamedIndividual> toReturn = new HashSet<OWLNamedIndividual>();
-        for (OWLOntology ontology : ontologyManager.getOntologies()) {
-            for (OWLObjectPropertyAssertionAxiom owlAxiom : ontology
-                    .getAxioms(AxiomType.OBJECT_PROPERTY_ASSERTION)) {
-                if (owlAxiom.getSubject().equals(subject)
-                        && owlAxiom.getProperty().equals(objectProperty)
-                        && !owlAxiom.getObject().isAnonymous()) {
-                    toReturn.add(owlAxiom.getObject().asOWLNamedIndividual());
-                }
-            }
-        }
-        return toReturn;
+        return asSet(axioms(AxiomType.OBJECT_PROPERTY_ASSERTION).filter(
+                ax -> ax.getSubject().equals(subject)
+                        && ax.getProperty().equals(objectProperty)
+                        && !ax.getObject().isAnonymous()).map(
+                ax -> ax.getObject().asOWLNamedIndividual()));
     }
 
     @Override
     public boolean hasNoSubClass(OWLClassExpression superClass) {
-        boolean found = false;
-        Iterator<OWLOntology> ontologyIterator = ontologyManager.getOntologies()
-                .iterator();
-        while (!found && ontologyIterator.hasNext()) {
-            OWLOntology owlOntology = ontologyIterator.next();
-            Iterator<OWLSubClassOfAxiom> iterator = owlOntology.getAxioms(
-                    AxiomType.SUBCLASS_OF).iterator();
-            while (!found && iterator.hasNext()) {
-                OWLSubClassOfAxiom owlSubClassOfAxiom = iterator.next();
-                found = owlSubClassOfAxiom.getSuperClass().equals(superClass);
-            }
-        }
-        return !found;
+        return !axioms(AxiomType.SUBCLASS_OF).anyMatch(
+                ax -> ax.getSuperClass().equals(superClass));
     }
 
     @Override
     public boolean hasNoSuperClass(OWLClassExpression subClass) {
-        boolean found = false;
-        Iterator<OWLOntology> ontologyIterator = ontologyManager.getOntologies()
-                .iterator();
-        while (!found && ontologyIterator.hasNext()) {
-            OWLOntology owlOntology = ontologyIterator.next();
-            Iterator<OWLSubClassOfAxiom> iterator = owlOntology.getAxioms(
-                    AxiomType.SUBCLASS_OF).iterator();
-            while (!found && iterator.hasNext()) {
-                OWLSubClassOfAxiom owlSubClassOfAxiom = iterator.next();
-                found = owlSubClassOfAxiom.getSubClass().equals(subClass);
-            }
-        }
-        return !found;
+        return !axioms(AxiomType.SUBCLASS_OF).anyMatch(
+                ax -> ax.getSubClass().equals(subClass));
     }
 }

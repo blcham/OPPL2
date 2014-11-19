@@ -3,7 +3,6 @@ package org.coode.oppl.datafactory;
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -12,20 +11,14 @@ import javax.annotation.Nonnull;
 import org.coode.oppl.function.inline.InlineSet;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLAxiomVisitor;
 import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectVisitor;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLPairwiseVisitor;
@@ -65,12 +58,6 @@ public class OPPLOWLDisjointClassesAxiom extends
     /** @return the shouldExpandAsPairwise */
     public boolean shouldExpandAsPairWise() {
         return shouldExpandAsPairWise;
-    }
-
-    // Delegate methods
-    @Override
-    public Set<OWLEntity> getSignature() {
-        return delegate.getSignature();
     }
 
     @Override
@@ -117,39 +104,9 @@ public class OPPLOWLDisjointClassesAxiom extends
     }
 
     @Override
-    public List<OWLClassExpression> getClassExpressionsAsList() {
-        return delegate.getClassExpressionsAsList();
-    }
-
-    @Override
-    public Set<OWLDataProperty> getDataPropertiesInSignature() {
-        return delegate.getDataPropertiesInSignature();
-    }
-
-    @Override
-    public Set<OWLObjectProperty> getObjectPropertiesInSignature() {
-        return delegate.getObjectPropertiesInSignature();
-    }
-
-    @Override
     public Set<OWLClassExpression> getClassExpressionsMinus(
             OWLClassExpression... desc) {
         return delegate.getClassExpressionsMinus(desc);
-    }
-
-    @Override
-    public Set<OWLNamedIndividual> getIndividualsInSignature() {
-        return delegate.getIndividualsInSignature();
-    }
-
-    @Override
-    public Set<OWLDatatype> getDatatypesInSignature() {
-        return delegate.getDatatypesInSignature();
-    }
-
-    @Override
-    public Set<OWLClassExpression> getNestedClassExpressions() {
-        return delegate.getNestedClassExpressions();
     }
 
     @Override
@@ -168,11 +125,6 @@ public class OPPLOWLDisjointClassesAxiom extends
     }
 
     @Override
-    public Set<OWLClass> getClassesInSignature() {
-        return delegate.getClassesInSignature();
-    }
-
-    @Override
     public OWLDisjointClassesAxiom getAxiomWithoutAnnotations() {
         return delegate.getAxiomWithoutAnnotations();
     }
@@ -188,17 +140,6 @@ public class OPPLOWLDisjointClassesAxiom extends
     @Override
     public Stream<OWLAnnotation> annotations() {
         return delegate.annotations();
-    }
-
-    @Override
-    public Set<OWLAnnotation> getAnnotations() {
-        return delegate.getAnnotations();
-    }
-
-    @Override
-    public Set<OWLAnnotation> getAnnotations(
-            OWLAnnotationProperty annotationProperty) {
-        return delegate.getAnnotations(annotationProperty);
     }
 
     @Override
@@ -278,6 +219,6 @@ public class OPPLOWLDisjointClassesAxiom extends
 
     @Override
     public boolean containsEntityInSignature(@Nonnull OWLEntity owlEntity) {
-        return false;
+        return delegate.containsEntityInSignature(owlEntity);
     }
 }
