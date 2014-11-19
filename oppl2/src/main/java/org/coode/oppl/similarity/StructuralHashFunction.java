@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import org.coode.oppl.utils.OWLVocabulary;
 import org.coode.oppl.utils.PrimeNumbersUtils;
@@ -90,23 +93,21 @@ import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
 
-import javax.annotation.Nonnull;
-
 /** @author Luigi Iannone */
-public class StructuralHashFunction implements
-        HashFunction, OWLObjectVisitorEx<Integer> {
-    private final static Map<AxiomType<?>, Integer> axiomTypeHashCodes = new HashMap<AxiomType<?>, Integer>();
-    private final static Map<IRI, Integer> iriHashCodes = new HashMap<IRI, Integer>();
-    private final static Map<OWLEntity, Integer> entityHashCodes = new HashMap<OWLEntity, Integer>();
-    private final static EnumMap<OWLConstruct, Integer> constructHashCodes = new EnumMap<OWLConstruct, Integer>(
+public class StructuralHashFunction implements HashFunction,
+        OWLObjectVisitorEx<Integer> {
+
+    private final static Map<AxiomType<?>, Integer> axiomTypeHashCodes = new HashMap<>();
+    private final static Map<IRI, Integer> iriHashCodes = new HashMap<>();
+    private final static Map<OWLEntity, Integer> entityHashCodes = new HashMap<>();
+    private final static EnumMap<OWLConstruct, Integer> constructHashCodes = new EnumMap<>(
             OWLConstruct.class);
-    private final static Map<Integer, Integer> integerHashCodes = new HashMap<Integer, Integer>();
+    private final static Map<Integer, Integer> integerHashCodes = new HashMap<>();
     private static int maxPrime = 1;
 
     /**
      * 
      */
-
     @Nonnull
     @Override
     public Integer doDefault(@Nonnull Object object) {
@@ -116,7 +117,8 @@ public class StructuralHashFunction implements
     @Override
     public Integer visit(OWLSubClassOfAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * axiom.getSubClass().accept(this) * axiom.getSuperClass().accept(this);
+                * axiom.getSubClass().accept(this)
+                * axiom.getSuperClass().accept(this);
     }
 
     private Integer getAxiomTypeHashValue(AxiomType<?> axiomType) {
@@ -141,9 +143,11 @@ public class StructuralHashFunction implements
         return getOWLObjectPropertyCharacteristicAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getOWLObjectPropertyCharacteristicAxiomHashCode(
             OWLObjectPropertyCharacteristicAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
@@ -160,15 +164,18 @@ public class StructuralHashFunction implements
         return getNaryClassAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getNaryClassAxiomHashCode(OWLNaryClassAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * getCollectionHashCode(axiom.getClassExpressions());
+                * getCollectionHashCode(axiom.classExpressions());
     }
 
-    private int getCollectionHashCode(Collection<? extends OWLObject> collection) {
+    private int
+            getCollectionHashCode(Collection<? extends OWLObject> collection) {
         int toReturn = 1;
         for (OWLObject owlObject : collection) {
             toReturn = toReturn * owlObject.accept(this);
@@ -176,17 +183,26 @@ public class StructuralHashFunction implements
         return toReturn;
     }
 
+    private int getCollectionHashCode(Stream<? extends OWLObject> collection) {
+        return collection.mapToInt(o -> o.accept(this)).reduce((i, j) -> i * j)
+                .orElse(1);
+    }
+
     @Override
     public Integer visit(OWLDataPropertyDomainAxiom axiom) {
         return getOWLPropertyDomainAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
-    private int getOWLPropertyDomainAxiomHashCode(OWLPropertyDomainAxiom<?> axiom) {
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
+    private int getOWLPropertyDomainAxiomHashCode(
+            OWLPropertyDomainAxiom<?> axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * axiom.getProperty().accept(this) * axiom.getDomain().accept(this);
+                * axiom.getProperty().accept(this)
+                * axiom.getDomain().accept(this);
     }
 
     private Integer getIRIHashCode(IRI uri) {
@@ -211,12 +227,14 @@ public class StructuralHashFunction implements
         return getNaryPropertyAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getNaryPropertyAxiomHashCode(OWLNaryPropertyAxiom<?> axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * getCollectionHashCode(axiom.getProperties());
+                * getCollectionHashCode(axiom.properties());
     }
 
     @Override
@@ -224,12 +242,16 @@ public class StructuralHashFunction implements
         return getPropertyAssertionHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
-    private int getPropertyAssertionHashCode(OWLPropertyAssertionAxiom<?, ?> axiom) {
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
+    private int getPropertyAssertionHashCode(
+            OWLPropertyAssertionAxiom<?, ?> axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * axiom.getProperty().accept(this) * axiom.getSubject().accept(this)
+                * axiom.getProperty().accept(this)
+                * axiom.getSubject().accept(this)
                 * axiom.getObject().accept(this);
     }
 
@@ -238,12 +260,14 @@ public class StructuralHashFunction implements
         return getNaryIndividualAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getNaryIndividualAxiomHashCode(OWLNaryIndividualAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * getCollectionHashCode(axiom.getIndividuals());
+                * getCollectionHashCode(axiom.individuals());
     }
 
     @Override
@@ -261,12 +285,16 @@ public class StructuralHashFunction implements
         return getOWLPropertyRangeAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
-    private int getOWLPropertyRangeAxiomHashCode(OWLPropertyRangeAxiom<?, ?> axiom) {
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
+    private int getOWLPropertyRangeAxiomHashCode(
+            OWLPropertyRangeAxiom<?, ?> axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * axiom.getProperty().accept(this) * axiom.getRange().accept(this);
+                * axiom.getProperty().accept(this)
+                * axiom.getRange().accept(this);
     }
 
     @Override
@@ -284,9 +312,11 @@ public class StructuralHashFunction implements
         return getOWLSubPropertyAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getOWLSubPropertyAxiomHashCode(OWLSubPropertyAxiom<?> axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
                 * axiom.getSubProperty().accept(this)
@@ -299,7 +329,7 @@ public class StructuralHashFunction implements
     @Override
     public Integer visit(OWLDisjointUnionAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
-                * getCollectionHashCode(axiom.getClassExpressions());
+                * getCollectionHashCode(axiom.classExpressions());
     }
 
     @Override
@@ -323,9 +353,11 @@ public class StructuralHashFunction implements
         return getOWLDataPropertyCharacteristicAxiomHashCode(axiom);
     }
 
-    /** @param axiom
-     *            axiom
-     * @return hashcode */
+    /**
+     * @param axiom
+     *        axiom
+     * @return hashcode
+     */
     private int getOWLDataPropertyCharacteristicAxiomHashCode(
             OWLDataPropertyCharacteristicAxiom axiom) {
         return getAxiomTypeHashValue(axiom.getAxiomType())
@@ -394,8 +426,9 @@ public class StructuralHashFunction implements
 
     @Override
     public Integer visit(SWRLRule axiom) {
-        return getAxiomTypeHashValue(axiom.getAxiomType()) * axiom.getBody().hashCode()
-                * axiom.getHead().hashCode();
+        return getAxiomTypeHashValue(axiom.getAxiomType())
+                * getCollectionHashCode(axiom.body())
+                * getCollectionHashCode(axiom.head());
     }
 
     @Override
@@ -412,42 +445,44 @@ public class StructuralHashFunction implements
         // The same prime will be assigned for the same kind of entity. We do
         // not care about the particular entity in this structural hash
         // function.
-        OWLEntity representative = owlEntity.accept(new OWLEntityVisitorEx<OWLEntity>() {
-            @Override
-            public OWLEntity visit(OWLClass cls) {
-                return OWLVocabulary.getOWLThing();
-            }
+        OWLEntity representative = owlEntity
+                .accept(new OWLEntityVisitorEx<OWLEntity>() {
 
-            @Override
-            public OWLEntity visit(OWLObjectProperty property) {
-                return OWLVocabulary.getOWLTopObjectProperty();
-            }
+                    @Override
+                    public OWLEntity visit(OWLClass cls) {
+                        return OWLVocabulary.getOWLThing();
+                    }
 
-            @Override
-            public OWLEntity visit(OWLDataProperty property) {
-                return OWLVocabulary.getOWLTopDataProperty();
-            }
+                    @Override
+                    public OWLEntity visit(OWLObjectProperty property) {
+                        return OWLVocabulary.getOWLTopObjectProperty();
+                    }
 
-            @Override
-            public OWLEntity visit(OWLAnnotationProperty property) {
-                return OWLVocabulary.getTopDatatype();
-            }
+                    @Override
+                    public OWLEntity visit(OWLDataProperty property) {
+                        return OWLVocabulary.getOWLTopDataProperty();
+                    }
 
-            @Override
-            public OWLEntity visit(OWLNamedIndividual individual) {
-                // We return the same prime as the one corresponding to
-                // an
-                // OWLClass as there can never be a structure where an
-                // OWLClass
-                // or an OWLIndividual can appear interchangeably.
-                return OWLVocabulary.getOWLThing();
-            }
+                    @Override
+                    public OWLEntity visit(OWLAnnotationProperty property) {
+                        return OWLVocabulary.getTopDatatype();
+                    }
 
-            @Override
-            public OWLEntity visit(OWLDatatype dataType) {
-                return OWLVocabulary.getTopDatatype();
-            }
-        });
+                    @Override
+                    public OWLEntity visit(OWLNamedIndividual individual) {
+                        // We return the same prime as the one corresponding to
+                        // an
+                        // OWLClass as there can never be a structure where an
+                        // OWLClass
+                        // or an OWLIndividual can appear interchangeably.
+                        return OWLVocabulary.getOWLThing();
+                    }
+
+                    @Override
+                    public OWLEntity visit(OWLDatatype dataType) {
+                        return OWLVocabulary.getTopDatatype();
+                    }
+                });
         Integer toReturn = entityHashCodes.get(representative);
         if (toReturn == null) {
             toReturn = this.createHashCode(representative);
@@ -464,13 +499,16 @@ public class StructuralHashFunction implements
         return getNaryBooleanClassDescriptionHasCode(description);
     }
 
-    /** @param description
-     *            description
-     * @return hashcode */
+    /**
+     * @param description
+     *        description
+     * @return hashcode
+     */
     private int getNaryBooleanClassDescriptionHasCode(
             OWLNaryBooleanClassExpression description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
-                * getCollectionHashCode(description.getOperands());
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
+                * getCollectionHashCode(description.operands());
     }
 
     private int getOWLConstructHashCode(OWLConstruct owlConstruct) {
@@ -492,7 +530,8 @@ public class StructuralHashFunction implements
 
     @Override
     public Integer visit(OWLObjectComplementOf description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
                 * description.getOperand().accept(this);
     }
 
@@ -501,12 +540,15 @@ public class StructuralHashFunction implements
         return getOWLQuantifiedRestrictionHashCode(description);
     }
 
-    /** @param description
-     *            description
-     * @return hashcode */
+    /**
+     * @param description
+     *        description
+     * @return hashcode
+     */
     private int getOWLQuantifiedRestrictionHashCode(
             OWLQuantifiedRestriction<?> description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
                 * description.getFiller().accept(this);
     }
 
@@ -520,14 +562,17 @@ public class StructuralHashFunction implements
         return getOWLValueRestricitonHashCode(description);
     }
 
-    /** @param description
-     *            description
-     * @return hashcode */
-    private int
-            getOWLValueRestricitonHashCode(OWLHasValueRestriction<?> description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
+    /**
+     * @param description
+     *        description
+     * @return hashcode
+     */
+    private int getOWLValueRestricitonHashCode(
+            OWLHasValueRestriction<?> description) {
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
                 * description.getProperty().accept(this)
-                * description.getValue().accept(this);
+                * description.getFiller().accept(this);
     }
 
     @Override
@@ -535,14 +580,18 @@ public class StructuralHashFunction implements
         return getOWLCardinalityRestrictionHashCode(description);
     }
 
-    /** @param description
-     *            description
-     * @return hashcode */
+    /**
+     * @param description
+     *        description
+     * @return hashcode
+     */
     private int getOWLCardinalityRestrictionHashCode(
             OWLCardinalityRestriction<?> description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
                 * getIntegerHashCode(description.getCardinality())
-                * (description.isQualified() ? description.getFiller().accept(this) : 1);
+                * (description.isQualified() ? description.getFiller().accept(
+                        this) : 1);
     }
 
     private int getIntegerHashCode(int cardinality) {
@@ -569,14 +618,16 @@ public class StructuralHashFunction implements
 
     @Override
     public Integer visit(OWLObjectHasSelf description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
                 * description.getProperty().accept(this);
     }
 
     @Override
     public Integer visit(OWLObjectOneOf description) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(description))
-                * getCollectionHashCode(description.getIndividuals());
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(description))
+                * getCollectionHashCode(description.individuals());
     }
 
     @Override
@@ -623,23 +674,24 @@ public class StructuralHashFunction implements
 
     @Override
     public Integer visit(OWLDataComplementOf dataComplementOf) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(dataComplementOf))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(dataComplementOf))
                 * dataComplementOf.getDataRange().accept(this);
     }
 
     @Override
     public Integer visit(OWLDataOneOf dataOneOf) {
         return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(dataOneOf))
-                * getCollectionHashCode(dataOneOf.getValues());
+                * getCollectionHashCode(dataOneOf.values());
     }
 
     @Override
     public Integer visit(OWLDatatypeRestriction dataRangeRestriction) {
-        return getOWLConstructHashCode(OWLConstruct.getOWLConstruct(dataRangeRestriction))
+        return getOWLConstructHashCode(OWLConstruct
+                .getOWLConstruct(dataRangeRestriction))
                 * dataRangeRestriction.getDatatype().accept(this)
-                * (dataRangeRestriction.getFacetRestrictions().isEmpty() ? 1
-                        : getCollectionHashCode(dataRangeRestriction
-                                .getFacetRestrictions()));
+                * getCollectionHashCode(dataRangeRestriction
+                        .facetRestrictions());
     }
 
     @Override
@@ -694,9 +746,11 @@ public class StructuralHashFunction implements
         return maxPrime;
     }
 
-    /** @param maxPrime
-     *            the maxPrime to set */
-    private void setMaxPrime(int maxPrime) {
+    /**
+     * @param maxPrime
+     *        the maxPrime to set
+     */
+    private static void setMaxPrime(int maxPrime) {
         StructuralHashFunction.maxPrime = maxPrime;
     }
 

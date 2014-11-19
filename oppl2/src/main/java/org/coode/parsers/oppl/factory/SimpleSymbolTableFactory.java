@@ -17,11 +17,15 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 /** @author Luigi Iannone */
-public class SimpleSymbolTableFactory implements SymbolTableFactory<OPPLSymbolTable> {
+public class SimpleSymbolTableFactory implements
+        SymbolTableFactory<OPPLSymbolTable> {
+
     private final OWLOntologyManager manager;
 
-    /** @param manager
-     *            manager */
+    /**
+     * @param manager
+     *        manager
+     */
     public SimpleSymbolTableFactory(OWLOntologyManager manager) {
         this.manager = checkNotNull(manager, "manager");
     }
@@ -29,7 +33,7 @@ public class SimpleSymbolTableFactory implements SymbolTableFactory<OPPLSymbolTa
     @Override
     public OPPLSymbolTable createSymbolTable() {
         BidirectionalShortFormProviderAdapter shortFormProvider = new BidirectionalShortFormProviderAdapter(
-                manager, manager.getOntologies(), new OPPLShortFormProvider(
+                manager, manager.ontologies(), new OPPLShortFormProvider(
                         new SimpleShortFormProvider()));
         DisposableOWLEntityChecker entityChecker = new DisposableShortFormEntityChecker(
                 shortFormProvider);

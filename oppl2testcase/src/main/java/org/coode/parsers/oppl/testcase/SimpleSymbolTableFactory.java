@@ -17,10 +17,13 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 /** @author Luigi Iannone */
 public class SimpleSymbolTableFactory implements
         SymbolTableFactory<OPPLTestCaseSymbolTable> {
+
     private final OWLOntologyManager manager;
 
-    /** @param manager
-     *            manager */
+    /**
+     * @param manager
+     *        manager
+     */
     public SimpleSymbolTableFactory(OWLOntologyManager manager) {
         this.manager = checkNotNull(manager, "manager");
     }
@@ -28,17 +31,18 @@ public class SimpleSymbolTableFactory implements
     @Override
     public OPPLTestCaseSymbolTable createSymbolTable() {
         BidirectionalShortFormProviderAdapter shortFormProvider = new BidirectionalShortFormProviderAdapter(
-                getOntologyManager(), getOntologyManager().getOntologies(),
+                getOntologyManager(), getOntologyManager().ontologies(),
                 new SimpleShortFormProvider());
         DisposableOWLEntityChecker entityChecker = new DisposableShortFormEntityChecker(
                 shortFormProvider);
         ShortFormEntityRenderer entityRenderer = new ShortFormEntityRenderer(
                 new SimpleShortFormProvider());
         EntityFinder entityFinder = new EntityFinderImpl(getOntologyManager(),
-                new OWLEntityRenderingCacheImpl(getOntologyManager(), entityRenderer),
-                false);
-        return new OPPLTestCaseSymbolTable(new OPPLScope(entityChecker, entityFinder,
-                entityRenderer), getOntologyManager().getOWLDataFactory());
+                new OWLEntityRenderingCacheImpl(getOntologyManager(),
+                        entityRenderer), false);
+        return new OPPLTestCaseSymbolTable(new OPPLScope(entityChecker,
+                entityFinder, entityRenderer), getOntologyManager()
+                .getOWLDataFactory());
     }
 
     /** @return the manager */

@@ -23,19 +23,24 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.AnnotationValueShortFormProvider;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 
-/** SimbleTable factory that builds symbol tables based on the short form
+/**
+ * SimbleTable factory that builds symbol tables based on the short form
  * provided by annotations rather than IRI fragments.
  * 
- * @author Luigi Iannone */
+ * @author Luigi Iannone
+ */
 public class AnnotationBasedSymbolTableFactory implements
         SymbolTableFactory<OPPLSymbolTable> {
+
     private final OWLOntologyManager manager;
     private final List<OWLAnnotationProperty> annotations = new ArrayList<OWLAnnotationProperty>();
 
-    /** @param manager
-     *            manager
+    /**
+     * @param manager
+     *        manager
      * @param iris
-     *            iris */
+     *        iris
+     */
     public AnnotationBasedSymbolTableFactory(OWLOntologyManager manager,
             List<? extends IRI> iris) {
         this.manager = checkNotNull(manager, "The ontology manager");
@@ -49,9 +54,10 @@ public class AnnotationBasedSymbolTableFactory implements
     public OPPLSymbolTable createSymbolTable() {
         ShortFormProvider baseShortFormProvider = new AnnotationValueShortFormProvider(
                 annotations,
-                Collections.<OWLAnnotationProperty, List<String>> emptyMap(), manager);
+                Collections.<OWLAnnotationProperty, List<String>> emptyMap(),
+                manager);
         BidirectionalShortFormProviderAdapter shortFormProvider = new BidirectionalShortFormProviderAdapter(
-                manager, manager.getOntologies(), baseShortFormProvider);
+                manager, manager.ontologies(), baseShortFormProvider);
         DisposableOWLEntityChecker entityChecker = new DisposableShortFormEntityChecker(
                 shortFormProvider);
         ShortFormEntityRenderer entityRenderer = new ShortFormEntityRenderer(

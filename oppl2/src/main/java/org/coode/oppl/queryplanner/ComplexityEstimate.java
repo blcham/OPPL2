@@ -1,8 +1,9 @@
 package org.coode.oppl.queryplanner;
 
+import static org.coode.oppl.StreamUtils.*;
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.add;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -17,7 +18,6 @@ import org.coode.oppl.function.ValueComputationParameters;
 import org.coode.oppl.log.Logging;
 import org.coode.oppl.search.AssignableValueExtractor;
 import org.coode.oppl.utils.AbstractVariableVisitorExAdapter;
-import org.coode.oppl.utils.ConstantCollector;
 import org.coode.oppl.utils.VariableExtractor;
 import org.coode.oppl.variabletypes.ANNOTATIONPROPERTYVariableType;
 import org.coode.oppl.variabletypes.CLASSVariableType;
@@ -27,14 +27,25 @@ import org.coode.oppl.variabletypes.INDIVIDUALVariableType;
 import org.coode.oppl.variabletypes.InputVariable;
 import org.coode.oppl.variabletypes.OBJECTPROPERTYVariableType;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLRuntimeException;
 
 /** @author Luigi Iannone */
 public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
+
     private final VariableExtractor variableExtractor;
     private final RuntimeExceptionHandler runtimeExceptionHandler;
     private final ConstraintSystem constraintSystem;
     private final VariableTypeVisitorEx<Set<? extends OWLObject>> assignableValuesVisitor = new VariableTypeVisitorEx<Set<? extends OWLObject>>() {
+
         @Override
         public Set<? extends OWLObject> visitCLASSVariableType(
                 CLASSVariableType classVariableType) {
@@ -71,17 +82,19 @@ public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
             return allAnnotationProperties;
         }
     };
-    protected final Set<OWLAnnotationProperty> allAnnotationProperties = new HashSet<OWLAnnotationProperty>();
-    protected final Set<OWLClass> allClasses = new HashSet<OWLClass>();
-    protected final Set<OWLLiteral> allConstants = new HashSet<OWLLiteral>();
-    protected final Set<OWLDataProperty> allDataProperties = new HashSet<OWLDataProperty>();
-    protected final Set<OWLIndividual> allIndividuals = new HashSet<OWLIndividual>();
-    protected final Set<OWLObjectProperty> allObjectProperties = new HashSet<OWLObjectProperty>();
+    protected final Set<OWLAnnotationProperty> allAnnotationProperties = new HashSet<>();
+    protected final Set<OWLClass> allClasses = new HashSet<>();
+    protected final Set<OWLLiteral> allConstants = new HashSet<>();
+    protected final Set<OWLDataProperty> allDataProperties = new HashSet<>();
+    protected final Set<OWLIndividual> allIndividuals = new HashSet<>();
+    protected final Set<OWLObjectProperty> allObjectProperties = new HashSet<>();
 
-    /** @param contraintSystem
-     *            contraintSystem
+    /**
+     * @param contraintSystem
+     *        contraintSystem
      * @param runtimeExceptionHandler
-     *            runtimeExceptionHandler */
+     *        runtimeExceptionHandler
+     */
     public ComplexityEstimate(ConstraintSystem contraintSystem,
             RuntimeExceptionHandler runtimeExceptionHandler) {
         constraintSystem = checkNotNull(contraintSystem, "contraintSystem");
@@ -120,7 +133,7 @@ public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
 
     private Set<OWLObject> getAssignableValues(Variable<?> variable,
             ValueComputationParameters parameters) {
-        Set<OWLObject> toReturn = new HashSet<OWLObject>();
+        Set<OWLObject> toReturn = new HashSet<>();
         toReturn.addAll(variable.accept(new AssignableValueExtractor(
                 assignableValuesVisitor, parameters)));
         Iterator<OWLObject> iterator = toReturn.iterator();
@@ -128,14 +141,18 @@ public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
             final OWLObject owlObject = iterator.next();
             boolean inScope = variable
                     .accept(new AbstractVariableVisitorExAdapter<Boolean>(true) {
+
                         @Override
-                        public <P extends OWLObject> Boolean visit(InputVariable<P> v) {
-                            VariableScope<?> variableScope = v.getVariableScope();
+                        public <P extends OWLObject> Boolean visit(
+                                InputVariable<P> v) {
+                            VariableScope<?> variableScope = v
+                                    .getVariableScope();
                             try {
                                 return variableScope == null
                                         || variableScope.check(owlObject);
                             } catch (OWLRuntimeException e) {
-                                ComplexityEstimate.this.getRuntimeExceptionHandler()
+                                ComplexityEstimate.this
+                                        .getRuntimeExceptionHandler()
                                         .handleOWLRuntimeException(e);
                                 return false;
                             }
@@ -164,79 +181,26 @@ public class ComplexityEstimate implements QueryPlannerVisitorEx<Float> {
         return runtimeExceptionHandler;
     }
 
-    private Set<OWLAnnotationProperty> getAllAnnotationProperties() {
-        Set<OWLAnnotationProperty> toReturn = new HashSet<OWLAnnotationProperty>();
-        for (OWLOntology ontology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            toReturn.addAll(ontology.getAnnotationPropertiesInSignature());
-        }
-        return toReturn;
-    }
-
-    private Collection<OWLClass> getAllClasses() {
-        Set<OWLClass> toReturn = new HashSet<OWLClass>();
-        for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            toReturn.addAll(owlOntology.getClassesInSignature());
-        }
-        return toReturn;
-    }
-
-    private Collection<OWLLiteral> getAllConstants() {
-        final Set<OWLLiteral> toReturn = new HashSet<OWLLiteral>();
-        final OWLObjectVisitor constantExtractor = new ConstantExtractor(toReturn);
-        ConstantCollector visitor = new ConstantCollector(toReturn, constantExtractor);
-        for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            for (OWLAxiom axiomToVisit : owlOntology.getAxioms()) {
-                axiomToVisit.accept(visitor);
-            }
-        }
-        return toReturn;
-    }
-
-    private Collection<OWLDataProperty> getAllDataProperties() {
-        Set<OWLDataProperty> toReturn = new HashSet<OWLDataProperty>();
-        for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            toReturn.addAll(owlOntology.getDataPropertiesInSignature());
-        }
-        return toReturn;
-    }
-
-    private Collection<OWLIndividual> getAllIndividuals() {
-        Set<OWLIndividual> toReturn = new HashSet<OWLIndividual>();
-        for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            toReturn.addAll(owlOntology.getIndividualsInSignature());
-        }
-        return toReturn;
-    }
-
-    private Collection<OWLObjectProperty> getAllObjectProperties() {
-        Set<OWLObjectProperty> toReturn = new HashSet<OWLObjectProperty>();
-        for (OWLOntology owlOntology : getConstraintSystem().getOntologyManager()
-                .getOntologies()) {
-            toReturn.addAll(owlOntology.getObjectPropertiesInSignature());
-        }
-        return toReturn;
-    }
-
     private void initAssignableValues() {
-        allClasses.addAll(getAllClasses());
-        Logging.getQueryLogger().fine("Possible class values ", allClasses.size());
-        allDataProperties.addAll(getAllDataProperties());
+        OWLOntologyManager m = getConstraintSystem()
+                .getOntologyManager();
+        add(allClasses, getAllClasses(m.ontologies()));
+        Logging.getQueryLogger().fine("Possible class values ",
+                allClasses.size());
+        add(allDataProperties, getAllDataProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible data property values ",
                 allDataProperties.size());
-        allObjectProperties.addAll(getAllObjectProperties());
+        add(allObjectProperties, getAllObjectProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible object property values ",
                 allObjectProperties.size());
-        allIndividuals.addAll(getAllIndividuals());
+        add(allIndividuals, getAllIndividuals(m.ontologies()));
         Logging.getQueryLogger().fine("Possible individual  values ",
                 allIndividuals.size());
-        allConstants.addAll(getAllConstants());
-        Logging.getQueryLogger().fine("Possible constant  values ", allConstants.size());
-        allAnnotationProperties.addAll(getAllAnnotationProperties());
+        add(allConstants, getAllConstants(m.ontologies()));
+        Logging.getQueryLogger().fine("Possible constant  values ",
+                allConstants.size());
+        add(allAnnotationProperties,
+                getAllAnnotationProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible annotation properties values ",
                 allAnnotationProperties.size());
     }

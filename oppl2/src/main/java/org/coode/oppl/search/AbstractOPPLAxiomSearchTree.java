@@ -1,5 +1,6 @@
 package org.coode.oppl.search;
 
+import static org.coode.oppl.StreamUtils.*;
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.add;
 
@@ -9,7 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.PartialOWLObjectInstantiator;
@@ -21,9 +21,7 @@ import org.coode.oppl.exceptions.RuntimeExceptionHandler;
 import org.coode.oppl.function.SimpleValueComputationParameters;
 import org.coode.oppl.function.ValueComputationParameters;
 import org.coode.oppl.log.Logging;
-import org.coode.oppl.queryplanner.ConstantExtractor;
 import org.coode.oppl.utils.AbstractVariableVisitorExAdapter;
-import org.coode.oppl.utils.ConstantCollector;
 import org.coode.oppl.utils.VariableExtractor;
 import org.coode.oppl.variabletypes.ANNOTATIONPROPERTYVariableType;
 import org.coode.oppl.variabletypes.CLASSVariableType;
@@ -41,7 +39,7 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectVisitor;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 
 /** axiom search tree */
@@ -98,31 +96,6 @@ public abstract class AbstractOPPLAxiomSearchTree extends
             }
         }
         return toReturn;
-    }
-
-    private Stream<OWLClass> getAllClasses() {
-        return getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.classesInSignature());
-    }
-
-    private Collection<OWLLiteral> getAllConstants() {
-        Set<OWLLiteral> toReturn = new HashSet<>();
-        OWLObjectVisitor constantExtractor = new ConstantExtractor(toReturn);
-        ConstantCollector visitor = new ConstantCollector(toReturn,
-                constantExtractor);
-        getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.axioms()).forEach(ax -> ax.accept(visitor));
-        return toReturn;
-    }
-
-    private Stream<OWLDataProperty> getAllDataProperties() {
-        return getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.dataPropertiesInSignature());
-    }
-
-    private Stream<OWLIndividual> getAllIndividuals() {
-        return getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.individualsInSignature());
     }
 
     private final VariableTypeVisitorEx<Set<? extends OWLObject>> assignableValuesVisitor = new VariableTypeVisitorEx<Set<? extends OWLObject>>() {
@@ -199,39 +172,30 @@ public abstract class AbstractOPPLAxiomSearchTree extends
     }
 
     private void initAssignableValues() {
-        add(allClasses, getAllClasses());
+        OWLOntologyManager m = getConstraintSystem().getOntologyManager();
+        add(allClasses, getAllClasses(m.ontologies()));
         Logging.getQueryLogger().fine("Possible class values ",
                 allClasses.size());
-        add(allDataProperties, getAllDataProperties());
+        add(allDataProperties, getAllDataProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible data property values ",
                 allDataProperties.size());
-        add(allObjectProperties, getObjectProperties());
+        add(allObjectProperties, getAllObjectProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible object property values ",
                 allObjectProperties.size());
-        add(allIndividuals, getAllIndividuals());
+        add(allIndividuals, getAllIndividuals(m.ontologies()));
         Logging.getQueryLogger().fine("Possible individual  values ",
                 allIndividuals.size());
-        allConstants.addAll(getAllConstants());
+        add(allConstants, getAllConstants(m.ontologies()));
         Logging.getQueryLogger().fine("Possible constant  values ",
                 allConstants.size());
-        add(allAnnotationProperties, getAllAnnotationProperties());
+        add(allAnnotationProperties, getAllAnnotationProperties(m.ontologies()));
         Logging.getQueryLogger().fine("Possible annotation properties values ",
                 allAnnotationProperties.size());
-    }
-
-    private Stream<OWLAnnotationProperty> getAllAnnotationProperties() {
-        return getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.annotationPropertiesInSignature());
     }
 
     /** @return the constraintSystem */
     public ConstraintSystem getConstraintSystem() {
         return constraintSystem;
-    }
-
-    private Stream<OWLObjectProperty> getObjectProperties() {
-        return getConstraintSystem().getOntologyManager().ontologies()
-                .flatMap(o -> o.objectPropertiesInSignature());
     }
 
     @Override

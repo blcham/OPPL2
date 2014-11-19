@@ -1,7 +1,9 @@
 package org.coode.parsers;
 
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asList;
+
+import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.model.OWLDataFactory;
@@ -27,7 +29,7 @@ public class BidirectionalShortFormProviderAdapter extends
         OWLEntitySetProvider<OWLEntity> {
 
     private final ShortFormProvider shortFormProvider;
-    protected Set<OWLOntology> ontologies;
+    protected Collection<OWLOntology> ontologies;
     private OWLOntologyManager man;
 
     /**
@@ -59,9 +61,9 @@ public class BidirectionalShortFormProviderAdapter extends
      *        ontologies contain references to entities or not.
      */
     public BidirectionalShortFormProviderAdapter(OWLOntologyManager man,
-            Set<OWLOntology> ontologies, ShortFormProvider shortFormProvider) {
+            Stream<OWLOntology> ontologies, ShortFormProvider shortFormProvider) {
         this.man = man;
-        this.ontologies = ontologies;
+        this.ontologies = asList(ontologies);
         this.shortFormProvider = shortFormProvider;
         this.man = man;
         rebuild(this);
