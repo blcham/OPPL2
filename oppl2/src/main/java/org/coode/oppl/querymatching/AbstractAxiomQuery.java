@@ -2,11 +2,28 @@ package org.coode.oppl.querymatching;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 
+import org.coode.oppl.ConstraintSystem;
+import org.coode.oppl.Variable;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.exceptions.RuntimeExceptionHandler;
+import org.coode.oppl.search.OPPLAssertedSingleOWLAxiomSearchTree;
+import org.coode.oppl.search.OPPLOWLAxiomSearchNode;
+import org.coode.oppl.search.SearchTree;
+import org.coode.oppl.utils.OWLObjectExtractor;
+import org.coode.oppl.utils.PositionBasedVariableComparator;
+import org.coode.oppl.utils.VariableExtractor;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyRangeAxiom;
@@ -34,6 +51,7 @@ import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
 import org.semanticweb.owlapi.model.OWLIrreflexiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
@@ -49,17 +67,154 @@ import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
 
 abstract class AbstractAxiomQuery implements AxiomQuery {
+
     private final RuntimeExceptionHandler runtimeExceptionHandler;
+    protected final Map<BindingNode, Set<OWLAxiom>> instantiations = new HashMap<>();
+    private final ConstraintSystem constraintSystem;
+    private final Set<BindingNode> leaves = new HashSet<>();
+    private final Map<OWLAxiom, SearchTree<OPPLOWLAxiomSearchNode>> searchTrees = new HashMap<>();
+    private final Map<OWLAxiom, Collection<? extends OWLObject>> cache = new HashMap<>();
 
-    protected abstract Set<BindingNode> match(OWLAxiom axiom);
-
-    private final Set<BindingNode> leaves = new HashSet<BindingNode>();
-
-    /** @param runtimeExceptionHandler
-     *            runtimeExceptionHandler */
-    AbstractAxiomQuery(RuntimeExceptionHandler runtimeExceptionHandler) {
+    /**
+     * @param runtimeExceptionHandler
+     *        runtimeExceptionHandler
+     */
+    AbstractAxiomQuery(RuntimeExceptionHandler runtimeExceptionHandler,
+            ConstraintSystem cs) {
         this.runtimeExceptionHandler = checkNotNull(runtimeExceptionHandler,
                 "runtimeExceptionHandler");
+        constraintSystem = checkNotNull(cs, "constraintSystem");
+    }
+
+    protected Set<BindingNode> match(OWLAxiom axiom) {
+        clearInstantions();
+        List<List<? extends OPPLOWLAxiomSearchNode>> solutions = new ArrayList<>();
+        VariableExtractor variableExtractor = new VariableExtractor(
+                getConstraintSystem(), false);
+        Set<Variable<?>> extractedVariables = variableExtractor
+                .extractVariables(axiom);
+        SortedSet<Variable<?>> sortedVariables = new TreeSet<>(
+                new PositionBasedVariableComparator(axiom,
+                        getConstraintSystem().getOntologyManager()
+                                .getOWLDataFactory()));
+        sortedVariables.addAll(extractedVariables);
+        OPPLOWLAxiomSearchNode start = new OPPLOWLAxiomSearchNode(axiom,
+                new BindingNode(sortedVariables));
+        solutions.addAll(doMatch(start));
+        return extractLeaves(solutions);
+    }
+
+    private static Set<BindingNode> extractLeaves(
+            List<List<? extends OPPLOWLAxiomSearchNode>> solutions) {
+        Set<BindingNode> toReturn = new HashSet<>();
+        for (List<? extends OPPLOWLAxiomSearchNode> path : solutions) {
+            OPPLOWLAxiomSearchNode searchLeaf = path.get(path.size() - 1);
+            BindingNode leaf = searchLeaf.getBinding();
+            toReturn.add(leaf);
+        }
+        return toReturn;
+    }
+
+    /**
+     * @param targetAxiom
+     *        targetAxiom
+     * @param start
+     *        start
+     * @return search nodes
+     */
+    protected List<List<OPPLOWLAxiomSearchNode>> matchTargetAxiom(
+            OPPLOWLAxiomSearchNode start, OWLAxiom targetAxiom) {
+        SearchTree<OPPLOWLAxiomSearchNode> searchTree = getSearchTree(targetAxiom);
+        List<List<OPPLOWLAxiomSearchNode>> solutions = new ArrayList<>();
+        searchTree.exhaustiveSearchTree(start, solutions);
+        return solutions;
+    }
+
+    /**
+     * @param targetAxiom
+     *        targetAxiom
+     * @return search nodes
+     */
+    protected SearchTree<OPPLOWLAxiomSearchNode> getSearchTree(
+            OWLAxiom targetAxiom) {
+        SearchTree<OPPLOWLAxiomSearchNode> toReturn = searchTrees
+                .get(targetAxiom);
+        if (toReturn == null) {
+            toReturn = new OPPLAssertedSingleOWLAxiomSearchTree(targetAxiom,
+                    getConstraintSystem(), getRuntimeExceptionHandler());
+            searchTrees.put(targetAxiom, toReturn);
+        }
+        return toReturn;
+    }
+
+    protected abstract List<List<OPPLOWLAxiomSearchNode>> doMatch(
+            OPPLOWLAxiomSearchNode start);
+
+    protected final void clearInstantions() {
+        instantiations.clear();
+    }
+
+    /** @return instantiations */
+    public Map<BindingNode, Set<OWLAxiom>> getInstantiations() {
+        return new HashMap<>(instantiations);
+    }
+
+    /** @return the constraintSystem */
+    public ConstraintSystem getConstraintSystem() {
+        return constraintSystem;
+    }
+
+    protected Stream<? extends OWLAxiom> filterAxioms(OWLAxiom toMatchAxiom,
+            Stream<? extends OWLAxiom> axioms) {
+        Set<OWLAxiom> toReturn = new HashSet<>();
+        VariableExtractor variableExtractor = new VariableExtractor(
+                getConstraintSystem(), true);
+        Set<Variable<?>> variables = variableExtractor
+                .extractVariables(toMatchAxiom);
+        Collection<? extends OWLObject> toMatchAllOWLObjects = extractOWLObjects(toMatchAxiom);
+        axioms.forEach(candidate -> {
+            Collection<? extends OWLObject> candidateAllOWLObjects = extractOWLObjects(candidate);
+            if (candidate.getAxiomType().equals(toMatchAxiom.getAxiomType())
+                    && toMatchAllOWLObjects.containsAll(candidateAllOWLObjects)) {
+                toReturn.add(candidate);
+            } else {
+                Set<OWLObject> difference = new HashSet<>(
+                        candidateAllOWLObjects);
+                difference.removeAll(toMatchAllOWLObjects);
+                Iterator<OWLObject> iterator = difference.iterator();
+                boolean found = false;
+                while (!found && iterator.hasNext()) {
+                    OWLObject leftOutOWLObject = iterator.next();
+                    Iterator<? extends Variable<?>> variableIterator = variables
+                            .iterator();
+                    boolean compatible = false;
+                    while (!compatible && variableIterator.hasNext()) {
+                        Variable<?> variable = variableIterator.next();
+                        compatible = variable.getType().isCompatibleWith(
+                                leftOutOWLObject);
+                    }
+                    found = !compatible;
+                }
+                if (!found) {
+                    toReturn.add(candidate);
+                }
+            }
+        });
+        return toReturn.stream();
+    }
+
+    /**
+     * @param axiom
+     *        axiom
+     * @return owl objects
+     */
+    private Collection<? extends OWLObject> extractOWLObjects(OWLAxiom axiom) {
+        Collection<? extends OWLObject> toReturn = cache.get(axiom);
+        if (toReturn == null) {
+            toReturn = OWLObjectExtractor.getAllOWLPrimitives(axiom);
+            cache.put(axiom, toReturn);
+        }
+        return toReturn;
     }
 
     @Override

@@ -22,13 +22,9 @@
  */
 package org.coode.oppl.querymatching;
 
-import static org.coode.oppl.utils.ArgCheck.checkNotNull;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -50,9 +46,6 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
         AbstractAxiomQuery {
 
-    private final ConstraintSystem constraintSystem;
-    private final Map<BindingNode, Set<OWLAxiom>> instantiations = new HashMap<BindingNode, Set<OWLAxiom>>();
-
     /**
      * @param constraintSystem
      *        constraintSystem
@@ -62,9 +55,7 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
     public InferredSolvabilityBasedTreeSearchAxiomQuery(
             ConstraintSystem constraintSystem,
             RuntimeExceptionHandler runtimeExceptionHandler) {
-        super(runtimeExceptionHandler);
-        this.constraintSystem = checkNotNull(constraintSystem,
-                "constraintSystem");
+        super(runtimeExceptionHandler, constraintSystem);
     }
 
     @Override
@@ -86,16 +77,19 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
         return extractLeaves(solutions);
     }
 
-    private List<List<? extends OPPLOWLAxiomSearchNode>> doMatch(
+    @Override
+    protected List<List<OPPLOWLAxiomSearchNode>> doMatch(
             OPPLOWLAxiomSearchNode start) {
-        List<List<? extends OPPLOWLAxiomSearchNode>> solutions = new ArrayList<List<? extends OPPLOWLAxiomSearchNode>>();
+        List<List<OPPLOWLAxiomSearchNode>> solutions = new ArrayList<>();
         OWLAxiom axiom = start.getAxiom();
         // Solvability based search is not worth applying if the axiom is not of
         // a specific kind.
         if (axiom.getAxiomType() == AxiomType.SUBCLASS_OF
                 || axiom.getAxiomType() == AxiomType.OBJECT_PROPERTY_ASSERTION) {
-            solutions.addAll(solvabilityBasedMatching(start.getAxiom(),
-                    start.getBinding()));
+            for (List<SolvabilitySearchNode> l : solvabilityBasedMatching(
+                    start.getAxiom(), start.getBinding())) {
+                solutions.add(new ArrayList<OPPLOWLAxiomSearchNode>(l));
+            }
         } else {
             solutions.addAll(nonSolvabilityBasedMatch(start));
         }
@@ -131,19 +125,5 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
             toReturn.add(leaf);
         }
         return toReturn;
-    }
-
-    private void clearInstantions() {
-        instantiations.clear();
-    }
-
-    /** @return instantiations */
-    public Map<BindingNode, Set<OWLAxiom>> getInstantiations() {
-        return new HashMap<BindingNode, Set<OWLAxiom>>(instantiations);
-    }
-
-    /** @return the constraintSystem */
-    public ConstraintSystem getConstraintSystem() {
-        return constraintSystem;
     }
 }

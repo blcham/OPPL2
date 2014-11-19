@@ -22,13 +22,9 @@
  */
 package org.coode.oppl.querymatching;
 
-import static org.coode.oppl.utils.ArgCheck.checkNotNull;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -46,9 +42,6 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 /** @author Luigi Iannone */
 public class InferredTreeSearchAxiomQuery extends AbstractAxiomQuery {
 
-    private final ConstraintSystem constraintSystem;
-    private final Map<BindingNode, Set<OWLAxiom>> instantiations = new HashMap<BindingNode, Set<OWLAxiom>>();
-
     /**
      * @param constraintSystem
      *        constraintSystem
@@ -57,9 +50,7 @@ public class InferredTreeSearchAxiomQuery extends AbstractAxiomQuery {
      */
     public InferredTreeSearchAxiomQuery(ConstraintSystem constraintSystem,
             RuntimeExceptionHandler runtimeExceptionHandler) {
-        super(runtimeExceptionHandler);
-        this.constraintSystem = checkNotNull(constraintSystem,
-                "constraintSystem");
+        super(runtimeExceptionHandler, constraintSystem);
     }
 
     @Override
@@ -81,7 +72,8 @@ public class InferredTreeSearchAxiomQuery extends AbstractAxiomQuery {
         return extractLeaves(solutions);
     }
 
-    private List<List<OPPLOWLAxiomSearchNode>> doMatch(
+    @Override
+    protected List<List<OPPLOWLAxiomSearchNode>> doMatch(
             OPPLOWLAxiomSearchNode start) {
         OPPLInferredOWLAxiomSearchTree searchTree = new OPPLInferredOWLAxiomSearchTree(
                 getConstraintSystem(), getRuntimeExceptionHandler());
@@ -99,19 +91,5 @@ public class InferredTreeSearchAxiomQuery extends AbstractAxiomQuery {
             toReturn.add(leaf);
         }
         return toReturn;
-    }
-
-    private void clearInstantions() {
-        instantiations.clear();
-    }
-
-    /** @return instantiations */
-    public Map<BindingNode, Set<OWLAxiom>> getInstantiations() {
-        return new HashMap<BindingNode, Set<OWLAxiom>>(instantiations);
-    }
-
-    /** @return the constraintSystem */
-    public ConstraintSystem getConstraintSystem() {
-        return constraintSystem;
     }
 }
