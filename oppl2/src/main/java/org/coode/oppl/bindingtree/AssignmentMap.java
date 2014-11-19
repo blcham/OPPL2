@@ -16,8 +16,8 @@ import org.semanticweb.owlapi.model.OWLObject;
  * 
  * @author Luigi Iannone */
 public class AssignmentMap implements Map<Variable<?>, Set<OWLObject>> {
-    private final Map<Variable<?>, Set<OWLObject>> delegate = new HashMap<Variable<?>, Set<OWLObject>>();
-    private final Set<BindingNode> bindingNodes = new HashSet<BindingNode>();
+    private final Map<Variable<?>, Set<OWLObject>> delegate = new HashMap<>();
+    private final Set<BindingNode> bindingNodes = new HashSet<>();
 
     /** Copy constructor.
      * 
@@ -42,7 +42,7 @@ public class AssignmentMap implements Map<Variable<?>, Set<OWLObject>> {
                 OWLObject assignedValue = assignment.getAssignment();
                 Set<OWLObject> previousAssignements = get(assignedVariable);
                 if (previousAssignements == null) {
-                    previousAssignements = new HashSet<OWLObject>();
+                    previousAssignements = new HashSet<>();
                     put(assignedVariable, previousAssignements);
                 }
                 previousAssignements.add(assignedValue);
@@ -124,12 +124,12 @@ public class AssignmentMap implements Map<Variable<?>, Set<OWLObject>> {
      * 
      * @return a Set of Variable */
     public Set<Variable<?>> getVariables() {
-        return new HashSet<Variable<?>>(keySet());
+        return new HashSet<>(keySet());
     }
 
     /** @return the bindingNodes */
     public Set<BindingNode> getBindingNodes() {
-        return new HashSet<BindingNode>(bindingNodes);
+        return new HashSet<>(bindingNodes);
     }
 
     /** @param anotherAssignmentMap
@@ -142,7 +142,7 @@ public class AssignmentMap implements Map<Variable<?>, Set<OWLObject>> {
         while (!found && iterator.hasNext()) {
             Variable<?> variable = iterator.next();
             if (anotherAssignmentMap.keySet().contains(variable)) {
-                Set<OWLObject> set = new HashSet<OWLObject>(get(variable));
+                Set<OWLObject> set = new HashSet<>(get(variable));
                 set.retainAll(anotherAssignmentMap.get(variable));
                 found = !set.isEmpty();
             }

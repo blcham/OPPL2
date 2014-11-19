@@ -1,9 +1,9 @@
 package org.coode.oppl.testontologies;
 
 import static org.junit.Assert.assertEquals;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,6 +59,7 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 @SuppressWarnings({ "javadoc", "unchecked" })
 public class TestOntologies {
+
     private static void declare(OWLOntology o, OWLEntity... entities) {
         for (OWLEntity e : entities) {
             o.getOWLOntologyManager().addAxiom(o, dec(e));
@@ -80,7 +81,7 @@ public class TestOntologies {
     }
 
     private static List<OWLAxiom> label(OWLEntity e, String... lines) {
-        List<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
+        List<OWLAxiom> axioms = new ArrayList<>();
         axioms.add(dec(e));
         for (String l : lines) {
             String language = "";
@@ -112,11 +113,11 @@ public class TestOntologies {
             OWLClass cpr = Class(naf_ns + "#C_P_Range");
             OWLClass dpr = Class(naf_ns + "#D_P_Range");
             declare(_naf, a, aa, ab, ac, ad, bpr, cpr, d, dpr, prange, hasP);
-            state(_naf, sub(a, some(hasP, prange)), sub(bpr, prange), sub(c, a),
-                    sub(ab, aa), sub(ac, aa), sub(ad, aa), sub(b, a), sub(cpr, prange),
-                    sub(d, a), sub(dpr, prange), sub(ab, some(hasP, bpr)),
-                    sub(b, some(hasP, bpr)), sub(c, some(hasP, cpr)),
-                    sub(d, some(hasP, dpr)));
+            state(_naf, sub(a, some(hasP, prange)), sub(bpr, prange),
+                    sub(c, a), sub(ab, aa), sub(ac, aa), sub(ad, aa),
+                    sub(b, a), sub(cpr, prange), sub(d, a), sub(dpr, prange),
+                    sub(ab, some(hasP, bpr)), sub(b, some(hasP, bpr)),
+                    sub(c, some(hasP, cpr)), sub(d, some(hasP, dpr)));
             state(_naf, label(b, "B"), label(c, "C"));
             return _naf;
         } catch (Exception e) {
@@ -131,26 +132,35 @@ public class TestOntologies {
             OWLClass fragment = Class(country_ns + "#Fragment");
             OWLClass chunk = Class(country_ns + "#Chunk");
             OWLClass BoundaryFragment = Class(country_ns + "#BoundaryFragment");
-            OWLClass LandBoundaryFragment = Class(country_ns + "#LandBoundaryFragment");
-            OWLClass WaterBoundaryFragment = Class(country_ns + "#WaterBoundaryFragment");
+            OWLClass LandBoundaryFragment = Class(country_ns
+                    + "#LandBoundaryFragment");
+            OWLClass WaterBoundaryFragment = Class(country_ns
+                    + "#WaterBoundaryFragment");
             OWLClass Country = Class(country_ns + "#Country");
             OWLDataProperty size = DataProperty(country_ns + "#size");
             OWLObjectProperty adjacentTo = object(country_ns + "#adjacentTo");
-            OWLObjectProperty hasWaterBoundary = object(country_ns + "#hasWaterBoundary");
+            OWLObjectProperty hasWaterBoundary = object(country_ns
+                    + "#hasWaterBoundary");
             OWLObjectProperty borders = object(country_ns + "#borders");
-            OWLObjectProperty dependencyOf = object(country_ns + "#dependencyOf");
+            OWLObjectProperty dependencyOf = object(country_ns
+                    + "#dependencyOf");
             OWLObjectProperty hasBoundary = object(country_ns + "#hasBoundary");
-            OWLObjectProperty hasLandBoundary = object(country_ns + "#hasLandBoundary");
-            OWLNamedIndividual asinara = NamedIndividual(country_ns + "#Asinara");
+            OWLObjectProperty hasLandBoundary = object(country_ns
+                    + "#hasLandBoundary");
+            OWLNamedIndividual asinara = NamedIndividual(country_ns
+                    + "#Asinara");
             declare(country, chunk, fragment, size, asinara);
-            state(country, sub(BoundaryFragment, fragment), eq(chunk, fragment),
+            state(country, sub(BoundaryFragment, fragment),
+                    eq(chunk, fragment),
                     sub(LandBoundaryFragment, BoundaryFragment),
                     sub(WaterBoundaryFragment, BoundaryFragment),
                     domain(adjacentTo, Country), range(adjacentTo, Country),
                     domain(borders, Country), range(borders, Country),
-                    domain(dependencyOf, Country), range(dependencyOf, Country),
-                    domain(hasBoundary, Country), range(hasBoundary, BoundaryFragment),
-                    sub(hasLandBoundary, hasBoundary), domain(hasLandBoundary, Country),
+                    domain(dependencyOf, Country),
+                    range(dependencyOf, Country), domain(hasBoundary, Country),
+                    range(hasBoundary, BoundaryFragment),
+                    sub(hasLandBoundary, hasBoundary),
+                    domain(hasLandBoundary, Country),
                     range(hasLandBoundary, LandBoundaryFragment),
                     sub(hasWaterBoundary, hasBoundary),
                     domain(hasWaterBoundary, Country),
@@ -165,8 +175,8 @@ public class TestOntologies {
 
     public static void same(OWLOntology o1, OWLOntology o2)
             throws OWLOntologyStorageException {
-        Set<OWLAxiom> common = new HashSet<OWLAxiom>(o1.getAxioms());
-        common.retainAll(o2.getAxioms());
+        Set<OWLAxiom> common = asSet(o1.axioms());
+        common.retainAll(asList(o2.axioms()));
         o1.getOWLOntologyManager().removeAxioms(o1, common);
         o2.getOWLOntologyManager().removeAxioms(o2, common);
         if (o1.getAxiomCount() == 0 && o2.getAxiomCount() == 0) {
@@ -177,14 +187,16 @@ public class TestOntologies {
         o1.getOWLOntologyManager().saveOntology(o1, t1);
         o2.getOWLOntologyManager().saveOntology(o2, t2);
         assertEquals(
-                t1.toString().replace("file:/C:/Tools/Alignement/align-4.0/temp.owl",
+                t1.toString().replace(
+                        "file:/C:/Tools/Alignement/align-4.0/temp.owl",
                         "urn:temp"), t2.toString());
     }
 
     public static OWLOntology entire(OWLOntologyManager m) {
         String ns = "http://www.ihtsdo.org/";
         try {
-            OWLOntology _entire = m.createOntology(IRI("http://www.ihtsdo.org"));
+            OWLOntology _entire = m
+                    .createOntology(IRI("http://www.ihtsdo.org"));
             OWLObjectProperty RoleGroup = object(ns + "RoleGroup");
             OWLObjectProperty SCT_116676008 = object(ns + "SCT_116676008");
             OWLObjectProperty SCT_246075003 = object(ns + "SCT_246075003");
@@ -215,23 +227,26 @@ public class TestOntologies {
             OWLObjectProperty laterality = object(ns + "sep/laterality");
             OWLObjectProperty rPartOf = object(ns + "sep/rPartOf");
             OWLObjectProperty sPartOf = object(ns + "sep/sPartOf");
-            declare(naf, RoleGroup, SCT_116676008, SCT_246075003, SCT_246454002,
-                    SCT_255234002, SCT_263502005, SCT_102298001, SCT_102957003,
-                    SCT_105981003, SCT_126732009, SCT_368009, SCT_399617002,
-                    SCT_414545008, SCT_415991003, SCT_56265001, SCT_363698007,
-                    SCT_363705008, SCT_363713009, SCT_363714003, SCT_370135005,
-                    SCT_47429007, has_locus, has_locus_entire, PartOf, cPartOf,
-                    containedIn, hasMember, laterality, rPartOf, sPartOf);
+            declare(naf, RoleGroup, SCT_116676008, SCT_246075003,
+                    SCT_246454002, SCT_255234002, SCT_263502005, SCT_102298001,
+                    SCT_102957003, SCT_105981003, SCT_126732009, SCT_368009,
+                    SCT_399617002, SCT_414545008, SCT_415991003, SCT_56265001,
+                    SCT_363698007, SCT_363705008, SCT_363713009, SCT_363714003,
+                    SCT_370135005, SCT_47429007, has_locus, has_locus_entire,
+                    PartOf, cPartOf, containedIn, hasMember, laterality,
+                    rPartOf, sPartOf);
             state(_entire,
                     label(SCT_56265001, "Heart disease (disorder)@en"),
-                    label(SCT_415991003, "Disorder of cardiac ventricle (disorder)@en"),
+                    label(SCT_415991003,
+                            "Disorder of cardiac ventricle (disorder)@en"),
                     label(SCT_368009, "Heart valve disorder (disorder)@en"),
                     label(SCT_414545008, "Ischemic heart disease (disorder)@en"),
                     label(SCT_399617002, "Carditis (disorder)@en"),
                     label(SCT_102298001,
                             "Structure of chordae tendineae cordis (body structure)@en"),
                     label(SCT_102957003, "Neurological finding (finding)@en"),
-                    label(SCT_105981003, "Disorder of cardiac function (disorder)@en"),
+                    label(SCT_105981003,
+                            "Disorder of cardiac function (disorder)@en"),
                     label(SCT_126732009, "Neoplasm of myocardium (disorder)@en"),
                     label(RoleGroup, "RoleGroup@en"),
                     label(SCT_116676008, "Associated morphology (attribute)@en"),
@@ -240,14 +255,16 @@ public class TestOntologies {
                     label(SCT_255234002, "After (attribute)@en"),
                     label(SCT_263502005, "Clinical course (attribute)@en"),
                     label(SCT_363698007, "Finding site (attribute)@en"),
-                    label(SCT_363705008, "Has definitional manifestation (attribute)@en"),
+                    label(SCT_363705008,
+                            "Has definitional manifestation (attribute)@en"),
                     label(SCT_363713009, "Has interpretation (attribute)@en"),
                     label(SCT_363714003, "Interprets (attribute)@en"),
                     label(SCT_370135005, "Pathological process (attribute)@en"),
                     label(SCT_47429007, "Associated with (attribute)@en"),
                     label(PartOf, "PartOf@en"), label(cPartOf, "cPartOf@en"),
                     label(containedIn, "containedIn@en"),
-                    label(hasMember, "hasMember@en"), label(laterality, "laterality@en"),
+                    label(hasMember, "hasMember@en"),
+                    label(laterality, "laterality@en"),
                     label(rPartOf, "rPartOf@en"), label(sPartOf, "sPartOf@en"));
             OWLClass SCT_312168006 = Class(ns + "SCT_312168006");
             OWLClass SCT_404684003 = Class(ns + "SCT_404684003");
@@ -267,10 +284,13 @@ public class TestOntologies {
                             and(SCT_55342001,
                                     SCT_56265001,
                                     some(RoleGroup,
-                                            and(some(SCT_363698007, SCT_74281007),
-                                                    some(SCT_116676008, SCT_108369006))))),
+                                            and(some(SCT_363698007,
+                                                    SCT_74281007),
+                                                    some(SCT_116676008,
+                                                            SCT_108369006))))),
                     eq(SCT_368009,
-                            and(some(RoleGroup, some(has_locus, E00017)), SCT_56265001)),
+                            and(some(RoleGroup, some(has_locus, E00017)),
+                                    SCT_56265001)),
                     eq(SCT_399617002,
                             and(some(
                                     RoleGroup,
@@ -278,14 +298,18 @@ public class TestOntologies {
                                             some(SCT_116676008, SCT_23583003))),
                                     SCT_56265001)),
                     sub(SCT_414545008,
-                            and(some(RoleGroup, some(has_locus, E00016)), SCT_56265001)),
+                            and(some(RoleGroup, some(has_locus, E00016)),
+                                    SCT_56265001)),
                     eq(SCT_415991003,
-                            and(some(RoleGroup, some(has_locus, E00612)), SCT_56265001)),
+                            and(some(RoleGroup, some(has_locus, E00612)),
+                                    SCT_56265001)),
                     eq(SCT_56265001,
-                            and(some(RoleGroup, some(has_locus, E00016)), SCT_49601007)),
+                            and(some(RoleGroup, some(has_locus, E00016)),
+                                    SCT_49601007)),
                     sub(SCT_246075003, SCT_47429007), sub(cPartOf, PartOf),
-                    sub(SCT_255234002, SCT_47429007), sub(has_locus_entire, has_locus),
-                    sub(rPartOf, PartOf), sub(sPartOf, PartOf));
+                    sub(SCT_255234002, SCT_47429007),
+                    sub(has_locus_entire, has_locus), sub(rPartOf, PartOf),
+                    sub(sPartOf, PartOf));
             return _entire;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -298,7 +322,8 @@ public class TestOntologies {
             OWLOntology _syntax = m.createOntology(IRI(syntax_ns));
             OWLDataProperty p = DataProperty(syntax_ns + "#aDataProperty");
             state(_syntax, label(p, "aDataProperty"));
-            state(_syntax, range(p, OWL2Datatype.XSD_INT.getDatatype(dataFactory)));
+            state(_syntax,
+                    range(p, OWL2Datatype.XSD_INT.getDatatype(dataFactory)));
             return _syntax;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -309,8 +334,8 @@ public class TestOntologies {
         String ns = "http://www.semanticweb.org/ontologies/2011/1/siblings.owl";
         try {
             OWLOntology _siblings = m.createOntology(IRI(ns));
-            declare(_siblings, object(ns + "#hasSibling"),
-                    NamedIndividual(ns + "#Robert"));
+            declare(_siblings, object(ns + "#hasSibling"), NamedIndividual(ns
+                    + "#Robert"));
             return _siblings;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -359,7 +384,8 @@ public class TestOntologies {
             OWLObjectProperty has_DPWS_Action = object(nsf + "has_DPWS_Action");
             OWLObjectProperty has_DPWS_Input = object(nsf + "has_DPWS_Input");
             OWLObjectProperty has_DPWS_Output = object(nsf + "has_DPWS_Output");
-            OWLObjectProperty has_DPWS_Service = object(nsf + "has_DPWS_Service");
+            OWLObjectProperty has_DPWS_Service = object(nsf
+                    + "has_DPWS_Service");
             OWLDataProperty a_has_DPWS_StateVariable_Type = DataProperty(nsf
                     + "a_has_DPWS_StateVariable_Type");
             OWLDataProperty has_DPWS_Logical_Device_Name = DataProperty(nsf
@@ -389,7 +415,8 @@ public class TestOntologies {
             OWLObjectProperty has_UPnP_Instance_Output = object(nsf1
                     + "has_UPnP_Instance_Output");
             OWLObjectProperty has_UPnP_Output = object(nsf1 + "has_UPnP_Output");
-            OWLObjectProperty has_UPnP_Service = object(nsf1 + "has_UPnP_Service");
+            OWLObjectProperty has_UPnP_Service = object(nsf1
+                    + "has_UPnP_Service");
             OWLClass Set12 = Class(nsf1 + "Set12");
             OWLClass Time = Class(nsf1 + "Time");
             OWLClass UPnP_Action = Class(nsf1 + "UPnP_Action");
@@ -402,46 +429,59 @@ public class TestOntologies {
                     + "Sequential_Union_Mapping_First_member");
             OWLObjectProperty Sequential_Union_Mapping_Second_member = object(ns
                     + "Sequential_Union_Mapping_Second_member");
-            OWLObjectProperty Simple_Mapping_Input = object(ns + "Simple_Mapping_Input");
+            OWLObjectProperty Simple_Mapping_Input = object(ns
+                    + "Simple_Mapping_Input");
             OWLObjectProperty Simple_Mapping_Input_Output = object(ns
                     + "Simple_Mapping_Input_Output");
-            OWLObjectProperty Simple_Mapping_Output = object(ns + "Simple_Mapping_Output");
+            OWLObjectProperty Simple_Mapping_Output = object(ns
+                    + "Simple_Mapping_Output");
             OWLObjectProperty Union_Mapping = object(ns + "Union_Mapping");
             OWLObjectProperty Union_Mapping_First_member = object(ns
                     + "Union_Mapping_First_member");
             OWLObjectProperty Union_Mapping_Second_member = object(ns
                     + "Union_Mapping_Second_member");
-            OWLObjectProperty Exact_Input_Match = object(ns1 + "#Exact_Input_Match");
+            OWLObjectProperty Exact_Input_Match = object(ns1
+                    + "#Exact_Input_Match");
             OWLObjectProperty Exact_Input_Output_Match = object(ns1
                     + "#Exact_Input_Output_Match");
-            OWLObjectProperty Exact_Output_Match = object(ns1 + "#Exact_Output_Match");
+            OWLObjectProperty Exact_Output_Match = object(ns1
+                    + "#Exact_Output_Match");
             OWLObjectProperty PlugIn_Input_Output_Match = object(ns1
                     + "#PlugIn_Input_Output_Match");
-            OWLObjectProperty PlugIn_Output_Match = object(ns1 + "#PlugIn_Output_Match");
+            OWLObjectProperty PlugIn_Output_Match = object(ns1
+                    + "#PlugIn_Output_Match");
             OWLObjectProperty has_Next = object(ns1 + "#has_Next");
-            OWLObjectProperty PlugIn_Input_Match = object(ns1 + "#PlugIn_Input_Match");
+            OWLObjectProperty PlugIn_Input_Match = object(ns1
+                    + "#PlugIn_Input_Match");
             OWLClass SequentialUnionClock = Class(nsf1 + "SequentialUnionClock");
             declare(_sequentialUnion, DPWS_Action, DPWS_Device, DPWS_Service,
-                    DPWS_StateVariable, DummyOperation, SeqClockStd, Set1, Set2, a,
-                    seqentialClock, x, y, newx, newy, sequentialunionclock, Set12, Time,
-                    UPnP_Action, UPnP_Device, UPnP_Service, UPnP_StateVariable, x1, y1,
+                    DPWS_StateVariable, DummyOperation, SeqClockStd, Set1,
+                    Set2, a, seqentialClock, x, y, newx, newy,
+                    sequentialunionclock, Set12, Time, UPnP_Action,
+                    UPnP_Device, UPnP_Service, UPnP_StateVariable, x1, y1,
                     Sequential_Union_Mapping_First_member,
-                    Sequential_Union_Mapping_Second_member, Simple_Mapping_Input,
-                    Simple_Mapping_Input_Output, Simple_Mapping_Output, Union_Mapping,
+                    Sequential_Union_Mapping_Second_member,
+                    Simple_Mapping_Input, Simple_Mapping_Input_Output,
+                    Simple_Mapping_Output, Union_Mapping,
                     Union_Mapping_First_member, Union_Mapping_Second_member,
-                    has_DPWS_Action, has_DPWS_Input, has_DPWS_Output, has_DPWS_Service,
-                    has_dpws_statevariable, UPnP_is_instance_of_type, has_UPnP_Action,
-                    has_UPnP_Input, has_UPnP_Instance_Input, has_UPnP_Instance_Output,
+                    has_DPWS_Action, has_DPWS_Input, has_DPWS_Output,
+                    has_DPWS_Service, has_dpws_statevariable,
+                    UPnP_is_instance_of_type, has_UPnP_Action, has_UPnP_Input,
+                    has_UPnP_Instance_Input, has_UPnP_Instance_Output,
                     has_UPnP_Output, has_UPnP_Service, Exact_Input_Match,
-                    Exact_Input_Output_Match, Exact_Output_Match, PlugIn_Input_Match,
-                    PlugIn_Input_Output_Match, PlugIn_Output_Match, has_Next,
-                    a_has_DPWS_StateVariable_Type, has_DPWS_Logical_Device_Name,
-                    x_has_DPWS_StateVariable_Type, y_has_DPWS_StateVariable_Type,
-                    has_UPnP_Device_Type, has_UPnP_Service_ID, has_UPnP_Service_Type,
+                    Exact_Input_Output_Match, Exact_Output_Match,
+                    PlugIn_Input_Match, PlugIn_Input_Output_Match,
+                    PlugIn_Output_Match, has_Next,
+                    a_has_DPWS_StateVariable_Type,
+                    has_DPWS_Logical_Device_Name,
+                    x_has_DPWS_StateVariable_Type,
+                    y_has_DPWS_StateVariable_Type, has_UPnP_Device_Type,
+                    has_UPnP_Service_ID, has_UPnP_Service_Type,
                     has_UPnP_Service_Version, x_has_UPnP_StateVariable_Type,
                     y_has_UPnP_StateVariable_Type);
             state(_sequentialUnion,
-                    sub(DPWS_Action, some(has_dpws_statevariable, DPWS_StateVariable)),
+                    sub(DPWS_Action,
+                            some(has_dpws_statevariable, DPWS_StateVariable)),
                     sub(DPWS_Device, some(has_DPWS_Service, DPWS_Service)),
                     sub(DPWS_Service, some(has_DPWS_Action, DPWS_Action)),
                     sub(DummyOperation, DPWS_Action),
@@ -502,7 +542,8 @@ public class TestOntologies {
                                     Literal("urn:upnp-org:serviceId:Time.1", ""))),
                     sub(Time,
                             has(has_UPnP_Service_Type,
-                                    Literal("urn:schemas-upnp-org:service:Time:1", ""))),
+                                    Literal("urn:schemas-upnp-org:service:Time:1",
+                                            ""))),
                     sub(Time, has(has_UPnP_Service_Version, Literal("1", ""))),
                     sub(UPnP_Action, some(has_UPnP_Input, UPnP_StateVariable)),
                     sub(UPnP_Action, some(has_UPnP_Output, UPnP_StateVariable)),
@@ -525,7 +566,8 @@ public class TestOntologies {
     public static OWLOntology pizza(OWLOntologyManager m) {
         String ns = "http://pizza.com/pizza.owl#";
         try {
-            OWLOntology _pizza = m.createOntology(IRI("http://pizza.com/pizza.owl"));
+            OWLOntology _pizza = m
+                    .createOntology(IRI("http://pizza.com/pizza.owl"));
             OWLClass American = Class(ns + "American");
             OWLClass AmericanHot = Class(ns + "AmericanHot");
             OWLClass AnchoviesTopping = Class(ns + "AnchoviesTopping");
@@ -538,7 +580,8 @@ public class TestOntologies {
             OWLClass Caprina = Class(ns + "Caprina");
             OWLClass CheeseTopping = Class(ns + "CheeseTopping");
             OWLClass CheeseyPizza = Class(ns + "CheeseyPizza");
-            OWLClass CheeseyVegetableTopping = Class(ns + "CheeseyVegetableTopping");
+            OWLClass CheeseyVegetableTopping = Class(ns
+                    + "CheeseyVegetableTopping");
             OWLClass ChickenTopping = Class(ns + "ChickenTopping");
             OWLClass Country = Class(ns + "Country");
             OWLClass DeepPanBase = Class(ns + "DeepPanBase");
@@ -583,7 +626,8 @@ public class TestOntologies {
             OWLClass Parmense = Class(ns + "Parmense");
             OWLClass ParmesanTopping = Class(ns + "ParmesanTopping");
             OWLClass PeperonataTopping = Class(ns + "PeperonataTopping");
-            OWLClass PeperoniSausageTopping = Class(ns + "PeperoniSausageTopping");
+            OWLClass PeperoniSausageTopping = Class(ns
+                    + "PeperoniSausageTopping");
             OWLClass PepperTopping = Class(ns + "PepperTopping");
             OWLClass PetitPoisTopping = Class(ns + "PetitPoisTopping");
             OWLClass PineKernels = Class(ns + "PineKernels");
@@ -619,12 +663,15 @@ public class TestOntologies {
             OWLClass ValuePartition = Class(ns + "ValuePartition");
             OWLClass VegetableTopping = Class(ns + "VegetableTopping");
             OWLClass VegetarianPizza = Class(ns + "VegetarianPizza");
-            OWLClass VegetarianPizzaEquivalent1 = Class(ns + "VegetarianPizzaEquivalent1");
-            OWLClass VegetarianPizzaEquivalent2 = Class(ns + "VegetarianPizzaEquivalent2");
+            OWLClass VegetarianPizzaEquivalent1 = Class(ns
+                    + "VegetarianPizzaEquivalent1");
+            OWLClass VegetarianPizzaEquivalent2 = Class(ns
+                    + "VegetarianPizzaEquivalent2");
             OWLClass VegetarianTopping = Class(ns + "VegetarianTopping");
             OWLClass Veneziana = Class(ns + "Veneziana");
             OWLObjectProperty hasBase = object(ns + "hasBase");
-            OWLObjectProperty hasCountryOfOrigin = object(ns + "hasCountryOfOrigin");
+            OWLObjectProperty hasCountryOfOrigin = object(ns
+                    + "hasCountryOfOrigin");
             OWLObjectProperty hasIngredient = object(ns + "hasIngredient");
             OWLObjectProperty hasSpiciness = object(ns + "hasSpiciness");
             OWLObjectProperty hasTopping = object(ns + "hasTopping");
@@ -636,15 +683,17 @@ public class TestOntologies {
             OWLNamedIndividual England = NamedIndividual(ns + "England");
             OWLNamedIndividual France = NamedIndividual(ns + "France");
             OWLNamedIndividual America = NamedIndividual(ns + "America");
-            declare(_pizza, DeepPanBase, DomainConcept, hasBase, hasCountryOfOrigin,
-                    hasIngredient, hasSpiciness, hasTopping, isBaseOf, isIngredientOf,
-                    isToppingOf);
-            state(_pizza, label(GoatsCheeseTopping, "CoberturaDeQueijoDeCabra@pt"),
+            declare(_pizza, DeepPanBase, DomainConcept, hasBase,
+                    hasCountryOfOrigin, hasIngredient, hasSpiciness,
+                    hasTopping, isBaseOf, isIngredientOf, isToppingOf);
+            state(_pizza,
+                    label(GoatsCheeseTopping, "CoberturaDeQueijoDeCabra@pt"),
                     label(GorgonzolaTopping, "CoberturaDeGorgonzola@pt"),
                     label(GreenPepperTopping, "CoberturaDePimentaoVerde@pt"),
                     label(HamTopping, "CoberturaDePresunto@pt"),
                     label(HerbSpiceTopping, "CoberturaDeErvas@pt"),
-                    label(HotGreenPepperTopping, "CoberturaDePimentaoVerdePicante@pt"),
+                    label(HotGreenPepperTopping,
+                            "CoberturaDePimentaoVerdePicante@pt"),
                     label(HotSpicedBeefTopping, "CoberturaDeBifePicante@pt"),
                     label(IceCream, "Sorvete@pt"),
                     label(InterestingPizza, "PizzaInteressante@pt"),
@@ -653,8 +702,10 @@ public class TestOntologies {
                     label(LeekTopping, "CoberturaDeLeek@pt"),
                     label(Margherita, "Margherita@pt"),
                     label(MeatTopping, "CoberturaDeCarne@pt"),
-                    label(MeatyPizza, "PizzaDeCarne@pt"), label(Medium, "Media@pt"),
-                    label(MixedSeafoodTopping, "CoberturaDeFrutosDoMarMistos@pt"),
+                    label(MeatyPizza, "PizzaDeCarne@pt"),
+                    label(Medium, "Media@pt"),
+                    label(MixedSeafoodTopping,
+                            "CoberturaDeFrutosDoMarMistos@pt"),
                     label(MozzarellaTopping, "CoberturaDeMozzarella@pt"),
                     label(Mushroom, "Cogumelo@pt"),
                     label(MushroomTopping, "CoberturaDeCogumelo@pt"),
@@ -665,9 +716,12 @@ public class TestOntologies {
                     label(OliveTopping, "CoberturaDeAzeitona@pt"),
                     label(OnionTopping, "CoberturaDeCebola@pt"),
                     label(ParmaHamTopping, "CoberturaDePrezuntoParma@pt"),
-                    label(Parmense, "Parmense@pt"), label(Hot, "Picante@pt"),
-                    label(Mild, "NaoPicante@pt"), label(Pizza, "Pizza@en"),
-                    label(Rosa, "Rosa@pt"), label(American, "Americana@pt"),
+                    label(Parmense, "Parmense@pt"),
+                    label(Hot, "Picante@pt"),
+                    label(Mild, "NaoPicante@pt"),
+                    label(Pizza, "Pizza@en"),
+                    label(Rosa, "Rosa@pt"),
+                    label(American, "Americana@pt"),
                     label(PineKernels, "CoberturaPineKernels@pt"),
                     label(PepperTopping, "CoberturaDePimentao@pt"),
                     label(PeperoniSausageTopping, "CoberturaDeCalabreza@pt"),
@@ -676,13 +730,15 @@ public class TestOntologies {
                     label(ParmesanTopping, "CoberturaDeParmesao@pt"),
                     label(PizzaTopping, "CoberturaDaPizza@pt"),
                     label(PolloAdAstra, "PolloAdAstra@pt"),
-                    label(PizzaBase, "BaseDaPizza@pt"), label(Spiciness, "Tempero@pt"),
+                    label(PizzaBase, "BaseDaPizza@pt"),
+                    label(Spiciness, "Tempero@pt"),
                     label(SpicyPizza, "PizzaTemperada@pt"),
                     label(SpicyPizzaEquivalent, "PizzaTemperadaEquivalente@pt"),
                     label(SpicyTopping, "CoberturaTemperada@pt"),
                     label(SpinachTopping, "CoberturaDeEspinafre@pt"),
                     label(SultanaTopping, "CoberturaSultana@pt"),
-                    label(SundriedTomatoTopping, "CoberturaDeTomateRessecadoAoSol@pt"),
+                    label(SundriedTomatoTopping,
+                            "CoberturaDeTomateRessecadoAoSol@pt"),
                     label(SweetPepperTopping, "CoberturaDePimentaoDoce@pt"),
                     label(ThinAndCrispyBase, "BaseFinaEQuebradica@pt"),
                     label(TobascoPepperSauce, "MolhoTobascoPepper@pt"),
@@ -691,8 +747,10 @@ public class TestOntologies {
                     label(ValuePartition, "ValorDaParticao@pt"),
                     label(VegetableTopping, "CoberturaDeVegetais@pt"),
                     label(VegetarianPizza, "PizzaVegetariana@pt"),
-                    label(VegetarianPizzaEquivalent1, "PizzaVegetarianaEquivalente1@pt"),
-                    label(VegetarianPizzaEquivalent2, "PizzaVegetarianaEquivalente2@pt"),
+                    label(VegetarianPizzaEquivalent1,
+                            "PizzaVegetarianaEquivalente1@pt"),
+                    label(VegetarianPizzaEquivalent2,
+                            "PizzaVegetarianaEquivalente2@pt"),
                     label(VegetarianTopping, "CoberturaVegetariana@pt"),
                     label(Veneziana, "Veneziana@pt"),
                     label(PrawnsTopping, "CoberturaDeCamarao@pt"),
@@ -712,13 +770,16 @@ public class TestOntologies {
                     label(AsparagusTopping, "CoberturaDeAspargos@pt"),
                     label(CajunSpiceTopping, "CoberturaDeCajun@pt"),
                     label(CaperTopping, "CoberturaDeCaper@pt"),
-                    label(Capricciosa, "Capricciosa@pt"), label(Cajun, "Cajun@pt"),
+                    label(Capricciosa, "Capricciosa@pt"),
+                    label(Cajun, "Cajun@pt"),
                     label(Caprina, "Caprina@pt"),
                     label(CheeseTopping, "CoberturaDeQueijo@pt"),
                     label(CheeseyPizza, "PizzaComQueijo@pt"),
-                    label(CheeseyVegetableTopping, "CoberturaDeQueijoComVegetais@pt"),
+                    label(CheeseyVegetableTopping,
+                            "CoberturaDeQueijoComVegetais@pt"),
                     label(ChickenTopping, "CoberturaDeFrango@pt"),
-                    label(Country, "Pais@pt"), label(DeepPanBase, "BaseEspessa@pt"),
+                    label(Country, "Pais@pt"),
+                    label(DeepPanBase, "BaseEspessa@pt"),
                     label(Fiorentina, "Fiorentina@pt"),
                     label(FishTopping, "CoberturaDePeixe@pt"),
                     label(FourCheesesTopping, "CoberturaQuatroQueijos@pt"),
@@ -726,7 +787,8 @@ public class TestOntologies {
                     label(FruitTopping, "CoberturaDeFrutas@pt"),
                     label(FruttiDiMare, "FrutosDoMar@pt"),
                     label(GarlicTopping, "CoberturaDeAlho@pt"),
-                    label(Giardiniera, "Giardiniera@pt"), label(Soho, "Soho@pt"));
+                    label(Giardiniera, "Giardiniera@pt"),
+                    label(Soho, "Soho@pt"));
             state(_pizza,
                     sub(American, NamedPizza),
                     sub(American, some(hasTopping, MozzarellaTopping)),
@@ -734,7 +796,8 @@ public class TestOntologies {
                     sub(American, some(hasTopping, TomatoTopping)),
                     sub(American,
                             all(hasTopping,
-                                    or(MozzarellaTopping, PeperoniSausageTopping,
+                                    or(MozzarellaTopping,
+                                            PeperoniSausageTopping,
                                             TomatoTopping))),
                     sub(AmericanHot, NamedPizza),
                     sub(AmericanHot, some(hasTopping, HotGreenPepperTopping)),
@@ -744,8 +807,10 @@ public class TestOntologies {
                     sub(AmericanHot, some(hasTopping, TomatoTopping)),
                     sub(AmericanHot,
                             all(hasTopping,
-                                    or(HotGreenPepperTopping, JalapenoPepperTopping,
-                                            MozzarellaTopping, PeperoniSausageTopping,
+                                    or(HotGreenPepperTopping,
+                                            JalapenoPepperTopping,
+                                            MozzarellaTopping,
+                                            PeperoniSausageTopping,
                                             TomatoTopping))),
                     sub(AnchoviesTopping, FishTopping),
                     sub(ArtichokeTopping, VegetableTopping),
@@ -778,9 +843,10 @@ public class TestOntologies {
                     sub(Capricciosa, some(hasTopping, TomatoTopping)),
                     sub(Capricciosa,
                             all(hasTopping,
-                                    or(AnchoviesTopping, CaperTopping, HamTopping,
-                                            MozzarellaTopping, OliveTopping,
-                                            PeperonataTopping, TomatoTopping))),
+                                    or(AnchoviesTopping, CaperTopping,
+                                            HamTopping, MozzarellaTopping,
+                                            OliveTopping, PeperonataTopping,
+                                            TomatoTopping))),
                     sub(Caprina, NamedPizza),
                     sub(Caprina, some(hasTopping, GoatsCheeseTopping)),
                     sub(Caprina, some(hasTopping, MozzarellaTopping)),
@@ -789,9 +855,11 @@ public class TestOntologies {
                     sub(Caprina,
                             all(hasTopping,
                                     or(GoatsCheeseTopping, MozzarellaTopping,
-                                            SundriedTomatoTopping, TomatoTopping))),
+                                            SundriedTomatoTopping,
+                                            TomatoTopping))),
                     sub(CheeseTopping, PizzaTopping),
-                    eq(CheeseyPizza, and(some(hasTopping, CheeseTopping), Pizza)),
+                    eq(CheeseyPizza,
+                            and(some(hasTopping, CheeseTopping), Pizza)),
                     sub(CheeseyVegetableTopping, CheeseTopping),
                     sub(CheeseyVegetableTopping, VegetableTopping),
                     sub(ChickenTopping, MeatTopping),
@@ -811,9 +879,9 @@ public class TestOntologies {
                     sub(Fiorentina, some(hasTopping, TomatoTopping)),
                     sub(Fiorentina,
                             all(hasTopping,
-                                    or(GarlicTopping, MozzarellaTopping, OliveTopping,
-                                            ParmesanTopping, SpinachTopping,
-                                            TomatoTopping))),
+                                    or(GarlicTopping, MozzarellaTopping,
+                                            OliveTopping, ParmesanTopping,
+                                            SpinachTopping, TomatoTopping))),
                     sub(FishTopping, PizzaTopping),
                     sub(FishTopping, some(hasSpiciness, Mild)),
                     sub(FourCheesesTopping, CheeseTopping),
@@ -828,9 +896,11 @@ public class TestOntologies {
                     sub(FourSeasons, some(hasTopping, TomatoTopping)),
                     sub(FourSeasons,
                             all(hasTopping,
-                                    or(AnchoviesTopping, CaperTopping, MozzarellaTopping,
-                                            MushroomTopping, OliveTopping,
-                                            PeperoniSausageTopping, TomatoTopping))),
+                                    or(AnchoviesTopping, CaperTopping,
+                                            MozzarellaTopping, MushroomTopping,
+                                            OliveTopping,
+                                            PeperoniSausageTopping,
+                                            TomatoTopping))),
                     sub(FruitTopping, PizzaTopping),
                     sub(FruttiDiMare, NamedPizza),
                     sub(FruttiDiMare, some(hasTopping, GarlicTopping)),
@@ -838,7 +908,8 @@ public class TestOntologies {
                     sub(FruttiDiMare, some(hasTopping, TomatoTopping)),
                     sub(FruttiDiMare,
                             all(hasTopping,
-                                    or(GarlicTopping, MixedSeafoodTopping, TomatoTopping))),
+                                    or(GarlicTopping, MixedSeafoodTopping,
+                                            TomatoTopping))),
                     sub(GarlicTopping, VegetableTopping),
                     sub(GarlicTopping, some(hasSpiciness, Medium)),
                     sub(Giardiniera, NamedPizza),
@@ -852,10 +923,11 @@ public class TestOntologies {
                     sub(Giardiniera, some(hasTopping, TomatoTopping)),
                     sub(Giardiniera,
                             all(hasTopping,
-                                    or(LeekTopping, MozzarellaTopping, MushroomTopping,
-                                            OliveTopping, PeperonataTopping,
-                                            PetitPoisTopping, SlicedTomatoTopping,
-                                            TomatoTopping))),
+                                    or(LeekTopping, MozzarellaTopping,
+                                            MushroomTopping, OliveTopping,
+                                            PeperonataTopping,
+                                            PetitPoisTopping,
+                                            SlicedTomatoTopping, TomatoTopping))),
                     sub(GoatsCheeseTopping, CheeseTopping),
                     sub(GoatsCheeseTopping, some(hasSpiciness, Mild)),
                     sub(GorgonzolaTopping, CheeseTopping),
@@ -870,7 +942,8 @@ public class TestOntologies {
                     sub(HotSpicedBeefTopping, some(hasSpiciness, Hot)),
                     sub(IceCream, DomainConcept),
                     sub(IceCream, some(hasTopping, FruitTopping)),
-                    eq(InterestingPizza, and(min(3, hasTopping, OWLThing()), Pizza)),
+                    eq(InterestingPizza,
+                            and(min(3, hasTopping, OWLThing()), Pizza)),
                     sub(JalapenoPepperTopping, PepperTopping),
                     sub(JalapenoPepperTopping, some(hasSpiciness, Hot)),
                     sub(LaReine, NamedPizza),
@@ -881,14 +954,17 @@ public class TestOntologies {
                     sub(LaReine, some(hasTopping, TomatoTopping)),
                     sub(LaReine,
                             all(hasTopping,
-                                    or(HamTopping, MozzarellaTopping, MushroomTopping,
-                                            OliveTopping, TomatoTopping))),
+                                    or(HamTopping, MozzarellaTopping,
+                                            MushroomTopping, OliveTopping,
+                                            TomatoTopping))),
                     sub(LeekTopping, VegetableTopping),
                     sub(LeekTopping, some(hasSpiciness, Mild)),
                     sub(Margherita, NamedPizza),
                     sub(Margherita, some(hasTopping, MozzarellaTopping)),
                     sub(Margherita, some(hasTopping, TomatoTopping)),
-                    sub(Margherita, all(hasTopping, or(TomatoTopping, MozzarellaTopping))),
+                    sub(Margherita,
+                            all(hasTopping,
+                                    or(TomatoTopping, MozzarellaTopping))),
                     sub(MeatTopping, PizzaTopping),
                     eq(MeatyPizza, and(some(hasTopping, MeatTopping), Pizza)),
                     sub(Medium, Spiciness),
@@ -903,7 +979,8 @@ public class TestOntologies {
                     sub(Mushroom, some(hasTopping, TomatoTopping)),
                     sub(Mushroom,
                             all(hasTopping,
-                                    or(MozzarellaTopping, MushroomTopping, TomatoTopping))),
+                                    or(MozzarellaTopping, MushroomTopping,
+                                            TomatoTopping))),
                     sub(MushroomTopping, VegetableTopping),
                     sub(MushroomTopping, some(hasSpiciness, Mild)),
                     sub(NamedPizza, Pizza),
@@ -915,8 +992,9 @@ public class TestOntologies {
                     sub(Napoletana, some(hasTopping, TomatoTopping)),
                     sub(Napoletana,
                             all(hasTopping,
-                                    or(AnchoviesTopping, CaperTopping, MozzarellaTopping,
-                                            OliveTopping, TomatoTopping))),
+                                    or(AnchoviesTopping, CaperTopping,
+                                            MozzarellaTopping, OliveTopping,
+                                            TomatoTopping))),
                     eq(NonVegetarianPizza, and(c(VegetarianPizza), Pizza)),
                     disjoint(NonVegetarianPizza, VegetarianPizza),
                     sub(NutTopping, PizzaTopping),
@@ -935,8 +1013,9 @@ public class TestOntologies {
                     sub(Parmense, some(hasTopping, TomatoTopping)),
                     sub(Parmense,
                             all(hasTopping,
-                                    or(AsparagusTopping, HamTopping, MozzarellaTopping,
-                                            ParmesanTopping, TomatoTopping))),
+                                    or(AsparagusTopping, HamTopping,
+                                            MozzarellaTopping, ParmesanTopping,
+                                            TomatoTopping))),
                     sub(ParmesanTopping, CheeseTopping),
                     sub(ParmesanTopping, some(hasSpiciness, Mild)),
                     sub(PeperonataTopping, PepperTopping),
@@ -961,8 +1040,9 @@ public class TestOntologies {
                     sub(PolloAdAstra, some(hasTopping, TomatoTopping)),
                     sub(PolloAdAstra,
                             all(hasTopping,
-                                    or(CajunSpiceTopping, ChickenTopping, GarlicTopping,
-                                            MozzarellaTopping, RedOnionTopping,
+                                    or(CajunSpiceTopping, ChickenTopping,
+                                            GarlicTopping, MozzarellaTopping,
+                                            RedOnionTopping,
                                             SweetPepperTopping, TomatoTopping))),
                     sub(PrawnsTopping, FishTopping),
                     sub(PrinceCarlo, NamedPizza),
@@ -973,14 +1053,17 @@ public class TestOntologies {
                     sub(PrinceCarlo, some(hasTopping, TomatoTopping)),
                     sub(PrinceCarlo,
                             all(hasTopping,
-                                    or(LeekTopping, MozzarellaTopping, ParmesanTopping,
-                                            RosemaryTopping, TomatoTopping))),
+                                    or(LeekTopping, MozzarellaTopping,
+                                            ParmesanTopping, RosemaryTopping,
+                                            TomatoTopping))),
                     sub(QuattroFormaggi, NamedPizza),
                     sub(QuattroFormaggi, some(hasTopping, FourCheesesTopping)),
                     sub(QuattroFormaggi, some(hasTopping, TomatoTopping)),
                     sub(QuattroFormaggi,
-                            all(hasTopping, or(TomatoTopping, FourCheesesTopping))),
-                    eq(RealItalianPizza, and(has(hasCountryOfOrigin, Italy), Pizza)),
+                            all(hasTopping,
+                                    or(TomatoTopping, FourCheesesTopping))),
+                    eq(RealItalianPizza,
+                            and(has(hasCountryOfOrigin, Italy), Pizza)),
                     sub(RealItalianPizza, all(hasBase, ThinAndCrispyBase)),
                     sub(RedOnionTopping, OnionTopping),
                     sub(RocketTopping, VegetableTopping),
@@ -1006,8 +1089,9 @@ public class TestOntologies {
                     sub(Siciliana, some(hasTopping, TomatoTopping)),
                     sub(Siciliana,
                             all(hasTopping,
-                                    or(AnchoviesTopping, ArtichokeTopping, GarlicTopping,
-                                            HamTopping, MozzarellaTopping, OliveTopping,
+                                    or(AnchoviesTopping, ArtichokeTopping,
+                                            GarlicTopping, HamTopping,
+                                            MozzarellaTopping, OliveTopping,
                                             TomatoTopping))),
                     sub(SlicedTomatoTopping, TomatoTopping),
                     sub(SlicedTomatoTopping, some(hasSpiciness, Mild)),
@@ -1019,7 +1103,8 @@ public class TestOntologies {
                     sub(SloppyGiuseppe, some(hasTopping, TomatoTopping)),
                     sub(SloppyGiuseppe,
                             all(hasTopping,
-                                    or(GreenPepperTopping, HotSpicedBeefTopping,
+                                    or(GreenPepperTopping,
+                                            HotSpicedBeefTopping,
                                             MozzarellaTopping, OnionTopping,
                                             TomatoTopping))),
                     sub(Soho, NamedPizza),
@@ -1031,14 +1116,16 @@ public class TestOntologies {
                     sub(Soho, some(hasTopping, TomatoTopping)),
                     sub(Soho,
                             all(hasTopping,
-                                    or(GarlicTopping, MozzarellaTopping, OliveTopping,
-                                            ParmesanTopping, RocketTopping, TomatoTopping))),
+                                    or(GarlicTopping, MozzarellaTopping,
+                                            OliveTopping, ParmesanTopping,
+                                            RocketTopping, TomatoTopping))),
                     eq(Spiciness, or(Hot, Medium, Mild)),
                     sub(Spiciness, ValuePartition),
                     eq(SpicyPizza, and(some(hasTopping, SpicyTopping), Pizza)),
                     eq(SpicyPizzaEquivalent,
                             and(some(hasTopping,
-                                    and(some(hasSpiciness, Hot), PizzaTopping)), Pizza)),
+                                    and(some(hasSpiciness, Hot), PizzaTopping)),
+                                    Pizza)),
                     eq(SpicyTopping, and(some(hasSpiciness, Hot), PizzaTopping)),
                     sub(SpinachTopping, VegetableTopping),
                     sub(SpinachTopping, some(hasSpiciness, Mild)),
@@ -1063,13 +1150,14 @@ public class TestOntologies {
                             and(all(hasTopping, VegetarianTopping), Pizza)),
                     eq(VegetarianPizzaEquivalent2,
                             and(all(hasTopping,
-                                    or(CheeseTopping, FruitTopping, HerbSpiceTopping,
-                                            NutTopping, SauceTopping, VegetableTopping)),
+                                    or(CheeseTopping, FruitTopping,
+                                            HerbSpiceTopping, NutTopping,
+                                            SauceTopping, VegetableTopping)),
                                     Pizza)),
                     eq(VegetarianTopping,
-                            and(or(CheeseTopping, FruitTopping, HerbSpiceTopping,
-                                    NutTopping, SauceTopping, VegetableTopping),
-                                    PizzaTopping)),
+                            and(or(CheeseTopping, FruitTopping,
+                                    HerbSpiceTopping, NutTopping, SauceTopping,
+                                    VegetableTopping), PizzaTopping)),
                     sub(Veneziana, NamedPizza),
                     sub(Veneziana, some(hasTopping, CaperTopping)),
                     sub(Veneziana, some(hasTopping, MozzarellaTopping)),
@@ -1080,8 +1168,9 @@ public class TestOntologies {
                     sub(Veneziana, some(hasTopping, TomatoTopping)),
                     sub(Veneziana,
                             all(hasTopping,
-                                    or(CaperTopping, MozzarellaTopping, OliveTopping,
-                                            OnionTopping, PineKernels, SultanaTopping,
+                                    or(CaperTopping, MozzarellaTopping,
+                                            OliveTopping, OnionTopping,
+                                            PineKernels, SultanaTopping,
                                             TomatoTopping))),
                     sub(hasBase, hasIngredient),
                     inverse(hasBase, isBaseOf),
@@ -1114,21 +1203,24 @@ public class TestOntologies {
                     disjoint(ArtichokeTopping, AsparagusTopping, CaperTopping,
                             CheeseTopping, ChickenTopping, FishTopping,
                             FourCheesesTopping, FruitTopping, GarlicTopping,
-                            GoatsCheeseTopping, GorgonzolaTopping, GreenPepperTopping,
-                            HamTopping, HerbSpiceTopping, HotSpicedBeefTopping,
-                            JalapenoPepperTopping, LeekTopping, MeatTopping,
-                            MixedSeafoodTopping, MozzarellaTopping, MushroomTopping,
-                            NutTopping, OliveTopping, OnionTopping, ParmesanTopping,
-                            PeperonataTopping, PeperoniSausageTopping, PepperTopping,
-                            PetitPoisTopping, PrawnsTopping, RocketTopping, SauceTopping,
-                            SlicedTomatoTopping, SpinachTopping, SundriedTomatoTopping,
+                            GoatsCheeseTopping, GorgonzolaTopping,
+                            GreenPepperTopping, HamTopping, HerbSpiceTopping,
+                            HotSpicedBeefTopping, JalapenoPepperTopping,
+                            LeekTopping, MeatTopping, MixedSeafoodTopping,
+                            MozzarellaTopping, MushroomTopping, NutTopping,
+                            OliveTopping, OnionTopping, ParmesanTopping,
+                            PeperonataTopping, PeperoniSausageTopping,
+                            PepperTopping, PetitPoisTopping, PrawnsTopping,
+                            RocketTopping, SauceTopping, SlicedTomatoTopping,
+                            SpinachTopping, SundriedTomatoTopping,
                             SweetPepperTopping, TomatoTopping, VegetableTopping),
                     disjoint(IceCream, Pizza, PizzaBase, PizzaTopping),
-                    disjoint(American, AmericanHot, Cajun, Capricciosa, Caprina,
-                            Fiorentina, FourSeasons, FruttiDiMare, Giardiniera, LaReine,
-                            Margherita, Mushroom, Napoletana, Parmense, PolloAdAstra,
-                            PrinceCarlo, QuattroFormaggi, Rosa, Siciliana,
-                            SloppyGiuseppe, Soho, UnclosedPizza, Veneziana),
+                    disjoint(American, AmericanHot, Cajun, Capricciosa,
+                            Caprina, Fiorentina, FourSeasons, FruttiDiMare,
+                            Giardiniera, LaReine, Margherita, Mushroom,
+                            Napoletana, Parmense, PolloAdAstra, PrinceCarlo,
+                            QuattroFormaggi, Rosa, Siciliana, SloppyGiuseppe,
+                            Soho, UnclosedPizza, Veneziana),
                     diff(America, England, France, Germany, Italy),
                     disjoint(Hot, Medium, Mild));
             return _pizza;
@@ -1137,7 +1229,8 @@ public class TestOntologies {
         }
     }
 
-    private static final OWLDataFactory dataFactory = OWLManager.getOWLDataFactory();
+    private static final OWLDataFactory dataFactory = OWLManager
+            .getOWLDataFactory();
 
     private static OWLClass Class(String i) {
         return dataFactory.getOWLClass(IRI(i));
@@ -1167,7 +1260,8 @@ public class TestOntologies {
         return dataFactory.getOWLDeclarationAxiom(entity);
     }
 
-    private static OWLObjectIntersectionOf and(OWLClassExpression... classExpressions) {
+    private static OWLObjectIntersectionOf and(
+            OWLClassExpression... classExpressions) {
         return dataFactory.getOWLObjectIntersectionOf(classExpressions);
     }
 
@@ -1208,7 +1302,8 @@ public class TestOntologies {
         return dataFactory.getOWLDataSomeValuesFrom(pe, dr);
     }
 
-    private static OWLDataHasValue has(OWLDataPropertyExpression pe, OWLLiteral literal) {
+    private static OWLDataHasValue has(OWLDataPropertyExpression pe,
+            OWLLiteral literal) {
         return dataFactory.getOWLDataHasValue(pe, literal);
     }
 
@@ -1217,7 +1312,8 @@ public class TestOntologies {
         return dataFactory.getOWLSubClassOfAxiom(subClass, superClass);
     }
 
-    private static OWLEquivalentClassesAxiom eq(OWLClassExpression... classExpressions) {
+    private static OWLEquivalentClassesAxiom eq(
+            OWLClassExpression... classExpressions) {
         return dataFactory.getOWLEquivalentClassesAxiom(classExpressions);
     }
 
@@ -1229,7 +1325,8 @@ public class TestOntologies {
     private static OWLSubObjectPropertyOfAxiom sub(
             OWLObjectPropertyExpression subProperty,
             OWLObjectPropertyExpression superProperty) {
-        return dataFactory.getOWLSubObjectPropertyOfAxiom(subProperty, superProperty);
+        return dataFactory.getOWLSubObjectPropertyOfAxiom(subProperty,
+                superProperty);
     }
 
     private static OWLInverseObjectPropertiesAxiom inverse(
@@ -1262,12 +1359,13 @@ public class TestOntologies {
         return dataFactory.getOWLTransitiveObjectPropertyAxiom(property);
     }
 
-    private static OWLDataPropertyRangeAxiom range(OWLDataPropertyExpression property,
-            OWLDataRange range) {
+    private static OWLDataPropertyRangeAxiom range(
+            OWLDataPropertyExpression property, OWLDataRange range) {
         return dataFactory.getOWLDataPropertyRangeAxiom(property, range);
     }
 
-    private static OWLDifferentIndividualsAxiom diff(OWLIndividual... individuals) {
+    private static OWLDifferentIndividualsAxiom diff(
+            OWLIndividual... individuals) {
         return dataFactory.getOWLDifferentIndividualsAxiom(individuals);
     }
 
@@ -1276,9 +1374,11 @@ public class TestOntologies {
         return dataFactory.getOWLClassAssertionAxiom(ce, ind);
     }
 
-    private static OWLAnnotationAssertionAxiom ann(OWLAnnotationProperty property,
-            OWLAnnotationSubject subject, OWLAnnotationValue value) {
-        return dataFactory.getOWLAnnotationAssertionAxiom(property, subject, value);
+    private static OWLAnnotationAssertionAxiom ann(
+            OWLAnnotationProperty property, OWLAnnotationSubject subject,
+            OWLAnnotationValue value) {
+        return dataFactory.getOWLAnnotationAssertionAxiom(property, subject,
+                value);
     }
 
     private static IRI IRI(String iri) {
@@ -1309,7 +1409,8 @@ public class TestOntologies {
             syntax = syntax(OWLManager.createOWLOntologyManager());
             siblings = siblings(OWLManager.createOWLOntologyManager());
             ondrejtest = ondrejtest(OWLManager.createOWLOntologyManager());
-            sequentialUnion = sequentialUnion(OWLManager.createOWLOntologyManager());
+            sequentialUnion = sequentialUnion(OWLManager
+                    .createOWLOntologyManager());
             pizza = pizza(OWLManager.createOWLOntologyManager());
             entire = entire(OWLManager.createOWLOntologyManager());
             // load a copy of pizza and patterned pizza on the same manager

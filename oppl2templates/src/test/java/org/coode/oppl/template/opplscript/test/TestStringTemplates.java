@@ -79,7 +79,7 @@ public class TestStringTemplates {
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf Thing BEGIN ADD ?x subClassOf Thing END;";
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new StringFormatReplacementStrategy(Collections.emptyList()),
                 parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
@@ -93,7 +93,7 @@ public class TestStringTemplates {
         ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf %s BEGIN ADD ?x subClassOf Thing END;";
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new StringFormatReplacementStrategy(Arrays.asList("Thing")),
                 parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
@@ -108,7 +108,7 @@ public class TestStringTemplates {
             ParsingStrategy<String, OPPLScript> parserCreationStrategy = new SimpleOPPLParserCreationStrategy(
                     ontologyManager, emptyOntology, null, ERROR_LISTENER);
             String template = "?x:CLASS SELECT ?x subClassOf %s BEGIN ADD ?x subClassOf Thing END;";
-            StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+            StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                     template, new StringFormatReplacementStrategy(
                             Collections.emptyList()), parserCreationStrategy);
             stringTemplate.replace();
@@ -129,7 +129,7 @@ public class TestStringTemplates {
         String template = "?x:CLASS SELECT ?x subClassOf ${Thing} BEGIN ADD ?x subClassOf Thing END;";
         Properties properties = new Properties();
         properties.setProperty("Thing", "Thing");
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new KeyBasedReplacementStrategy(properties),
                 parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
@@ -145,7 +145,7 @@ public class TestStringTemplates {
                 ontologyManager, emptyOntology, null, ERROR_LISTENER);
         String template = "?x:CLASS SELECT ?x subClassOf ${Thing} BEGIN ADD ?x subClassOf Thing END;";
         Properties properties = new Properties();
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new KeyBasedReplacementStrategy(properties),
                 parserCreationStrategy);
         stringTemplate.replace();
@@ -161,7 +161,7 @@ public class TestStringTemplates {
         String template = "?x:CLASS SELECT ?x subClassOf ${Thing} BEGIN ADD ?x subClassOf ${Thing} END;";
         Properties properties = new Properties();
         properties.setProperty("Thing", "Thing");
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new KeyBasedReplacementStrategy(properties),
                 parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();
@@ -179,7 +179,7 @@ public class TestStringTemplates {
         String template = "?x:CLASS SELECT ?x subClassOf ${ValuePartition} BEGIN ADD ?x subClassOf Thing END;";
         Properties properties = new Properties();
         properties.setProperty("ValuePartition", "ValorDaParticao");
-        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<OPPLScript>(
+        StringTemplate<OPPLScript> stringTemplate = new StringTemplate<>(
                 template, new KeyBasedReplacementStrategy(properties),
                 parserCreationStrategy);
         OPPLScript opplScript = stringTemplate.replace();

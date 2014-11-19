@@ -10,7 +10,7 @@ import java.util.List;
  * @param <O>
  *            type */
 public class ProgressiveSimilarityMeasure<O> implements SimilarityMeasure<O> {
-    private final List<SimilarityMeasure<O>> measureList = new ArrayList<SimilarityMeasure<O>>();
+    private final List<SimilarityMeasure<O>> measureList = new ArrayList<>();
 
     /** @param measures
      *            measures */
@@ -47,6 +47,6 @@ public class ProgressiveSimilarityMeasure<O> implements SimilarityMeasure<O> {
 
     /** @return the measureList */
     public final List<SimilarityMeasure<O>> getMeasureList() {
-        return new ArrayList<SimilarityMeasure<O>>(this.measureList);
+        return new ArrayList<>(this.measureList);
     }
 }

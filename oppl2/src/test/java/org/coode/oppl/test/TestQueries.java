@@ -1,6 +1,7 @@
 package org.coode.oppl.test;
 
 import static org.junit.Assert.*;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asList;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -64,7 +65,6 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.model.RemoveAxiom;
 
 @SuppressWarnings("javadoc")
 public class TestQueries {
@@ -156,7 +156,7 @@ public class TestQueries {
         // Clear test ontology
         clearOntology(o);
         List<InputVariable<?>> inputVariables = opplScript.getInputVariables();
-        Map<Variable<?>, Set<OWLObject>> bindings = new HashMap<Variable<?>, Set<OWLObject>>();
+        Map<Variable<?>, Set<OWLObject>> bindings = new HashMap<>();
         for (Variable<?> variable : inputVariables) {
             bindings.put(variable,
                     generateValues(variable, o.getOWLOntologyManager()));
@@ -193,14 +193,12 @@ public class TestQueries {
      * @param manager
      */
     private static void clearOntology(OWLOntology o) {
-        for (OWLAxiom axiom : o.getAxioms()) {
-            o.getOWLOntologyManager().applyChange(new RemoveAxiom(o, axiom));
-        }
+        o.removeAxioms(asList(o.axioms()));
     }
 
     private Set<OWLObject> generateValues(Variable<?> variable,
             OWLOntologyManager manager) {
-        Set<OWLObject> toReturn = new HashSet<OWLObject>();
+        Set<OWLObject> toReturn = new HashSet<>();
         int questionMarkIndex = variable.getName().indexOf('?');
         String fragment = questionMarkIndex != -1 ? variable.getName()
                 .substring(questionMarkIndex + 1) : variable.getName();
@@ -446,10 +444,10 @@ public class TestQueries {
                         .extractVariables(axiom);
                 OPPLQuery query = opplFactory.buildNewQuery(cs);
                 query.addAssertedAxiom(axiom);
-                ArrayList<OWLAxiomChange> actions = new ArrayList<OWLAxiomChange>();
+                ArrayList<OWLAxiomChange> actions = new ArrayList<>();
                 actions.add(new AddAxiom(testOntology, axiom));
                 OPPLScript opplScript = opplFactory.buildOPPLScript(cs,
-                        new ArrayList<Variable<?>>(variables), query, actions);
+                        new ArrayList<>(variables), query, actions);
                 testQuery(opplScript, testOntology);
             }
         }
@@ -538,8 +536,8 @@ public class TestQueries {
         changeExtractor.visit(opplScript);
         Set<BindingNode> checkLeaves = opplScript.getConstraintSystem()
                 .getLeaves();
-        final Set<OWLAxiom> correctResults = new HashSet<OWLAxiom>();
-        Set<OWLAxiom> queryAxioms = new HashSet<OWLAxiom>();
+        final Set<OWLAxiom> correctResults = new HashSet<>();
+        Set<OWLAxiom> queryAxioms = new HashSet<>();
         if (opplScript.getQuery() != null) {
             queryAxioms.addAll(opplScript.getQuery().getAssertedAxioms());
             queryAxioms.addAll(opplScript.getQuery().getAxioms());
@@ -564,7 +562,7 @@ public class TestQueries {
             int counter, ConstraintSystem cs) throws OPPLException {
         EnumSet<DescriptionType> descriptionTypes = EnumSet
                 .allOf(DescriptionType.class);
-        Set<OWLClassExpression> toReturn = new HashSet<OWLClassExpression>();
+        Set<OWLClassExpression> toReturn = new HashSet<>();
         for (DescriptionType descriptionType : descriptionTypes) {
             Variable<?> classVariable = cs.createVariable("?aClass_" + counter,
                     VariableTypeFactory.getCLASSVariableType(), null);
@@ -789,7 +787,7 @@ public class TestQueries {
         OWLIndividual anotherIndividual = dataFactory.getOWLNamedIndividual(IRI
                 .create(TEST_NS, "anotherIndividual"));
         ontologyManager.applyChange(new AddAxiom(testOntology, dataFactory
-                .getOWLSameIndividualAxiom(new HashSet<OWLIndividual>(Arrays
+                .getOWLSameIndividualAxiom(new HashSet<>(Arrays
                         .asList(anIndividual, anotherIndividual)))));
         String opplString = "?x:INDIVIDUAL, ?y:INDIVIDUAL SELECT ASSERTED ?x SameAs ?y BEGIN ADD ?x SameAs ?y END;";
         OPPLScript opplScript = parseScript(opplString, testOntology);

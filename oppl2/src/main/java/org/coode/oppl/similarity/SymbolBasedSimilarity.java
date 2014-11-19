@@ -41,9 +41,9 @@ public class SymbolBasedSimilarity implements SimilarityMeasure<OWLObject> {
         double toReturn = anObjectSymbols.isEmpty() && anotherObjectSymbols.isEmpty() ? 0
                 : 1;
         if (toReturn > 0) {
-            Set<OWLObject> intersection = new HashSet<OWLObject>(anObjectSymbols);
+            Set<OWLObject> intersection = new HashSet<>(anObjectSymbols);
             intersection.retainAll(anotherObjectSymbols);
-            Set<OWLObject> union = new HashSet<OWLObject>(anObjectSymbols);
+            Set<OWLObject> union = new HashSet<>(anObjectSymbols);
             union.addAll(anotherObjectSymbols);
             toReturn = (double) intersection.size() / (double) union.size();
         }

@@ -124,7 +124,7 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
         T entity = this.getOWLEntity(type, anIRI);
         OWLDeclarationAxiom declarationAxiom = factory.getOWLDataFactory()
                 .getOWLDeclarationAxiom(entity);
-        List<OWLOntologyChange> changes = new ArrayList<OWLOntologyChange>();
+        List<OWLOntologyChange> changes = new ArrayList<>();
         changes.add(new AddAxiom(factory.getOntology(), declarationAxiom));
         if (!realShortName.equals(shortName)) {
             // add a label only if the shortname passed in input was not
@@ -142,7 +142,7 @@ public class EntityFactory implements org.coode.oppl.entity.OWLEntityFactory {
                     owlAnnotationAssertionAxiom);
             changes.add(extraChange);
         }
-        return new OWLEntityCreationSet<T>(entity, changes);
+        return new OWLEntityCreationSet<>(entity, changes);
     }
 
     @Override

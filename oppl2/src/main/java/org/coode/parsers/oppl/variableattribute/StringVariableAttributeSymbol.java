@@ -50,7 +50,7 @@ public abstract class StringVariableAttributeSymbol extends
     public static <O extends OWLObject> StringVariableAttributeSymbol getGroup(
             RegexpGeneratedVariable<O> v, final int index) {
         return new StringVariableAttributeSymbol(String.format("%s.%s(%d)", v.getName(),
-                AttributeName.GROUPS, index), new GroupVariableAttribute<O>(v, index)) {
+                AttributeName.GROUPS, index), new GroupVariableAttribute<>(v, index)) {
             @Override
             public String toString() {
                 return String.format("%s.GROUPS(%d)", getName(), index);

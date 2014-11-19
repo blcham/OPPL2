@@ -23,11 +23,13 @@
 package org.coode.oppl.querymatching;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.add;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.coode.oppl.ConstraintSystem;
 import org.coode.oppl.exceptions.RuntimeExceptionHandler;
@@ -48,11 +50,11 @@ public class AssertedTreeSearchSingleAxiomQuery extends AbstractAxiomQuery {
      * @param runtimeExceptionHandler
      *        runtimeExceptionHandler
      */
-    public AssertedTreeSearchSingleAxiomQuery(Set<OWLOntology> ontologies,
+    public AssertedTreeSearchSingleAxiomQuery(Stream<OWLOntology> ontologies,
             ConstraintSystem constraintSystem,
             RuntimeExceptionHandler runtimeExceptionHandler) {
         super(runtimeExceptionHandler, constraintSystem);
-        this.ontologies.addAll(checkNotNull(ontologies, "ontologies"));
+        add(this.ontologies, checkNotNull(ontologies, "ontologies"));
     }
 
     /**

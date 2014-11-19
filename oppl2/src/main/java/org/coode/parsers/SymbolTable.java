@@ -51,7 +51,7 @@ public class SymbolTable {
 
     private final Scope globalScope;
     protected final OWLDataFactory df;
-    private final Map<String, Symbol> symbols = new HashMap<String, Symbol>();
+    private final Map<String, Symbol> symbols = new HashMap<>();
     private ErrorListener errorListener;
     private final OWLTypeOnlyVisitor classDetector = new OWLTypeOnlyVisitor() {
         @Override
@@ -1149,7 +1149,7 @@ public class SymbolTable {
             getOneOf(CommonTree expression, ManchesterOWLSyntaxTree[] individuals) {
         boolean allFine = true;
         OWLObjectOneOf toReturn = null;
-        List<OWLIndividual> individualList = new ArrayList<OWLIndividual>(
+        List<OWLIndividual> individualList = new ArrayList<>(
                 individuals.length);
         for (ManchesterOWLSyntaxTree individual : individuals) {
             if (individual.getEvalType() != OWLType.OWL_INDIVIDUAL) {
@@ -1559,9 +1559,9 @@ public class SymbolTable {
             ManchesterOWLSyntaxTree[] conjuncts) {
         boolean allFine = true;
         OWLObject toReturn = null;
-        List<OWLClassExpression> conjunctList = new ArrayList<OWLClassExpression>(
+        List<OWLClassExpression> conjunctList = new ArrayList<>(
                 conjuncts.length);
-        List<OWLDataRange> owlDataRangeList = new ArrayList<OWLDataRange>(
+        List<OWLDataRange> owlDataRangeList = new ArrayList<>(
                 conjuncts.length);
         Type rest = null;
         for (ManchesterOWLSyntaxTree conjunct : conjuncts) {
@@ -1602,7 +1602,7 @@ public class SymbolTable {
         OWLPropertyChain toReturn = null;
         boolean allFine = chainItems.length >= 2;
         if (allFine) {
-            List<OWLObjectPropertyExpression> items = new ArrayList<OWLObjectPropertyExpression>(
+            List<OWLObjectPropertyExpression> items = new ArrayList<>(
                     chainItems.length);
             for (ManchesterOWLSyntaxTree item : chainItems) {
                 if (item.getEvalType() == null || !item.getEvalType().accept(opDetector)) {
@@ -1632,7 +1632,7 @@ public class SymbolTable {
             OWLObjectPropertyExpression firstPropertyExpression,
             OWLObjectPropertyExpression secondPropertyExpression,
             OWLObjectPropertyExpression... others) {
-        List<OWLObjectPropertyExpression> a = new ArrayList<OWLObjectPropertyExpression>(
+        List<OWLObjectPropertyExpression> a = new ArrayList<>(
                 Arrays.asList(others));
         a.add(0, secondPropertyExpression);
         a.add(0, firstPropertyExpression);
@@ -1648,9 +1648,9 @@ public class SymbolTable {
             ManchesterOWLSyntaxTree[] disjuncts) {
         boolean allFine = true;
         OWLObject toReturn = null;
-        List<OWLClassExpression> disjunctList = new ArrayList<OWLClassExpression>(
+        List<OWLClassExpression> disjunctList = new ArrayList<>(
                 disjuncts.length);
-        List<OWLDataRange> owlDataRangeList = new ArrayList<OWLDataRange>(
+        List<OWLDataRange> owlDataRangeList = new ArrayList<>(
                 disjuncts.length);
         Type rest = null;
         for (ManchesterOWLSyntaxTree disjunct : disjuncts) {
@@ -1883,7 +1883,7 @@ public class SymbolTable {
             reportIncompatibleSymbolType(anotherIndividual, expression);
         }
         if (rightKinds) {
-            toReturn = df.getOWLSameIndividualAxiom(new HashSet<OWLIndividual>(Arrays
+            toReturn = df.getOWLSameIndividualAxiom(new HashSet<>(Arrays
                     .asList((OWLIndividual) anIndividual.getOWLObject(),
                             (OWLIndividual) anotherIndividual.getOWLObject())));
         }
@@ -2281,7 +2281,7 @@ public class SymbolTable {
      *             if the input is {@code null}. */
     public Set<String> match(String prefix) {
         Set<Symbol> matches = getGlobalScope().match(prefix);
-        Set<String> toReturn = new HashSet<String>(matches.size());
+        Set<String> toReturn = new HashSet<>(matches.size());
         for (Symbol symbol : matches) {
             toReturn.add(symbol.getName());
         }
@@ -2307,7 +2307,7 @@ public class SymbolTable {
      *            type
      * @return completions */
     public Set<String> getCompletions(Type type) {
-        Set<String> toReturn = new HashSet<String>();
+        Set<String> toReturn = new HashSet<>();
         if (OWLType.isClassExpression(type)) {
             toReturn.addAll(getOWLClassCompletions());
         }
@@ -2327,7 +2327,7 @@ public class SymbolTable {
      *            type
      * @return property completions */
     public Set<String> getOWLPropertyCompletions(Type type) {
-        Set<String> toReturn = new HashSet<String>();
+        Set<String> toReturn = new HashSet<>();
         if (OWLType.isObjectPropertyExpression(type)) {
             toReturn.addAll(getOWLObjectPropertyCompletions());
         }
@@ -2346,7 +2346,7 @@ public class SymbolTable {
      *            types
      * @return all completions */
     public Set<String> getAllCompletions(Type... types) {
-        Set<String> toReturn = new HashSet<String>();
+        Set<String> toReturn = new HashSet<>();
         for (Type type : types) {
             for (Symbol symbol : getGlobalScope().getAllSymbols(type)) {
                 toReturn.add(symbol.getName());
@@ -2397,7 +2397,7 @@ public class SymbolTable {
      * 
      * @return a Set of Symbol elements. */
     public Set<Symbol> getDefinedSymbols() {
-        return new HashSet<Symbol>(symbols.values());
+        return new HashSet<>(symbols.values());
     }
 
     /** dispose */
@@ -2461,7 +2461,7 @@ public class SymbolTable {
         if (dataType.getEvalType() != OWLType.OWL_DATA_TYPE) {
             reportIncompatibleSymbolType(dataType, parentExpression);
         } else {
-            Set<OWLFacetRestriction> facetRestrictions = new HashSet<OWLFacetRestriction>(
+            Set<OWLFacetRestriction> facetRestrictions = new HashSet<>(
                     facets.length);
             boolean allFine = true;
             for (ManchesterOWLSyntaxTree facet : facets) {
@@ -2496,7 +2496,7 @@ public class SymbolTable {
         if (dataType.getEvalType() != OWLType.OWL_DATA_TYPE) {
             reportIncompatibleSymbolType(dataType, parentExpression);
         } else {
-            Set<OWLFacetRestriction> facetRestrictions = new HashSet<OWLFacetRestriction>(
+            Set<OWLFacetRestriction> facetRestrictions = new HashSet<>(
                     facets.length);
             boolean allFine = true;
             for (ManchesterOWLSyntaxTree facet : facets) {
@@ -2560,7 +2560,7 @@ public class SymbolTable {
             ce = (OWLClassExpression) node.getOWLObject();
             boolean allFine = true;
             Iterator<ManchesterOWLSyntaxTree> iterator = propertyExpressions.iterator();
-            Set<OWLPropertyExpression> pes = new HashSet<OWLPropertyExpression>();
+            Set<OWLPropertyExpression> pes = new HashSet<>();
             while (allFine && iterator.hasNext()) {
                 ManchesterOWLSyntaxTree propertyNode = iterator.next();
                 allFine = propertyNode.getEvalType() != null

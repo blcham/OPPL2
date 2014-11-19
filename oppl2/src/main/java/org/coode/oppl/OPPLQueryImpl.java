@@ -46,7 +46,6 @@ import org.coode.oppl.queryplanner.QueryPlannerItem;
 import org.coode.oppl.rendering.ManchesterSyntaxRenderer;
 import org.coode.oppl.utils.VariableExtractor;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyChangeListener;
@@ -55,23 +54,28 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
 
 /** @author Luigi Iannone */
 public class OPPLQueryImpl implements OPPLQuery {
-    private final List<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
-    private final List<OWLAxiom> assertedAxioms = new ArrayList<OWLAxiom>();
-    private final Set<AbstractConstraint> constraints = new HashSet<AbstractConstraint>();
+
+    private final List<OWLAxiom> axioms = new ArrayList<>();
+    private final List<OWLAxiom> assertedAxioms = new ArrayList<>();
+    private final Set<AbstractConstraint> constraints = new HashSet<>();
     private final ConstraintSystem constraintSystem;
     private boolean dirty = true;
     private final OWLOntologyChangeListener listener = new OWLOntologyChangeListener() {
+
         @Override
-        public void ontologiesChanged(List<? extends OWLOntologyChange> changes) {
+        public void
+                ontologiesChanged(List<? extends OWLOntologyChange> changes) {
             OPPLQueryImpl.this.setDirty(true);
         }
     };
     private final OPPLAbstractFactory factory;
 
-    /** @param query
-     *            query
+    /**
+     * @param query
+     *        query
      * @param factory
-     *            factory */
+     *        factory
+     */
     public OPPLQueryImpl(OPPLQuery query, OPPLAbstractFactory factory) {
         this(query.getConstraintSystem(), factory);
         for (OWLAxiom assertedAxiom : query.getAssertedAxioms()) {
@@ -85,13 +89,18 @@ public class OPPLQueryImpl implements OPPLQuery {
         }
     }
 
-    /** @param constraintSystem
-     *            constraintSystem
+    /**
+     * @param constraintSystem
+     *        constraintSystem
      * @param factory
-     *            factory */
-    public OPPLQueryImpl(ConstraintSystem constraintSystem, OPPLAbstractFactory factory) {
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
-        constraintSystem.getOntologyManager().addOntologyChangeListener(listener);
+     *        factory
+     */
+    public OPPLQueryImpl(ConstraintSystem constraintSystem,
+            OPPLAbstractFactory factory) {
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
+        constraintSystem.getOntologyManager().addOntologyChangeListener(
+                listener);
         this.factory = checkNotNull(factory);
     }
 
@@ -115,17 +124,17 @@ public class OPPLQueryImpl implements OPPLQuery {
 
     @Override
     public List<OWLAxiom> getAxioms() {
-        return new ArrayList<OWLAxiom>(axioms);
+        return new ArrayList<>(axioms);
     }
 
     @Override
     public List<OWLAxiom> getAssertedAxioms() {
-        return new ArrayList<OWLAxiom>(assertedAxioms);
+        return new ArrayList<>(assertedAxioms);
     }
 
     @Override
     public List<AbstractConstraint> getConstraints() {
-        return new ArrayList<AbstractConstraint>(constraints);
+        return new ArrayList<>(constraints);
     }
 
     @Override
@@ -274,7 +283,8 @@ public class OPPLQueryImpl implements OPPLQuery {
         result = prime * result
                 + (assertedAxioms == null ? 0 : assertedAxioms.hashCode());
         result = prime * result + (axioms == null ? 0 : axioms.hashCode());
-        result = prime * result + (constraints == null ? 0 : constraints.hashCode());
+        result = prime * result
+                + (constraints == null ? 0 : constraints.hashCode());
         return result;
     }
 
@@ -340,14 +350,16 @@ public class OPPLQueryImpl implements OPPLQuery {
         }
     }
 
-    /** @param runtimeExceptionHandler
-     *            runtimeExceptionHandler
+    /**
+     * @param runtimeExceptionHandler
+     *        runtimeExceptionHandler
      * @param resetConstraintSystem
-     *            resetConstraintSystem
+     *        resetConstraintSystem
      * @param executionMonitor
-     *            executionMonitor
+     *        executionMonitor
      * @throws OWLRuntimeException
-     *             OWLRuntimeException */
+     *         OWLRuntimeException
+     */
     private void doExecute(RuntimeExceptionHandler runtimeExceptionHandler,
             boolean resetConstraintSystem, ExecutionMonitor executionMonitor)
             throws OWLRuntimeException {
@@ -355,10 +367,10 @@ public class OPPLQueryImpl implements OPPLQuery {
             getConstraintSystem().reset();
         }
         Set<BindingNode> currentLeaves = getConstraintSystem().getLeaves();
-        List<QueryPlannerItem> queryPlannerItems = new ArrayList<QueryPlannerItem>();
+        List<QueryPlannerItem> queryPlannerItems = new ArrayList<>();
         for (OWLAxiom axiom : assertedAxioms) {
-            queryPlannerItems.add(new AssertedAxiomPlannerItem(getConstraintSystem(),
-                    axiom));
+            queryPlannerItems.add(new AssertedAxiomPlannerItem(
+                    getConstraintSystem(), axiom));
         }
         for (OWLAxiom axiom : axioms) {
             // TODO: can be optimised using de-composition in simpler axioms see
@@ -370,13 +382,16 @@ public class OPPLQueryImpl implements OPPLQuery {
         final ComplexityEstimate complexityEstimate = new ComplexityEstimate(
                 constraintSystem, runtimeExceptionHandler);
         Comparator<QueryPlannerItem> comparator = new Comparator<QueryPlannerItem>() {
+
             @Override
-            public int compare(QueryPlannerItem anItem, QueryPlannerItem anotherItem) {
+            public int compare(QueryPlannerItem anItem,
+                    QueryPlannerItem anotherItem) {
                 int toReturn = 0;
                 if (anItem == null) {
                     toReturn = anotherItem == null ? toReturn : -1;
                 } else {
-                    int difference = (int) Math.signum(anItem.accept(complexityEstimate)
+                    int difference = (int) Math.signum(anItem
+                            .accept(complexityEstimate)
                             - anotherItem.accept(complexityEstimate));
                     toReturn = difference == 0 ? anItem.hashCode()
                             - anotherItem.hashCode() : difference;
@@ -385,20 +400,21 @@ public class OPPLQueryImpl implements OPPLQuery {
             }
         };
         Collections.sort(queryPlannerItems, comparator);
-        int increment = (int) Math.ceil((double) 100 / (double) queryPlannerItems.size());
+        int increment = (int) Math.ceil((double) 100
+                / (double) queryPlannerItems.size());
         int progress = 0;
         // I want to sort the constraints separately as their matching can only
         // happen on existing leaves.
-        List<ConstraintQueryPlannerItem> constraintsItems = new ArrayList<ConstraintQueryPlannerItem>();
+        List<ConstraintQueryPlannerItem> constraintsItems = new ArrayList<>();
         for (AbstractConstraint c : constraints) {
-            constraintsItems
-                    .add(new ConstraintQueryPlannerItem(getConstraintSystem(), c));
+            constraintsItems.add(new ConstraintQueryPlannerItem(
+                    getConstraintSystem(), c));
         }
         Iterator<QueryPlannerItem> iterator = queryPlannerItems.iterator();
         while (!executionMonitor.isCancelled() && iterator.hasNext()) {
             QueryPlannerItem queryPlannerItem = iterator.next();
-            currentLeaves = queryPlannerItem.match(currentLeaves, executionMonitor,
-                    runtimeExceptionHandler);
+            currentLeaves = queryPlannerItem.match(currentLeaves,
+                    executionMonitor, runtimeExceptionHandler);
             // Now I check the constraints
             for (int i = 0; i < constraintsItems.size();) {
                 ConstraintQueryPlannerItem c = constraintsItems.get(i);
@@ -437,24 +453,29 @@ public class OPPLQueryImpl implements OPPLQuery {
             final VariableExtractor variableExtractor = new VariableExtractor(
                     OPPLQueryImpl.this.getConstraintSystem(), false);
             found = constraint.accept(new ConstraintVisitorEx<Boolean>() {
+
                 @Override
                 public Boolean visit(InequalityConstraint ic) {
-                    OWLObject instantiatedExpression = ic.getExpression().accept(
-                            instantiator);
-                    return bindingNode.getAssignmentValue(ic.getVariable(), parameters) == null
-                            || !variableExtractor
-                                    .extractVariables(instantiatedExpression).isEmpty();
+                    OWLObject instantiatedExpression = ic.getExpression()
+                            .accept(instantiator);
+                    return bindingNode.getAssignmentValue(ic.getVariable(),
+                            parameters) == null
+                            || !variableExtractor.extractVariables(
+                                    instantiatedExpression).isEmpty();
                 }
 
                 @Override
-                public Boolean visit(InCollectionConstraint<? extends OWLObject> icc) {
+                public Boolean visit(
+                        InCollectionConstraint<? extends OWLObject> icc) {
                     for (OWLObject owlObject : icc.getCollection()) {
                         OWLObject instantiated = owlObject.accept(instantiator);
-                        if (!variableExtractor.extractVariables(instantiated).isEmpty()) {
+                        if (!variableExtractor.extractVariables(instantiated)
+                                .isEmpty()) {
                             return true;
                         }
                     }
-                    return bindingNode.getAssignmentValue(icc.getVariable(), parameters) == null;
+                    return bindingNode.getAssignmentValue(icc.getVariable(),
+                            parameters) == null;
                 }
 
                 @Override
@@ -462,17 +483,19 @@ public class OPPLQueryImpl implements OPPLQuery {
                     OPPLFunction<Pattern> expression = rc.getExpression();
                     for (Variable<?> variable : variableExtractor
                             .extractVariables(expression)) {
-                        if (bindingNode.getAssignmentValue(variable, parameters) == null) {
+                        if (bindingNode
+                                .getAssignmentValue(variable, parameters) == null) {
                             return true;
                         }
                     }
-                    return bindingNode.getAssignmentValue(rc.getVariable(), parameters) == null;
+                    return bindingNode.getAssignmentValue(rc.getVariable(),
+                            parameters) == null;
                 }
 
                 @Override
                 public Boolean visit(NAFConstraint nafConstraint) {
-                    OWLAxiom instantiatedAxiom = (OWLAxiom) nafConstraint.getAxiom()
-                            .accept(instantiator);
+                    OWLAxiom instantiatedAxiom = (OWLAxiom) nafConstraint
+                            .getAxiom().accept(instantiator);
                     Set<Variable<?>> extractedVariables = variableExtractor
                             .extractVariables(instantiatedAxiom);
                     return !extractedVariables.isEmpty();
@@ -487,8 +510,10 @@ public class OPPLQueryImpl implements OPPLQuery {
         return dirty;
     }
 
-    /** @param dirty
-     *            the dirty to set */
+    /**
+     * @param dirty
+     *        the dirty to set
+     */
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

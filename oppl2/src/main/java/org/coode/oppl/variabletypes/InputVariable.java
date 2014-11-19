@@ -127,6 +127,6 @@ public class InputVariable<O extends OWLObject> implements Variable<O> {
 
     static <P extends OWLObject> InputVariable<P> getInputVariable(String name,
             VariableType<P> type, VariableScope<?> variableScope) {
-        return new InputVariable<P>(name, type, variableScope);
+        return new InputVariable<>(name, type, variableScope);
     }
 }

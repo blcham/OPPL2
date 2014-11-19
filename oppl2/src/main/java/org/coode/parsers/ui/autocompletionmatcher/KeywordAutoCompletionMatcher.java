@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * 
  * @author Luigi Iannone */
 public final class KeywordAutoCompletionMatcher implements AutoCompletionMatcher {
-    private final Set<String> keywords = new HashSet<String>();
+    private final Set<String> keywords = new HashSet<>();
 
     /** @param keywords
      *            keywords */
@@ -26,7 +26,7 @@ public final class KeywordAutoCompletionMatcher implements AutoCompletionMatcher
 
     @Override
     public List<String> getMatches(String string2Complete) {
-        List<String> toReturn = new ArrayList<String>();
+        List<String> toReturn = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\A" + string2Complete + ".*",
                 Pattern.CASE_INSENSITIVE);
         for (String kw : keywords) {

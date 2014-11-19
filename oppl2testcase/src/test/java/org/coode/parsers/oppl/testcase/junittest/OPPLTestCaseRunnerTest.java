@@ -19,7 +19,6 @@ import org.coode.parsers.oppl.testcase.TestCaseRunner;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
@@ -27,7 +26,10 @@ import uk.ac.manchester.cs.jfact.JFactFactory;
 
 @SuppressWarnings("javadoc")
 public class OPPLTestCaseRunnerTest {
-    private final class JunitConfigShouldFailTestCaseRunner extends TestCaseRunner {
+
+    private final class JunitConfigShouldFailTestCaseRunner extends
+            TestCaseRunner {
+
         /** @param opplTestCase */
         public JunitConfigShouldFailTestCaseRunner(OPPLTestCase opplTestCase) {
             super(opplTestCase);
@@ -54,6 +56,7 @@ public class OPPLTestCaseRunnerTest {
     }
 
     private final class JunitShouldFailTestCaseRunner extends TestCaseRunner {
+
         /** @param opplTestCase */
         public JunitShouldFailTestCaseRunner(OPPLTestCase opplTestCase) {
             super(opplTestCase);
@@ -78,19 +81,21 @@ public class OPPLTestCaseRunnerTest {
     }
 
     static final ErrorListener ERROR_LISTENER = new ErrorListener() {
+
         @Override
         public void unrecognisedSymbol(CommonTree t) {
             throw new RuntimeException(t.toString());
         }
 
         @Override
-        public void
-                incompatibleSymbolType(CommonTree t, Type type, CommonTree expression) {
+        public void incompatibleSymbolType(CommonTree t, Type type,
+                CommonTree expression) {
             throw new RuntimeException(t.toString());
         }
 
         @Override
-        public void incompatibleSymbols(CommonTree parentExpression, CommonTree... trees) {
+        public void incompatibleSymbols(CommonTree parentExpression,
+                CommonTree... trees) {
             throw new RuntimeException(parentExpression.toString());
         }
 
@@ -105,7 +110,8 @@ public class OPPLTestCaseRunnerTest {
         }
 
         @Override
-        public void recognitionException(RecognitionException e, String... tokenNames) {
+        public void recognitionException(RecognitionException e,
+                String... tokenNames) {
             throw new RuntimeException(e);
         }
 
@@ -115,11 +121,13 @@ public class OPPLTestCaseRunnerTest {
         }
 
         @Override
-        public void reportThrowable(Throwable t, int line, int charPosInLine, int length) {
+        public void reportThrowable(Throwable t, int line, int charPosInLine,
+                int length) {
             throw new RuntimeException(t);
         }
     };
     private static final RuntimeExceptionHandler HANDLER = new RuntimeExceptionHandler() {
+
         @Override
         public void handlePatternSyntaxExcpetion(PatternSyntaxException e) {
             ERROR_LISTENER.reportThrowable(e, 0, 0, 0);
@@ -152,11 +160,6 @@ public class OPPLTestCaseRunnerTest {
         String testCase = "testOneAssertion; INFERENCE; ?x:CLASS SELECT ?x subClassOf InterestingPizza WHERE ?x!=InterestingPizza, FAIL ?x equivalentTo Nothing  ASSERT count(?x) = 20; ?x count is not 20;";
         JFactFactory reasonerFactory = new JFactFactory();
         OWLReasoner reasoner = reasonerFactory.createReasoner(pizza);
-        for (OWLClass c : pizza.getClassesInSignature()) {
-            if (c.getIRI().toString().contains("Interesting")) {
-                System.out.println(c + " " + reasoner.getSubClasses(c, true));
-            }
-        }
         ParserFactory parserFactory = new ParserFactory(pizza,
                 pizza.getOWLOntologyManager(), reasoner);
         OPPLTestCaseParser parser = parserFactory.build(ERROR_LISTENER);
@@ -181,7 +184,8 @@ public class OPPLTestCaseRunnerTest {
                 pizza.getOWLOntologyManager());
         OPPLTestCaseParser parser = parserFactory.build(ERROR_LISTENER);
         OPPLTestCase opplTestCase = parser.parse(testCase, HANDLER);
-        TestCaseRunner runner = new JunitConfigShouldFailTestCaseRunner(opplTestCase);
+        TestCaseRunner runner = new JunitConfigShouldFailTestCaseRunner(
+                opplTestCase);
         runner.run();
     }
 
@@ -191,8 +195,8 @@ public class OPPLTestCaseRunnerTest {
 
     /** @param opplTestCase */
     private void runTestCase(OPPLTestCase opplTestCase, boolean shouldSucceed) {
-        TestCaseRunner runner = shouldSucceed ? new JUnitTestCaseRunner(opplTestCase)
-                : new JunitShouldFailTestCaseRunner(opplTestCase);
+        TestCaseRunner runner = shouldSucceed ? new JUnitTestCaseRunner(
+                opplTestCase) : new JunitShouldFailTestCaseRunner(opplTestCase);
         runner.run();
     }
 }

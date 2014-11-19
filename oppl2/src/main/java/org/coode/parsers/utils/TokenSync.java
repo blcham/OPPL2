@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 public class TokenSync {
     private class TokenMap {
         private final String path;
-        private final Map<Integer, String> map = new HashMap<Integer, String>();
-        private final Map<String, Integer> inverseMap = new HashMap<String, Integer>();
+        private final Map<Integer, String> map = new HashMap<>();
+        private final Map<String, Integer> inverseMap = new HashMap<>();
         private int max = 0;
 
         /** @param path
@@ -79,7 +79,7 @@ public class TokenSync {
 
         protected void write(String outPath) throws FileNotFoundException {
             PrintWriter writer = new PrintWriter(new File(outPath));
-            Set<Integer> keySet = new TreeSet<Integer>(map.keySet());
+            Set<Integer> keySet = new TreeSet<>(map.keySet());
             for (Integer type : keySet) {
                 writer.println(map.get(type) + "=" + type);
             }
@@ -87,7 +87,7 @@ public class TokenSync {
         }
 
         public Set<Integer> getKeys() {
-            return new HashSet<Integer>(map.keySet());
+            return new HashSet<>(map.keySet());
         }
 
         public String getTokenText(int key) {
@@ -173,7 +173,7 @@ public class TokenSync {
     }
 
     private final TokenMap referenceTokenMap;
-    private final List<TokenMap> toSync = new ArrayList<TokenMap>();
+    private final List<TokenMap> toSync = new ArrayList<>();
     private boolean synced = false;
 
     /** @param referencePath
@@ -228,7 +228,7 @@ public class TokenSync {
         if (args.length >= 2) {
             String referenceTokenFileName = args[0];
             String toSync = args[1];
-            List<String> asList = new ArrayList<String>(Arrays.asList(args));
+            List<String> asList = new ArrayList<>(Arrays.asList(args));
             asList.remove(referenceTokenFileName);
             asList.remove(toSync);
             TokenSync tokenSync = new TokenSync(referenceTokenFileName, toSync,

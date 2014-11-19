@@ -23,6 +23,7 @@
 package org.coode.oppl;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asList;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 /** @author Luigi Iannone */
 public class OPPLFactory implements OPPLAbstractFactory {
+
     private final OWLOntologyManager ontologyManager;
     private VariableScopeChecker variableScopeChecker = null;
     private final OWLReasoner reasoner;
@@ -54,14 +56,16 @@ public class OPPLFactory implements OPPLAbstractFactory {
     public static final IRI DEFAULT_ONTOLOGY_IRI = IRI
             .create("http://www.coode.org/oppl");
 
-    /** @param ontologyManager
-     *            ontologyManager
+    /**
+     * @param ontologyManager
+     *        ontologyManager
      * @param ontology
-     *            ontology
+     *        ontology
      * @param reasoner
-     *            reasoner */
-    public OPPLFactory(OWLOntologyManager ontologyManager, OWLOntology ontology,
-            OWLReasoner reasoner) {
+     *        reasoner
+     */
+    public OPPLFactory(OWLOntologyManager ontologyManager,
+            OWLOntology ontology, OWLReasoner reasoner) {
         this.ontologyManager = ontologyManager;
         this.ontology = ontology;
         this.reasoner = reasoner;
@@ -70,8 +74,8 @@ public class OPPLFactory implements OPPLAbstractFactory {
 
     private OWLEntityChecker defaultEntityChecker() {
         BidirectionalShortFormProviderAdapter bshp = new BidirectionalShortFormProviderAdapter(
-                ontologyManager.getOntologies(), new OPPLShortFormProvider(
-                        new SimpleShortFormProvider()));
+                asList(ontologyManager.ontologies()),
+                new OPPLShortFormProvider(new SimpleShortFormProvider()));
         // XXX fix for missing Thing
         bshp.add(ontologyManager.getOWLDataFactory().getOWLThing());
         bshp.add(ontologyManager.getOWLDataFactory().getOWLNothing());
@@ -96,8 +100,8 @@ public class OPPLFactory implements OPPLAbstractFactory {
 
     @Override
     public OWLEntityRenderer getOWLEntityRenderer(ConstraintSystem cs) {
-        return new VariableOWLEntityRenderer(checkNotNull(cs, "constraint system"),
-                new OWLEntityRendererImpl());
+        return new VariableOWLEntityRenderer(checkNotNull(cs,
+                "constraint system"), new OWLEntityRendererImpl());
     }
 
     @Override
@@ -106,17 +110,17 @@ public class OPPLFactory implements OPPLAbstractFactory {
     }
 
     @Override
-    public OPPLScript
-            buildOPPLScript(ConstraintSystem constraintSystem1,
-                    List<Variable<?>> variables, OPPLQuery opplQuery,
-                    List<OWLAxiomChange> actions) {
+    public OPPLScript buildOPPLScript(ConstraintSystem constraintSystem1,
+            List<Variable<?>> variables, OPPLQuery opplQuery,
+            List<OWLAxiomChange> actions) {
         if (variables == null || variables.contains(null)) {
             throw new IllegalArgumentException("Invalid variables");
         }
         if (actions == null || actions.contains(null)) {
             throw new IllegalArgumentException("Invalid actions");
         }
-        return new OPPLScriptImpl(constraintSystem1, variables, opplQuery, actions, this);
+        return new OPPLScriptImpl(constraintSystem1, variables, opplQuery,
+                actions, this);
     }
 
     @Override
@@ -126,8 +130,9 @@ public class OPPLFactory implements OPPLAbstractFactory {
 
     @Override
     public ConstraintSystem createConstraintSystem() {
-        return reasoner == null ? new ConstraintSystem(ontology, ontologyManager, this)
-                : new ConstraintSystem(ontology, ontologyManager, reasoner, this);
+        return reasoner == null ? new ConstraintSystem(ontology,
+                ontologyManager, this) : new ConstraintSystem(ontology,
+                ontologyManager, reasoner, this);
     }
 
     @Override
@@ -136,7 +141,8 @@ public class OPPLFactory implements OPPLAbstractFactory {
     }
 
     @Override
-    public ManchesterSyntaxRenderer getManchesterSyntaxRenderer(ConstraintSystem cs) {
+    public ManchesterSyntaxRenderer getManchesterSyntaxRenderer(
+            ConstraintSystem cs) {
         return new ManchesterSyntaxRenderer(new OPPLShortFormProvider(
                 new SimpleShortFormProvider()));
     }
@@ -149,11 +155,13 @@ public class OPPLFactory implements OPPLAbstractFactory {
     @Override
     public OPPLScript importOPPLScript(OPPLScript opplScript) {
         ConstraintSystem newConstraintSystem = createConstraintSystem();
-        for (Variable<?> variable : opplScript.getConstraintSystem().getVariables()) {
+        for (Variable<?> variable : opplScript.getConstraintSystem()
+                .getVariables()) {
             newConstraintSystem.importVariable(variable);
         }
-        return new OPPLScriptImpl(newConstraintSystem, opplScript.getVariables(),
-                opplScript.getQuery(), opplScript.getActions(), this, true);
+        return new OPPLScriptImpl(newConstraintSystem,
+                opplScript.getVariables(), opplScript.getQuery(),
+                opplScript.getActions(), this, true);
     }
 
     @Override

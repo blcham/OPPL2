@@ -71,7 +71,7 @@ public class BindingNodeCountAssertionExpression implements AssertionExpression<
     public String toString() {
         StringBuilder b = new StringBuilder("count(");
         boolean first = true;
-        TreeSet<Assignment> sortedAssignment = new TreeSet<Assignment>(
+        TreeSet<Assignment> sortedAssignment = new TreeSet<>(
                 new Comparator<Assignment>() {
                     @Override
                     public int compare(Assignment o1, Assignment o2) {

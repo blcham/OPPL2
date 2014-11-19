@@ -21,7 +21,7 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
  *            type */
 public abstract class Aggregation<O, I> extends AbstractOPPLFunction<O> implements
         OPPLFunction<O> {
-    protected final List<Aggregandum<I>> toAggregate = new ArrayList<Aggregandum<I>>();
+    protected final List<Aggregandum<I>> toAggregate = new ArrayList<>();
 
     /** @param toAggregate
      *            toAggregate */
@@ -38,7 +38,7 @@ public abstract class Aggregation<O, I> extends AbstractOPPLFunction<O> implemen
     /** @return the toAggreagte */
     public List<Aggregandum<I>> getToAggregate() {
         // Defensive copy
-        return new ArrayList<Aggregandum<I>>(this.toAggregate);
+        return new ArrayList<>(this.toAggregate);
     }
 
     @Override
@@ -197,7 +197,7 @@ class ClassUnionAggregation extends
 
     @Override
     protected OWLClassExpression aggregate(ValueComputationParameters parameters) {
-        Set<OWLClassExpression> operands = new HashSet<OWLClassExpression>();
+        Set<OWLClassExpression> operands = new HashSet<>();
         for (Aggregandum<? extends Collection<? extends OWLClassExpression>> aggregandum : toAggregate) {
             for (OPPLFunction<? extends Collection<? extends OWLClassExpression>> opplFunction : aggregandum
                     .getOPPLFunctions()) {
@@ -235,7 +235,7 @@ class ClassIntersectionAggregation extends
 
     @Override
     protected OWLClassExpression aggregate(ValueComputationParameters parameters) {
-        Set<OWLClassExpression> operands = new HashSet<OWLClassExpression>();
+        Set<OWLClassExpression> operands = new HashSet<>();
         for (Aggregandum<Collection<? extends OWLClassExpression>> aggregandum : toAggregate) {
             for (OPPLFunction<Collection<? extends OWLClassExpression>> opplFunction : aggregandum
                     .getOPPLFunctions()) {

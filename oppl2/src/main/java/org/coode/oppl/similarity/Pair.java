@@ -29,7 +29,7 @@ public class Pair<O> {
 
     /** @return members */
     public Set<O> getMembers() {
-        return new HashSet<O>(Arrays.asList(o1, o2));
+        return new HashSet<>(Arrays.asList(o1, o2));
     }
 
     @Override
@@ -62,11 +62,11 @@ public class Pair<O> {
      *            type
      * @return all pairs */
     public static <T> Set<Pair<T>> getAllPossiblePairs(Collection<? extends T> c) {
-        Set<Pair<T>> toReturn = new HashSet<Pair<T>>();
+        Set<Pair<T>> toReturn = new HashSet<>();
         for (T t : c) {
             for (T anotherT : c) {
                 if (!t.equals(anotherT)) {
-                    toReturn.add(new Pair<T>(t, anotherT));
+                    toReturn.add(new Pair<>(t, anotherT));
                 }
             }
         }

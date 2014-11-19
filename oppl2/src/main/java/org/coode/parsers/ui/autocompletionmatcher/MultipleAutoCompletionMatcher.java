@@ -13,7 +13,7 @@ import java.util.Set;
  * 
  * @author Luigi Iannone */
 public final class MultipleAutoCompletionMatcher implements AutoCompletionMatcher {
-    private final Set<AutoCompletionMatcher> matchers = new HashSet<AutoCompletionMatcher>();
+    private final Set<AutoCompletionMatcher> matchers = new HashSet<>();
 
     /** @param matchers
      *            matchers */
@@ -25,7 +25,7 @@ public final class MultipleAutoCompletionMatcher implements AutoCompletionMatche
     @Override
     public List<String> getMatches(String string2Complete) {
         checkNotNull(string2Complete, "string2Complete");
-        List<String> toReturn = new ArrayList<String>();
+        List<String> toReturn = new ArrayList<>();
         for (AutoCompletionMatcher matcher : matchers) {
             toReturn.addAll(matcher.getMatches(string2Complete));
         }

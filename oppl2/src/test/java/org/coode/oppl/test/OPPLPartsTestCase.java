@@ -179,7 +179,7 @@ public class OPPLPartsTestCase {
         anotherBindingNode.addAssignment(new Assignment(constraintSystem
                 .getVariable("?x"), constraintSystem.getOntologyManager()
                 .getOWLDataFactory().getOWLClass(IRI.create("blah#Monica"))));
-        constraintSystem.setLeaves(new HashSet<BindingNode>(Arrays.asList(
+        constraintSystem.setLeaves(new HashSet<>(Arrays.asList(
                 bindingNode, anotherBindingNode)));
         final ValueComputationParameters parameters = new SimpleValueComputationParameters(
                 constraintSystem, BindingNode.createNewEmptyBindingNode(),

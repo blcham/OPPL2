@@ -28,7 +28,10 @@ import java.util.List;
 /** @author Luigi Iannone Jun 27, 2008 */
 @SuppressWarnings("javadoc")
 public class NonResovableArgumentsException extends PatternException {
-    public NonResovableArgumentsException(String patternName, List<Object>... args) {
+
+    @SafeVarargs
+    public NonResovableArgumentsException(String patternName,
+            List<Object>... args) {
         super("One of the arguments " + Arrays.toString(args)
                 + " is not instantiated for pattern: " + patternName + " ");
     }

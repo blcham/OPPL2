@@ -120,7 +120,7 @@ public final class AutoCompleter {
     public AutoCompleter(JTextComponent tc, AutoCompletionMatcher matcher) {
         this.matcher = checkNotNull(matcher, "matcher");
         textComponent = checkNotNull(tc, "tc");
-        wordDelimeters = new HashSet<String>(Arrays.asList(" ", "\n", "[", "]", "{", "}",
+        wordDelimeters = new HashSet<>(Arrays.asList(" ", "\n", "[", "]", "{", "}",
                 "(", ")", ",", "^"));
         popupList = new JList();
         popupList.setAutoscrolls(true);

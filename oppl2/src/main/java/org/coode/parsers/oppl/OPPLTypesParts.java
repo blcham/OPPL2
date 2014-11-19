@@ -361,7 +361,7 @@ public class OPPLTypesParts extends TreeFilter {
     public final OPPLFunction<String> stringOperation() {
         OPPLFunction<String> value = null;
         OPPLFunction<String> valuesToAggregate = null;
-        List<Aggregandum<String>> values = new ArrayList<Aggregandum<String>>();
+        List<Aggregandum<String>> values = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:135:3:
             // ( ^( STRING_OPERATION (valuesToAggregate= stringExpression )+ ) )
@@ -523,7 +523,7 @@ public class OPPLTypesParts extends TreeFilter {
                         return value;
                     }
                     if (state.backtracking == 1) {
-                        value = new Constant<String>(DBLQUOTE1.getText());
+                        value = new Constant<>(DBLQUOTE1.getText());
                     }
                 }
                     break;
@@ -898,7 +898,7 @@ public class OPPLTypesParts extends TreeFilter {
         OPPLSyntaxTree expression = null;
         OPPLSyntaxTree a = null;
         OPPLFunction<String> se = null;
-        List<OPPLSyntaxTree> identifiers = new ArrayList<OPPLSyntaxTree>();
+        List<OPPLSyntaxTree> identifiers = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:228:1:
             // ( ^( INEQUALITY_CONSTRAINT IDENTIFIER ^( EXPRESSION expression= .
@@ -1145,8 +1145,8 @@ public class OPPLTypesParts extends TreeFilter {
         OPPLTypesParts.aggregandums_return retval = new OPPLTypesParts.aggregandums_return();
         retval.start = input.LT(1);
         OPPLTypesParts.aggregandum_return a = null;
-        retval.list = new ArrayList<Aggregandum<?>>();
-        retval.tokenList = new ArrayList<OPPLSyntaxTree>();
+        retval.list = new ArrayList<>();
+        retval.tokenList = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypesParts.g:255:2:
             // ( (a= aggregandum )+ )

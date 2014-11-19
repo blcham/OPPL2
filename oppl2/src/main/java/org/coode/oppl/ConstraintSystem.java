@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.coode.oppl.bindingtree.Assignment;
 import org.coode.oppl.bindingtree.BindingNode;
 import org.coode.oppl.exceptions.InvalidVariableNameException;
@@ -58,18 +60,30 @@ import org.coode.oppl.variabletypes.InputVariable;
 import org.coode.oppl.variabletypes.OBJECTPROPERTYVariableType;
 import org.coode.oppl.variabletypes.VariableType;
 import org.coode.oppl.variabletypes.VariableTypeVisitorEx;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectInverseOf;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLRuntimeException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author Luigi Iannone
  */
 public class ConstraintSystem {
-    private static final class RightKindVisitor implements VariableVisitorEx<Boolean> {
-        public RightKindVisitor() {
-        }
+
+    private static final class RightKindVisitor implements
+            VariableVisitorEx<Boolean> {
+
+        public RightKindVisitor() {}
 
         @Override
         public <P extends OWLObject> Boolean visit(InputVariable<P> v) {
@@ -91,11 +105,11 @@ public class ConstraintSystem {
     private static final RightKindVisitor rightKindVisitor = new RightKindVisitor();
 
     private final static class VariableSet {
-        private final Map<String, Variable<?>> map = new HashMap<String, Variable<?>>();
-        private final Map<IRI, Variable<?>> irisMap = new HashMap<IRI, Variable<?>>();
 
-        public VariableSet() {
-        }
+        private final Map<String, Variable<?>> map = new HashMap<>();
+        private final Map<IRI, Variable<?>> irisMap = new HashMap<>();
+
+        public VariableSet() {}
 
         public Variable<?> get(String name) {
             return map.get(name);
@@ -115,8 +129,8 @@ public class ConstraintSystem {
         }
 
         public Set<InputVariable<?>> getInputVariables() {
-            Set<InputVariable<?>> toReturn = new HashSet<InputVariable<?>>(map.values()
-                    .size());
+            Set<InputVariable<?>> toReturn = new HashSet<>(map
+                    .values().size());
             for (Variable<?> v : map.values()) {
                 if (VariableRecogniser.INPUT_VARIABLE_RECOGNISER.recognise(v)) {
                     toReturn.add((InputVariable<?>) v);
@@ -126,14 +140,15 @@ public class ConstraintSystem {
         }
 
         public Set<Variable<?>> getAllVariables() {
-            return new HashSet<Variable<?>>(map.values());
+            return new HashSet<>(map.values());
         }
 
         public Set<GeneratedVariable<?>> getGeneratedVariables() {
-            Set<GeneratedVariable<?>> toReturn = new HashSet<GeneratedVariable<?>>(map
-                    .values().size());
+            Set<GeneratedVariable<?>> toReturn = new HashSet<>(
+                    map.values().size());
             for (Variable<?> v : map.values()) {
-                if (VariableRecogniser.GENERATED_VARIABLE_RECOGNISER.recognise(v)) {
+                if (VariableRecogniser.GENERATED_VARIABLE_RECOGNISER
+                        .recognise(v)) {
                     toReturn.add((GeneratedVariable<?>) v);
                 }
             }
@@ -158,7 +173,8 @@ public class ConstraintSystem {
             StringBuilder b = new StringBuilder();
             for (Variable<?> variable : map.values()) {
                 b.append(String.format("Variable name: %s generated: %s \n",
-                        variable.getName(), generatedVariables.contains(variable)));
+                        variable.getName(),
+                        generatedVariables.contains(variable)));
             }
             return b.toString();
         }
@@ -177,31 +193,40 @@ public class ConstraintSystem {
     private final VariableDetector variableDetector = new VariableDetector(this);
 
     /**
-     * @param ontology        ontology
-     * @param ontologyManager ontologyManager
-     * @param opplFactory     opplFactory
+     * @param ontology
+     *        ontology
+     * @param ontologyManager
+     *        ontologyManager
+     * @param opplFactory
+     *        opplFactory
      */
-    public ConstraintSystem(OWLOntology ontology, OWLOntologyManager ontologyManager,
-                            OPPLAbstractFactory opplFactory) {
+    public ConstraintSystem(OWLOntology ontology,
+            OWLOntologyManager ontologyManager, OPPLAbstractFactory opplFactory) {
         this.opplFactory = checkNotNull(opplFactory, "ontology");
         this.ontology = checkNotNull(ontology, "ontology manager");
         this.ontologyManager = checkNotNull(ontologyManager, "OPPL factory");
     }
 
     /**
-     * @param ontology            ontology
-     * @param ontologyManager     ontologyManager
-     * @param reasoner            reasoner
-     * @param opplAbstractFactory opplAbstractFactory
+     * @param ontology
+     *        ontology
+     * @param ontologyManager
+     *        ontologyManager
+     * @param reasoner
+     *        reasoner
+     * @param opplAbstractFactory
+     *        opplAbstractFactory
      */
-    public ConstraintSystem(OWLOntology ontology, OWLOntologyManager ontologyManager,
-                            OWLReasoner reasoner, OPPLAbstractFactory opplAbstractFactory) {
+    public ConstraintSystem(OWLOntology ontology,
+            OWLOntologyManager ontologyManager, OWLReasoner reasoner,
+            OPPLAbstractFactory opplAbstractFactory) {
         this(ontology, ontologyManager, opplAbstractFactory);
         this.reasoner = reasoner;
     }
 
     /**
-     * @param name name
+     * @param name
+     *        name
      * @return variable for name
      */
     public Variable<?> getVariable(String name) {
@@ -209,93 +234,109 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param name          name
-     * @param type          type
-     * @param variableScope variableScope
-     * @param <O>           variable type
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param variableScope
+     *        variableScope
+     * @param <O>
+     *        variable type
      * @return input variable
-     * @throws OPPLException OPPLException
+     * @throws OPPLException
+     *         OPPLException
      */
-    public <O extends OWLObject> InputVariable<O> createVariable(final String name,
-                                                                 final VariableType<O> type, final VariableScope<?> variableScope)
-            throws OPPLException {
+    public <O extends OWLObject> InputVariable<O> createVariable(
+            final String name, final VariableType<O> type,
+            final VariableScope<?> variableScope) throws OPPLException {
         if (name.matches("\\?([\\p{Alnum}[-_]])+")) {
             return createVariableWithVerifiedName(name, type, variableScope);
-        }
-        else {
+        } else {
             throw new InvalidVariableNameException("Invalid name: " + name);
         }
     }
 
     /**
-     * @param name          name
-     * @param type          type
-     * @param variableScope variableScope
-     * @param <O>           variable type
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param variableScope
+     *        variableScope
+     * @param <O>
+     *        variable type
      * @return input variable
-     * @throws OPPLException OPPLException
+     * @throws OPPLException
+     *         OPPLException
      */
-    public <O extends OWLObject> InputVariable<O> createVariableWithVerifiedName(
-            final String name, final VariableType<O> type,
-            final VariableScope<?> variableScope) throws OPPLException {
+    public <O extends OWLObject> InputVariable<O>
+            createVariableWithVerifiedName(final String name,
+                    final VariableType<O> type,
+                    final VariableScope<?> variableScope) throws OPPLException {
         Variable<?> newVariable = variables.get(name);
         if (newVariable == null) {
             newVariable = type.getInputVariable(name, variableScope);
             variables.store(newVariable);
-        }
-        else {
+        } else {
+            VariableVisitorEx<Variable<?>> visitor = new VariableVisitorEx<Variable<?>>() {
+
+                @Override
+                public <P extends OWLObject> Variable<?> visit(
+                        InputVariable<P> v) {
+                    Variable<?> toReturn = v;
+                    if (v.getVariableScope() != variableScope) {
+                        toReturn = type.getInputVariable(name, variableScope);
+                        variables.store(toReturn);
+                    }
+                    return toReturn;
+                }
+
+                @Override
+                public <P extends OWLObject> Variable<?> visit(
+                        GeneratedVariable<P> v) {
+                    return v;
+                }
+
+                @Override
+                public <P extends OWLObject> Variable<?> visit(
+                        RegexpGeneratedVariable<P> regExpGenerated) {
+                    return regExpGenerated;
+                }
+            };
             boolean rightKind = newVariable.accept(rightKindVisitor);
             if (!rightKind) {
-                throw new OPPLException(String.format(
-                        "A generated or regexp variable named %s already exists", name));
-            }
-            else if (type != newVariable.getType()) {
+                throw new OPPLException(
+                        String.format(
+                                "A generated or regexp variable named %s already exists",
+                                name));
+            } else if (type != newVariable.getType()) {
                 throw new OPPLException(
                         String.format(
                                 "An input variable named %s already exists but is of a different type %s from the input one %s",
                                 name, newVariable, type));
-            }
-            else {
-                newVariable = newVariable.accept(new VariableVisitorEx<Variable<?>>() {
-                    @Override
-                    public <P extends OWLObject> Variable<?> visit(InputVariable<P> v) {
-                        Variable<?> toReturn = v;
-                        if (v.getVariableScope() != variableScope) {
-                            toReturn = type.getInputVariable(name, variableScope);
-                            variables.store(toReturn);
-                        }
-                        return toReturn;
-                    }
-
-                    @Override
-                    public <P extends OWLObject> Variable<?>
-                    visit(GeneratedVariable<P> v) {
-                        return v;
-                    }
-
-                    @Override
-                    public <P extends OWLObject> Variable<?> visit(
-                            RegexpGeneratedVariable<P> regExpGenerated) {
-                        return regExpGenerated;
-                    }
-                });
+            } else {
+                newVariable = newVariable.accept(visitor);
             }
         }
         return (InputVariable<O>) newVariable;
     }
 
     /**
-     * @param axiom axiom
+     * @param axiom
+     *        axiom
      * @return variables for axiom
      */
     public Set<Variable<?>> getAxiomVariables(OWLAxiom axiom) {
-        VariableExtractor axiomVariableExtractor = new VariableExtractor(this, true);
-        Set<Variable<?>> axiomVariables = axiomVariableExtractor.extractVariables(axiom);
-        return new HashSet<Variable<?>>(axiomVariables);
+        VariableExtractor axiomVariableExtractor = new VariableExtractor(this,
+                true);
+        Set<Variable<?>> axiomVariables = axiomVariableExtractor
+                .extractVariables(axiom);
+        return new HashSet<>(axiomVariables);
     }
 
     /**
-     * @param iri iri
+     * @param iri
+     *        iri
      * @return true if uri is a variable
      */
     public boolean isVariableIRI(IRI iri) {
@@ -303,7 +344,8 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param iri iri
+     * @param iri
+     *        iri
      * @return variable for iri
      */
     public Variable<?> getVariable(IRI iri) {
@@ -311,7 +353,8 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param e e
+     * @param e
+     *        e
      * @return true if desc is a variable
      */
     public boolean isVariable(OWLObject e) {
@@ -319,28 +362,33 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param bindingNode bindingNode
+     * @param bindingNode
+     *        bindingNode
      */
     public void addLeaf(BindingNode bindingNode) {
         if (leaves == null) {
-            leaves = new HashSet<BindingNode>();
+            leaves = new HashSet<>();
         }
         leaves.add(bindingNode);
     }
 
     /**
-     * @param v                       v
-     * @param runtimeExceptionHandler runtimeExceptionHandler
+     * @param v
+     *        v
+     * @param runtimeExceptionHandler
+     *        runtimeExceptionHandler
      * @return variable bindings
      */
     public Set<OWLObject> getVariableBindings(Variable<?> v,
-                                              RuntimeExceptionHandler runtimeExceptionHandler) {
-        Set<OWLObject> toReturn = new HashSet<OWLObject>();
+            RuntimeExceptionHandler runtimeExceptionHandler) {
+        Set<OWLObject> toReturn = new HashSet<>();
         SimpleValueComputationParameters parameters = new SimpleValueComputationParameters(
-                this, BindingNode.getEmptyBindingNode(), runtimeExceptionHandler);
+                this, BindingNode.getEmptyBindingNode(),
+                runtimeExceptionHandler);
         if (leaves != null) {
             for (BindingNode bindingNode : leaves) {
-                OWLObject assignmentValue = bindingNode.getAssignmentValue(v, parameters);
+                OWLObject assignmentValue = bindingNode.getAssignmentValue(v,
+                        parameters);
                 if (assignmentValue != null) {
                     toReturn.add(assignmentValue);
                 }
@@ -350,23 +398,24 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param variable variable
-     * @param object   object
+     * @param variable
+     *        variable
+     * @param object
+     *        object
      * @return true if leaf is added
      */
     public boolean addLeaf(Variable<?> variable, OWLObject object) {
         boolean toReturn = variable.getType().isCompatibleWith(object);
         if (toReturn) {
             if (leaves == null) {
-                leaves = new HashSet<BindingNode>();
+                leaves = new HashSet<>();
             }
             Assignment assignment = new Assignment(variable, object);
             if (!leaves.isEmpty()) {
                 for (BindingNode node : leaves) {
                     node.addAssignment(assignment);
                 }
-            }
-            else {
+            } else {
                 leaves.add(new BindingNode(assignment));
             }
         }
@@ -377,7 +426,7 @@ public class ConstraintSystem {
      * @return the leaves
      */
     public Set<BindingNode> getLeaves() {
-        return leaves == null ? leaves : new HashSet<BindingNode>(leaves);
+        return leaves == null ? leaves : new HashSet<>(leaves);
     }
 
     /**
@@ -395,14 +444,16 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param binding binding
+     * @param binding
+     *        binding
      */
     public void removeBinding(BindingNode binding) {
         leaves.remove(binding);
     }
 
     /**
-     * @param node node
+     * @param node
+     *        node
      * @return true if node is variable
      */
     public boolean isVariable(OWLLiteral node) {
@@ -410,19 +461,20 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param newLeaves newLeaves
+     * @param newLeaves
+     *        newLeaves
      */
     public void setLeaves(Collection<? extends BindingNode> newLeaves) {
         if (newLeaves == null) {
             leaves = null;
-        }
-        else {
-            leaves = new HashSet<BindingNode>(newLeaves);
+        } else {
+            leaves = new HashSet<>(newLeaves);
         }
     }
 
     /**
-     * @param reasoner reasoner
+     * @param reasoner
+     *        reasoner
      */
     public void setReasoner(OWLReasoner reasoner) {
         this.reasoner = reasoner;
@@ -437,63 +489,73 @@ public class ConstraintSystem {
 
     /**
      * @return the reasoner
-     * @throws OWLRuntimeException OWLRuntimeException
+     * @throws OWLRuntimeException
+     *         OWLRuntimeException
      */
     public OWLReasoner getReasoner() {
         return reasoner;
     }
 
     /**
-     * @param name  name
-     * @param type  type
-     * @param value value
-     * @param <O>   variable type
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param value
+     *        value
+     * @param <O>
+     *        variable type
      * @return generated variables
      */
     @SuppressWarnings("unchecked")
-    public <O extends OWLObject> GeneratedVariable<O> createStringGeneratedVariable(
-            final String name, VariableType<O> type, final OPPLFunction<String> value) {
+    public <O extends OWLObject> GeneratedVariable<O>
+            createStringGeneratedVariable(final String name,
+                    VariableType<O> type, final OPPLFunction<String> value) {
         GeneratedVariable<O> generatedVariable = type
                 .accept(new VariableTypeVisitorEx<GeneratedVariable<O>>() {
+
                     @Override
-                    public GeneratedVariable<O>
-                    visitCLASSVariableType(CLASSVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
-                                Create.createOWLClass(value));
+                    public GeneratedVariable<O> visitCLASSVariableType(
+                            CLASSVariableType t) {
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t, Create.createOWLClass(value));
                     }
 
                     @Override
-                    public GeneratedVariable<O> visitOBJECTPROPERTYVariableType(
-                            OBJECTPROPERTYVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
-                                Create.createOWLObjectProperty(value));
+                    public GeneratedVariable<O>
+                            visitOBJECTPROPERTYVariableType(
+                                    OBJECTPROPERTYVariableType t) {
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t, Create.createOWLObjectProperty(value));
                     }
 
                     @Override
                     public GeneratedVariable<O> visitDATAPROPERTYVariableType(
                             DATAPROPERTYVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
-                                Create.createOWLDataProperty(value));
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t, Create.createOWLDataProperty(value));
                     }
 
                     @Override
                     public GeneratedVariable<O> visitINDIVIDUALVariableType(
                             INDIVIDUALVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
-                                Create.createOWLNamedIndividual(value));
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t, Create.createOWLNamedIndividual(value));
                     }
 
                     @Override
                     public GeneratedVariable<O> visitCONSTANTVariableType(
                             CONSTANTVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
-                                Create.createOWLLiteral(value));
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t, Create.createOWLLiteral(value));
                     }
 
                     @Override
-                    public GeneratedVariable<O> visitANNOTATIONPROPERTYVariableType(
-                            ANNOTATIONPROPERTYVariableType t) {
-                        return (GeneratedVariable<O>) getGeneratedVariable(name, t,
+                    public GeneratedVariable<O>
+                            visitANNOTATIONPROPERTYVariableType(
+                                    ANNOTATIONPROPERTYVariableType t) {
+                        return (GeneratedVariable<O>) getGeneratedVariable(
+                                name, t,
                                 Create.createOWLAnnotationProperty(value));
                     }
                 });
@@ -516,7 +578,8 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param v v
+     * @param v
+     *        v
      * @return true if generated
      */
     public boolean isGenerated(Variable<?> v) {
@@ -531,62 +594,72 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param variable variable
+     * @param variable
+     *        variable
      */
     public void removeVariable(Variable<?> variable) {
         variables.remove(variable.getName());
     }
 
     /**
-     * @param name     name
-     * @param type     type
-     * @param operands operands
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param operands
+     *        operands
      * @return generated variable
      */
-    public GeneratedVariable<OWLClassExpression>
-    createIntersectionGeneratedVariable(
-            final String name,
-            VariableType<?> type,
-            Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> operands) {
+    public
+            GeneratedVariable<OWLClassExpression>
+            createIntersectionGeneratedVariable(
+                    final String name,
+                    VariableType<?> type,
+                    Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> operands) {
         OWLDataFactory df = getOntologyManager().getOWLDataFactory();
         final Aggregation<OWLClassExpression, Collection<? extends OWLClassExpression>> and = Aggregation
                 .buildClassExpressionIntersection(operands, df);
         GeneratedVariable<OWLClassExpression> toReturn = type
                 .accept(new VariableTypeVisitorEx<GeneratedVariable<OWLClassExpression>>() {
+
                     @Override
-                    public GeneratedVariable<OWLClassExpression> visitCLASSVariableType(
-                            CLASSVariableType t) {
-                        return getCLASSVariableType().getGeneratedVariable(name, and);
+                    public GeneratedVariable<OWLClassExpression>
+                            visitCLASSVariableType(CLASSVariableType t) {
+                        return getCLASSVariableType().getGeneratedVariable(
+                                name, and);
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitANNOTATIONPROPERTYVariableType(
-                            ANNOTATIONPROPERTYVariableType t) {
+                            visitANNOTATIONPROPERTYVariableType(
+                                    ANNOTATIONPROPERTYVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitOBJECTPROPERTYVariableType(OBJECTPROPERTYVariableType t) {
+                            visitOBJECTPROPERTYVariableType(
+                                    OBJECTPROPERTYVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitDATAPROPERTYVariableType(DATAPROPERTYVariableType t) {
+                            visitDATAPROPERTYVariableType(
+                                    DATAPROPERTYVariableType t) {
+                        return null;
+                    }
+
+                    @Override
+                    public
+                            GeneratedVariable<OWLClassExpression>
+                            visitINDIVIDUALVariableType(INDIVIDUALVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitINDIVIDUALVariableType(INDIVIDUALVariableType t) {
-                        return null;
-                    }
-
-                    @Override
-                    public GeneratedVariable<OWLClassExpression>
-                    visitCONSTANTVariableType(CONSTANTVariableType t) {
+                            visitCONSTANTVariableType(CONSTANTVariableType t) {
                         return null;
                     }
                 });
@@ -595,56 +668,64 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param name     name
-     * @param type     type
-     * @param operands operands
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param operands
+     *        operands
      * @return generated variable
      */
-    public GeneratedVariable<OWLClassExpression>
-    createUnionGeneratedVariable(
-            final String name,
-            VariableType<?> type,
-            Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> operands) {
+    public
+            GeneratedVariable<OWLClassExpression>
+            createUnionGeneratedVariable(
+                    final String name,
+                    VariableType<?> type,
+                    Collection<? extends Aggregandum<Collection<? extends OWLClassExpression>>> operands) {
         final Aggregation<OWLClassExpression, Collection<? extends OWLClassExpression>> function = Aggregation
                 .buildClassExpressionUnion(operands, getOntologyManager()
                         .getOWLDataFactory());
         GeneratedVariable<OWLClassExpression> toReturn = type
                 .accept(new VariableTypeVisitorEx<GeneratedVariable<OWLClassExpression>>() {
+
                     @Override
-                    public GeneratedVariable<OWLClassExpression> visitCLASSVariableType(
-                            CLASSVariableType t) {
-                        return getCLASSVariableType()
-                                .getGeneratedVariable(name, function);
+                    public GeneratedVariable<OWLClassExpression>
+                            visitCLASSVariableType(CLASSVariableType t) {
+                        return getCLASSVariableType().getGeneratedVariable(
+                                name, function);
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitANNOTATIONPROPERTYVariableType(
-                            ANNOTATIONPROPERTYVariableType t) {
+                            visitANNOTATIONPROPERTYVariableType(
+                                    ANNOTATIONPROPERTYVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitOBJECTPROPERTYVariableType(OBJECTPROPERTYVariableType t) {
+                            visitOBJECTPROPERTYVariableType(
+                                    OBJECTPROPERTYVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitDATAPROPERTYVariableType(DATAPROPERTYVariableType t) {
+                            visitDATAPROPERTYVariableType(
+                                    DATAPROPERTYVariableType t) {
+                        return null;
+                    }
+
+                    @Override
+                    public
+                            GeneratedVariable<OWLClassExpression>
+                            visitINDIVIDUALVariableType(INDIVIDUALVariableType t) {
                         return null;
                     }
 
                     @Override
                     public GeneratedVariable<OWLClassExpression>
-                    visitINDIVIDUALVariableType(INDIVIDUALVariableType t) {
-                        return null;
-                    }
-
-                    @Override
-                    public GeneratedVariable<OWLClassExpression>
-                    visitCONSTANTVariableType(CONSTANTVariableType t) {
+                            visitCONSTANTVariableType(CONSTANTVariableType t) {
                         return null;
                     }
                 });
@@ -653,62 +734,79 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param name                          name
-     * @param type                          type
-     * @param patternGeneratingOPPLFunction patternGeneratingOPPLFunction
-     * @param <O>                           expression type
+     * @param name
+     *        name
+     * @param type
+     *        type
+     * @param patternGeneratingOPPLFunction
+     *        patternGeneratingOPPLFunction
+     * @param <O>
+     *        expression type
      * @return regexp variable
      */
     public <O extends OWLObject> RegexpGeneratedVariable<? extends O>
-    createRegexpGeneratedVariable(String name, VariableType<O> type,
-                                  OPPLFunction<Pattern> patternGeneratingOPPLFunction) {
-        RegexpGeneratedVariable<? extends O> toReturn = type.getRegexpGeneratedVariable(
-                name, patternGeneratingOPPLFunction);
+            createRegexpGeneratedVariable(String name, VariableType<O> type,
+                    OPPLFunction<Pattern> patternGeneratingOPPLFunction) {
+        RegexpGeneratedVariable<? extends O> toReturn = type
+                .getRegexpGeneratedVariable(name, patternGeneratingOPPLFunction);
         variables.store(toReturn);
         return toReturn;
     }
 
     /**
-     * @param name       name
-     * @param expression expression
-     * @param <O>        expression type
+     * @param name
+     *        name
+     * @param expression
+     *        expression
+     * @param <O>
+     *        expression type
      * @return expression generated variable
      */
-    public <O extends OWLObject> GeneratedVariable<O> createExpressionGeneratedVariable(
-            final String name, O expression) {
+    public <O extends OWLObject> GeneratedVariable<O>
+            createExpressionGeneratedVariable(final String name, O expression) {
         GeneratedVariable<O> toReturn = expression
                 .accept(new OWLObjectVisitorEx<GeneratedVariable<O>>() {
 
                     @Nonnull
                     @Override
                     public GeneratedVariable<O> doDefault(@Nonnull Object ce) {
-                        return getCLASSGeneratedVariable(name, (OWLClassExpression) ce);
+                        return getCLASSGeneratedVariable(name,
+                                (OWLClassExpression) ce);
                     }
 
                     @Override
-                    public GeneratedVariable<O> visit(OWLObjectProperty property) {
-                        return getOBJECTPROPERTYGeneratedVariable(name, property);
+                    public GeneratedVariable<O>
+                            visit(OWLObjectProperty property) {
+                        return getOBJECTPROPERTYGeneratedVariable(name,
+                                property);
                     }
 
                     @Override
-                    public GeneratedVariable<O> visit(OWLObjectInverseOf property) {
-                        return getOBJECTPROPERTYGeneratedVariable(name, property);
+                    public GeneratedVariable<O> visit(
+                            OWLObjectInverseOf property) {
+                        return getOBJECTPROPERTYGeneratedVariable(name,
+                                property);
                     }
 
                     @SuppressWarnings("unchecked")
                     protected GeneratedVariable<O> getCLASSGeneratedVariable(
                             final String varName, OWLClassExpression desc) {
                         return (GeneratedVariable<O>) getCLASSVariableType()
-                                .getGeneratedVariable(varName,
-                                        new Expression<OWLClassExpression>(desc));
+                                .getGeneratedVariable(
+                                        varName,
+                                        new Expression<>(desc));
                     }
 
                     @SuppressWarnings("unchecked")
-                    protected GeneratedVariable<O> getOBJECTPROPERTYGeneratedVariable(
-                            final String varName, OWLObjectPropertyExpression p) {
+                    protected GeneratedVariable<O>
+                            getOBJECTPROPERTYGeneratedVariable(
+                                    final String varName,
+                                    OWLObjectPropertyExpression p) {
                         return (GeneratedVariable<O>) getOBJECTPROPERTYTypeVariableType()
-                                .getGeneratedVariable(varName,
-                                        new Expression<OWLObjectPropertyExpression>(p));
+                                .getGeneratedVariable(
+                                        varName,
+                                        new Expression<>(
+                                                p));
                     }
                 });
         variables.store(toReturn);
@@ -716,7 +814,8 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param variable variable
+     * @param variable
+     *        variable
      * @return render
      */
     public String render(Variable<?> variable) {
@@ -724,7 +823,8 @@ public class ConstraintSystem {
     }
 
     /**
-     * @param v v
+     * @param v
+     *        v
      */
     public void importVariable(Variable<?> v) {
         variables.store(v);

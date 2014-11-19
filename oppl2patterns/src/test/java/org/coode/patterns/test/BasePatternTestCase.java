@@ -47,12 +47,12 @@ public abstract class BasePatternTestCase {
         try {
             ChangeExtractor changeExtractor = new ChangeExtractor(HANDLER, true);
             changeExtractor.visit(script);
-            Set<OWLAxiom> queryAxioms = new HashSet<OWLAxiom>();
+            Set<OWLAxiom> queryAxioms = new HashSet<>();
             if (script.getQuery() != null) {
                 queryAxioms.addAll(script.getQuery().getAssertedAxioms());
                 queryAxioms.addAll(script.getQuery().getAxioms());
             }
-            Set<OWLAxiom> matches = new HashSet<OWLAxiom>();
+            Set<OWLAxiom> matches = new HashSet<>();
             StringWriter resultWriter = new StringWriter();
             if (script.getConstraintSystem().getLeaves() != null
                     && !script.getConstraintSystem().getLeaves().isEmpty()) {

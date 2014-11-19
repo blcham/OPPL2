@@ -32,7 +32,7 @@ public class QuickFailErrorListener implements ErrorListener {
 
     @Override
     public void incompatibleSymbols(CommonTree parentExpression, CommonTree... trees) {
-        List<String> symbols = new ArrayList<String>(trees.length);
+        List<String> symbols = new ArrayList<>(trees.length);
         for (CommonTree commonTree : trees) {
             symbols.add(commonTree.getText());
         }

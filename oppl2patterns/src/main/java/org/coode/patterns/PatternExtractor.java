@@ -49,7 +49,7 @@ public class PatternExtractor implements
     private final OWLOntologyManager ontologyManager;
     private final OWLOntology ontology;
     private final ErrorListener errorListener;
-    private final Set<OWLAnnotation> visited = new HashSet<OWLAnnotation>();
+    private final Set<OWLAnnotation> visited = new HashSet<>();
 
     /**
      * @param ontology
@@ -101,7 +101,7 @@ public class PatternExtractor implements
                         });
                 if (value != null) {
                     String patternName = annotation.getProperty().getIRI()
-                            .getFragment();
+                            .getRemainder().orElse(null);
                     ParserFactory parserFactory = new ParserFactory(
                             getOntology(), getOntologyManager());
                     OPPLPatternParser parser = parserFactory
@@ -128,12 +128,12 @@ public class PatternExtractor implements
     }
 
     protected Set<String> getVisitedPatternNames() {
-        Set<String> toReturn = new HashSet<String>();
+        Set<String> toReturn = new HashSet<>();
         for (OWLAnnotation patternAnnotation : visited) {
             IRI iri = patternAnnotation.getProperty().getIRI();
             if (iri != null
                     && PatternModel.NAMESPACE.equals(iri.getNamespace())) {
-                toReturn.add(iri.getFragment());
+                toReturn.add(iri.getRemainder().orElse(null));
             }
         }
         return toReturn;
@@ -159,7 +159,8 @@ public class PatternExtractor implements
         return new PatternReferenceResolver() {
 
             @Override
-            public void resolvePattern(OPPLSyntaxTree reference,
+            @SafeVarargs
+            public final void resolvePattern(OPPLSyntaxTree reference,
                     String patternName,
                     PatternConstraintSystem constraintSystem,
                     OPPLPatternsSymbolTable symbolTable, List<Object>... args) {

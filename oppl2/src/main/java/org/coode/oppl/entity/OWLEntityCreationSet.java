@@ -28,14 +28,14 @@ public class OWLEntityCreationSet<E extends OWLEntity> {
      *            changes */
     public OWLEntityCreationSet(E owlEntity, List<? extends OWLOntologyChange> changes) {
         this.owlEntity = owlEntity;
-        this.changes = new ArrayList<OWLOntologyChange>(changes);
+        this.changes = new ArrayList<>(changes);
     }
 
     /** @param owlEntity
      *            owlEntity */
     public OWLEntityCreationSet(E owlEntity) {
         this.owlEntity = owlEntity;
-        this.changes = new ArrayList<OWLOntologyChange>();
+        this.changes = new ArrayList<>();
         // changes.add(new AddEntity(ontology, owlEntity, null));
     }
 

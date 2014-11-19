@@ -110,8 +110,8 @@ public class BindingNode implements Renderable {
                 visit(RegexpGeneratedVariable<P> regExpGenerated) {}
     }
 
-    protected final Set<Assignment> assignments = new HashSet<Assignment>();
-    protected final Set<Variable<?>> unassignedVariables = new LinkedHashSet<Variable<?>>();
+    protected final Set<Assignment> assignments = new HashSet<>();
+    protected final Set<Variable<?>> unassignedVariables = new LinkedHashSet<>();
     protected final VariableInspector unassignedVariablesUpdater = new VariableInspector(
             unassignedVariables);
 
@@ -241,7 +241,7 @@ public class BindingNode implements Renderable {
 
     /** @return assigned variables */
     public Set<Variable<?>> getAssignedVariables() {
-        Set<Variable<?>> toReturn = new HashSet<Variable<?>>();
+        Set<Variable<?>> toReturn = new HashSet<>();
         for (Assignment assignment : assignments) {
             toReturn.add(assignment.getAssignedVariable());
         }
@@ -262,12 +262,12 @@ public class BindingNode implements Renderable {
 
     /** @return the assignments */
     public Collection<Assignment> getAssignments() {
-        return new ArrayList<Assignment>(assignments);
+        return new ArrayList<>(assignments);
     }
 
     /** @return unassigned variables */
     public Set<Variable<?>> getUnassignedVariables() {
-        return new LinkedHashSet<Variable<?>>(unassignedVariables);
+        return new LinkedHashSet<>(unassignedVariables);
     }
 
     /** Adds a variable to the set of the unassigned ones

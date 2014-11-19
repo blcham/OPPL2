@@ -28,6 +28,6 @@ public class ValuesVariableAttributeSymbol<P extends OWLObject> extends
     public static <T extends OWLObject> ValuesVariableAttributeSymbol<T>
             getValuesVariableAttributeSymbol(String name,
                     ValuesVariableAtttribute<T> variableAttribute) {
-        return new ValuesVariableAttributeSymbol<T>(name, variableAttribute);
+        return new ValuesVariableAttributeSymbol<>(name, variableAttribute);
     }
 }

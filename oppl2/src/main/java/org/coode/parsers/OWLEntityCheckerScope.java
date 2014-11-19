@@ -84,7 +84,7 @@ public class OWLEntityCheckerScope implements Scope {
 
     @Override
     public Set<Symbol> match(String prefix) {
-        Set<Symbol> toReturn = new HashSet<Symbol>();
+        Set<Symbol> toReturn = new HashSet<>();
         Set<OWLEntity> entities = getEntityFinder().getEntities(
                 checkNotNull(prefix, "prefix"));
         for (OWLEntity owlEntity : entities) {
@@ -112,7 +112,7 @@ public class OWLEntityCheckerScope implements Scope {
     @Override
     public Set<Symbol> getAllSymbols() {
         Set<OWLEntity> entities = getEntityFinder().getEntities("");
-        Set<Symbol> toReturn = new HashSet<Symbol>(entities.size());
+        Set<Symbol> toReturn = new HashSet<>(entities.size());
         for (OWLEntity owlEntity : entities) {
             toReturn.add(new OWLEntitySymbol(getOWLEntityRenderer().render(owlEntity),
                     owlEntity));
@@ -135,7 +135,7 @@ public class OWLEntityCheckerScope implements Scope {
 
             @Override
             public Set<OWLEntity> visitOWLType(OWLType owlType) {
-                Set<OWLEntity> toReturn = new HashSet<OWLEntity>();
+                Set<OWLEntity> toReturn = new HashSet<>();
                 switch (owlType) {
                     case OWL_CLASS:
                         toReturn.addAll(OWLEntityCheckerScope.this.getEntityFinder()
@@ -159,7 +159,7 @@ public class OWLEntityCheckerScope implements Scope {
                 return toReturn;
             }
         });
-        Set<Symbol> toReturn = new HashSet<Symbol>(entities.size());
+        Set<Symbol> toReturn = new HashSet<>(entities.size());
         for (OWLEntity owlEntity : entities) {
             toReturn.add(new OWLEntitySymbol(getOWLEntityRenderer().render(owlEntity),
                     owlEntity));

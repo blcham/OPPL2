@@ -38,8 +38,8 @@ public abstract class ClassVariableScope extends
         AbstractVariableScope<OWLClassExpression> implements
         VariableScope<OWLClassExpression> {
     private final OWLClassExpression description;
-    private static Map<OWLClassExpression, SuperClassVariableScope> superClassesScopes = new HashMap<OWLClassExpression, SuperClassVariableScope>();
-    private static Map<OWLClassExpression, SubClassVariableScope> subClassesScopes = new HashMap<OWLClassExpression, SubClassVariableScope>();
+    private static Map<OWLClassExpression, SuperClassVariableScope> superClassesScopes = new HashMap<>();
+    private static Map<OWLClassExpression, SubClassVariableScope> subClassesScopes = new HashMap<>();
 
     /** @param description
      *            description

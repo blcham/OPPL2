@@ -23,7 +23,7 @@ import org.antlr.runtime.Token;
 /** @author Luigi Iannone */
 public class TokenFileSorter {
     private final String path;
-    private final List<Token> tokens = new ArrayList<Token>();
+    private final List<Token> tokens = new ArrayList<>();
 
     /** @param path
      *            path */
@@ -177,6 +177,6 @@ public class TokenFileSorter {
 
     /** @return the tokens */
     public List<Token> getTokens() {
-        return new ArrayList<Token>(tokens);
+        return new ArrayList<>(tokens);
     }
 }

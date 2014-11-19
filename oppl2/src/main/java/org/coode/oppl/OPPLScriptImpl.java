@@ -34,7 +34,7 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
 /** @author Luigi Iannone */
 public class OPPLScriptImpl implements OPPLScript {
     private final ConstraintSystem constraintSystem;
-    private final List<Variable<?>> variables = new ArrayList<Variable<?>>();
+    private final List<Variable<?>> variables = new ArrayList<>();
     private final OPPLQuery query;
     private final List<OWLAxiomChange> actions;
     private final OPPLAbstractFactory factory;
@@ -76,7 +76,7 @@ public class OPPLScriptImpl implements OPPLScript {
         } else {
             this.query = query == null ? null : new OPPLQueryImpl(query, factory);
         }
-        this.actions = new ArrayList<OWLAxiomChange>(actions);
+        this.actions = new ArrayList<>(actions);
         this.factory = factory;
     }
 
@@ -87,7 +87,7 @@ public class OPPLScriptImpl implements OPPLScript {
 
     @Override
     public List<InputVariable<?>> getInputVariables() {
-        List<InputVariable<?>> toReturn = new ArrayList<InputVariable<?>>(
+        List<InputVariable<?>> toReturn = new ArrayList<>(
                 variables.size());
         for (Variable<?> v : variables) {
             if (VariableRecogniser.INPUT_VARIABLE_RECOGNISER.recognise(v)) {
@@ -99,7 +99,7 @@ public class OPPLScriptImpl implements OPPLScript {
 
     @Override
     public List<Variable<?>> getVariables() {
-        return new ArrayList<Variable<?>>(variables);
+        return new ArrayList<>(variables);
     }
 
     /** @return the query */

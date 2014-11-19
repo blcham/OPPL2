@@ -19,7 +19,7 @@ import org.coode.oppl.template.ReplacementStrategy;
  *            replacement type */
 public class CombinedReplacementStrategy<I, P extends I> implements
         ReplacementStrategy<I, P> {
-    private final List<ReplacementStrategy<I, P>> strategies = new ArrayList<ReplacementStrategy<I, P>>();
+    private final List<ReplacementStrategy<I, P>> strategies = new ArrayList<>();
 
     /** @param strategies
      *            strategies */
@@ -45,6 +45,6 @@ public class CombinedReplacementStrategy<I, P extends I> implements
 
     /** @return the strategies */
     public final List<ReplacementStrategy<I, P>> getStrategies() {
-        return new ArrayList<ReplacementStrategy<I, P>>(this.strategies);
+        return new ArrayList<>(this.strategies);
     }
 }

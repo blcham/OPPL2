@@ -505,7 +505,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
         OPPLSyntaxTree _last = null;
         OPPLSyntaxTree ARGUMENTS3 = null;
         OPPLPatternsReferenceDefine.argument_return arg = null;
-        retval.args = new ArrayList<List<Object>>();
+        retval.args = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:120:2:
             // ( ^( ARGUMENTS (arg= argument )+ ) )
@@ -634,7 +634,7 @@ public class OPPLPatternsReferenceDefine extends TreeRewriter {
         OPPLSyntaxTree VALUES9 = null;
         OPPLSyntaxTree ARGUMENT10 = null;
         OPPLSyntaxTree a = null;
-        retval.argObjects = new ArrayList<Object>();
+        retval.argObjects = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLPatternsReferenceDefine.g:130:3:
             // ( ^( ARGUMENT ^( EXPRESSION ^( IDENTIFIER VARIABLE_NAME DOT

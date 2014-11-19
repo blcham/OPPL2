@@ -3478,7 +3478,7 @@ public class ManchesterOWLSyntaxAutoCompleteCombined_ManchesterOWLSyntaxAutoComp
                                     stream_propertyExpression.add(rest.getTree());
                                 }
                                 if (list_rest == null) {
-                                    list_rest = new ArrayList<Object>();
+                                    list_rest = new ArrayList<>();
                                 }
                                 if (rest != null) {
                                     list_rest.add(rest.getTree());
@@ -5995,7 +5995,7 @@ public class ManchesterOWLSyntaxAutoCompleteCombined_ManchesterOWLSyntaxAutoComp
                             return;
                         }
                         if (list_rest == null) {
-                            list_rest = new ArrayList<Object>();
+                            list_rest = new ArrayList<>();
                         }
                         list_rest.add(rest);
                     }

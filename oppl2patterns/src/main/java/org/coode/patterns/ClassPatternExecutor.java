@@ -74,7 +74,7 @@ public class ClassPatternExecutor extends ChangeExtractor {
     @Override
     public List<OWLAxiomChange> visit(OPPLScript script) {
         List<OWLAxiomChange> changes = script.getActions();
-        Set<OWLAxiomChange> p = new HashSet<OWLAxiomChange>(changes.size());
+        Set<OWLAxiomChange> p = new HashSet<>(changes.size());
         for (OWLAxiomChange axiomChange : changes) {
             ActionType actionType = axiomChange.isAddAxiom() ? ActionType.ADD
                     : ActionType.REMOVE;
@@ -85,6 +85,6 @@ public class ClassPatternExecutor extends ChangeExtractor {
                             getRuntimeExceptionHandler());
             p.addAll(createdChanges);
         }
-        return new ArrayList<OWLAxiomChange>(p);
+        return new ArrayList<>(p);
     }
 }

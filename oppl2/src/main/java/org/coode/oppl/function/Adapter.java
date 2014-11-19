@@ -37,7 +37,7 @@ public class Adapter {
      *            function type
      * @return oppl function */
     public static <O> OPPLFunction<O> buildObjectAdater(O value) {
-        return new Constant<O>(checkNotNull(value, "value"));
+        return new Constant<>(checkNotNull(value, "value"));
     }
 
     /** @param collection
@@ -47,7 +47,7 @@ public class Adapter {
      * @return aggregandum set */
     public static <O extends OWLObject> Set<Aggregandum<Collection<? extends O>>>
             buildOWLObjectCollectionAdapter(Collection<? extends O> collection) {
-        Set<Aggregandum<Collection<? extends O>>> toReturn = new HashSet<Aggregandum<Collection<? extends O>>>();
+        Set<Aggregandum<Collection<? extends O>>> toReturn = new HashSet<>();
         for (O o : checkNotNull(collection, "collection")) {
             toReturn.add(buildAggregandumOfCollection(o));
         }
@@ -155,7 +155,7 @@ public class Adapter {
         return new Aggregandum<I>() {
             @Override
             public Set<OPPLFunction<I>> getOPPLFunctions() {
-                return new HashSet<OPPLFunction<I>>(collection);
+                return new HashSet<>(collection);
             }
 
             @Override

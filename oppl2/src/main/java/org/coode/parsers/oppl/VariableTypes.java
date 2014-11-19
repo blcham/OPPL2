@@ -123,8 +123,8 @@ public enum VariableTypes implements Type {
             return VariableTypeFactory.getCONSTANTVariableType();
         }
     };
-    private final static Map<String, VariableTypes> map = new HashMap<String, VariableTypes>();
-    private final static Map<VariableType<?>, VariableTypes> typeMap = new HashMap<VariableType<?>, VariableTypes>();
+    private final static Map<String, VariableTypes> map = new HashMap<>();
+    private final static Map<VariableType<?>, VariableTypes> typeMap = new HashMap<>();
     private final String NAMESPACE = "http://www.coode.org/oppl/variablemansyntax#";
 
     protected IRI createIRI(String name) {

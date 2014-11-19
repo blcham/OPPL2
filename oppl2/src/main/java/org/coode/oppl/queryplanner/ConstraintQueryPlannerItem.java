@@ -34,7 +34,7 @@ public class ConstraintQueryPlannerItem extends AbstractQueryPlannerItem {
     public Set<BindingNode> match(Collection<? extends BindingNode> currentLeaves,
             ExecutionMonitor executionMonitor,
             RuntimeExceptionHandler runtimeExceptionHandler) {
-        Set<BindingNode> toReturn = new HashSet<BindingNode>(currentLeaves.size());
+        Set<BindingNode> toReturn = new HashSet<>(currentLeaves.size());
         Iterator<? extends BindingNode> it = currentLeaves.iterator();
         BindingNode leaf;
         while (!executionMonitor.isCancelled() && it.hasNext()) {

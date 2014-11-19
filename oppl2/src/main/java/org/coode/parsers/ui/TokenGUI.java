@@ -67,7 +67,7 @@ public class TokenGUI extends JFrame {
                     return name.endsWith(".tokens");
                 }
             });
-            List<TokenFileSorter> tokenFileSorters = new ArrayList<TokenFileSorter>(
+            List<TokenFileSorter> tokenFileSorters = new ArrayList<>(
                     list.length);
             for (String string : list) {
                 tokenFileSorters

@@ -12,8 +12,8 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 /** @author Luigi Iannone */
 public class SymbolBasedHashFunction implements HashFunction {
-    private final Map<OWLEntity, Integer> entityHashCodes = new HashMap<OWLEntity, Integer>();
-    private final Map<OWLLiteral, Integer> owlConstantHashCodes = new HashMap<OWLLiteral, Integer>();
+    private final Map<OWLEntity, Integer> entityHashCodes = new HashMap<>();
+    private final Map<OWLLiteral, Integer> owlConstantHashCodes = new HashMap<>();
     private int maxPrime = 1;
 
     @Override

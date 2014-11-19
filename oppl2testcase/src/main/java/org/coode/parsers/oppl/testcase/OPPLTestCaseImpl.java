@@ -9,19 +9,22 @@ import org.coode.oppl.OPPLScript;
 
 /** @author Luigi Iannone */
 public class OPPLTestCaseImpl implements OPPLTestCase {
+
     private final String name;
     private final OPPLScript opplScript;
     private final boolean requiresInference;
-    private final List<OPPLTest> tests = new ArrayList<OPPLTest>();
+    private final List<OPPLTest> tests = new ArrayList<>();
 
-    /** @param name
-     *            name
+    /**
+     * @param name
+     *        name
      * @param opplScript
-     *            opplScript
+     *        opplScript
      * @param tests
-     *            tests
+     *        tests
      * @param requiresInference
-     *            requiresInference */
+     *        requiresInference
+     */
     public OPPLTestCaseImpl(String name, OPPLScript opplScript,
             List<? extends OPPLTest> tests, boolean requiresInference) {
         this.name = checkNotNull(name, "name");
@@ -33,7 +36,8 @@ public class OPPLTestCaseImpl implements OPPLTestCase {
         this.requiresInference = requiresInference;
         this.tests.addAll(checkNotNull(tests, "tests"));
         if (tests.isEmpty()) {
-            throw new IllegalArgumentException("There should be at least one test");
+            throw new IllegalArgumentException(
+                    "There should be at least one test");
         }
     }
 
@@ -54,7 +58,7 @@ public class OPPLTestCaseImpl implements OPPLTestCase {
 
     @Override
     public List<OPPLTest> getTests() {
-        return new ArrayList<OPPLTest>(tests);
+        return new ArrayList<>(tests);
     }
 
     @Override
@@ -75,7 +79,8 @@ public class OPPLTestCaseImpl implements OPPLTestCase {
         final int prime = 31;
         int result = 1;
         result = prime * result + (name == null ? 0 : name.hashCode());
-        result = prime * result + (opplScript == null ? 0 : opplScript.hashCode());
+        result = prime * result
+                + (opplScript == null ? 0 : opplScript.hashCode());
         result = prime * result + (requiresInference ? 1231 : 1237);
         result = prime * result + (tests == null ? 0 : tests.hashCode());
         return result;

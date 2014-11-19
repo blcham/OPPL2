@@ -80,7 +80,7 @@ public abstract class ParseTreeBasedAutoCompletionMatcher implements
 
     @Override
     public List<String> getMatches(String string2Complete) {
-        List<String> toReturn = new ArrayList<String>();
+        List<String> toReturn = new ArrayList<>();
         boolean newWord = string2Complete.matches(".*\\s");
         MOWLLexer lexer = new MOWLLexer(new ANTLRStringStream(string2Complete));
         TokenRewriteStream tokens = new TokenRewriteStream(lexer);

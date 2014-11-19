@@ -357,7 +357,7 @@ public class PatternExecutionTest {
         ParserFactory pf = new ParserFactory(pizza, pizza.getOWLOntologyManager());
         OPPLPatternParser parser = pf.build(new SystemErrorEcho());
         PatternModel patternModel = parser.parse(pattern);
-        List<OWLAxiomChange> changes = new ArrayList<OWLAxiomChange>();
+        List<OWLAxiomChange> changes = new ArrayList<>();
         QuickFailRuntimeExceptionHandler handler = new QuickFailRuntimeExceptionHandler();
         InstantiatedPatternModel ipm = pf.getPatternFactory()
                 .createInstantiatedPatternModel(patternModel, handler);
@@ -414,11 +414,11 @@ public class PatternExecutionTest {
         ParserFactory pf = new ParserFactory(pizza, pizza.getOWLOntologyManager());
         OPPLPatternParser parser = pf.build(new SystemErrorEcho());
         PatternModel patternModel = parser.parse(pattern);
-        List<OWLAxiomChange> changes = new ArrayList<OWLAxiomChange>();
+        List<OWLAxiomChange> changes = new ArrayList<>();
         QuickFailRuntimeExceptionHandler handler = new QuickFailRuntimeExceptionHandler();
         InstantiatedPatternModel ipm = pf.getPatternFactory()
                 .createInstantiatedPatternModel(patternModel, handler);
-        Map<String, Variable<?>> opplVariableMap = new HashMap<String, Variable<?>>();
+        Map<String, Variable<?>> opplVariableMap = new HashMap<>();
         for (Variable<?> v : patternModel.getInputVariables()) {
             opplVariableMap.put(v.getName(), v);
         }

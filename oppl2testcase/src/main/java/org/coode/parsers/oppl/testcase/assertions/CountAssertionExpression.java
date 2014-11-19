@@ -50,7 +50,7 @@ public class CountAssertionExpression implements AssertionExpression<Integer> {
     @Override
     public Integer resolve(Set<? extends BindingNode> bindings,
             ConstraintSystem constraintSystem) {
-        Set<OWLObject> values = new HashSet<OWLObject>(bindings.size());
+        Set<OWLObject> values = new HashSet<>(bindings.size());
         for (BindingNode bindingNode : bindings) {
             ValueComputationParameters parameters = new SimpleValueComputationParameters(
                     constraintSystem, bindingNode, getHandler());

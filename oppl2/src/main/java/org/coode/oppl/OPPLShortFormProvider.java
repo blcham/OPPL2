@@ -5,10 +5,13 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
 
 /** @author Luigi Iannone */
 public class OPPLShortFormProvider implements ShortFormProvider {
+
     private final ShortFormProvider delegate;
 
-    /** @param provider
-     *            provider */
+    /**
+     * @param provider
+     *        provider
+     */
     public OPPLShortFormProvider(ShortFormProvider provider) {
         delegate = provider;
     }
@@ -16,7 +19,7 @@ public class OPPLShortFormProvider implements ShortFormProvider {
     @Override
     public String getShortForm(OWLEntity entity) {
         if (entity.getIRI().getNamespace().endsWith("?")) {
-            return "?" + entity.getIRI().getFragment();
+            return "?" + entity.getIRI().getRemainder().get();
         }
         return delegate.getShortForm(entity);
     }

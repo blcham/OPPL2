@@ -1,23 +1,32 @@
 package org.coode.oppl.variabletypes;
 
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
+
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
 
 import org.coode.oppl.VariableScopes.Direction;
 import org.coode.oppl.function.OPPLFunction;
 import org.coode.oppl.generated.RegexpGeneratedVariable;
-import org.semanticweb.owlapi.model.*;
-
-import javax.annotation.Nonnull;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+import org.semanticweb.owlapi.model.OWLOntology;
 
 /** @author Luigi Iannone */
-public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual> implements
-        VariableType<OWLIndividual> {
-    /** @param name
-     *            name */
+public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual>
+        implements VariableType<OWLIndividual> {
+
+    /**
+     * @param name
+     *        name
+     */
     public INDIVIDUALVariableType(VariableTypeName name) {
         super(name, EnumSet.of(Direction.INSTANCEOF));
     }
@@ -33,9 +42,10 @@ public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual> 
     }
 
     @Override
-    public RegexpGeneratedVariable<? extends OWLIndividual> getRegexpGeneratedVariable(
-            String name, OPPLFunction<Pattern> patternGeneratingOPPLFunction) {
-        return new RegexpGeneratedVariable<OWLIndividual>(name,
+    public RegexpGeneratedVariable<? extends OWLIndividual>
+            getRegexpGeneratedVariable(String name,
+                    OPPLFunction<Pattern> patternGeneratingOPPLFunction) {
+        return new RegexpGeneratedVariable<>(name,
                 VariableTypeFactory.getINDIVIDUALVariableType(),
                 patternGeneratingOPPLFunction);
     }
@@ -43,16 +53,14 @@ public class INDIVIDUALVariableType extends AbstractVariableType<OWLIndividual> 
     @Override
     public Set<OWLIndividual> getReferencedOWLObjects(
             Collection<? extends OWLOntology> ontologies) {
-        Set<OWLIndividual> toReturn = new HashSet<OWLIndividual>();
-        for (OWLOntology ontology : ontologies) {
-            toReturn.addAll(ontology.getIndividualsInSignature());
-        }
-        return toReturn;
+        return asSet(ontologies.stream().flatMap(
+                o -> o.individualsInSignature()));
     }
 
     @Override
     public boolean isCompatibleWith(OWLObject o) {
         return o.accept(new OWLObjectVisitorEx<Boolean>() {
+
             @Nonnull
             @Override
             public Boolean doDefault(@Nonnull Object object) {

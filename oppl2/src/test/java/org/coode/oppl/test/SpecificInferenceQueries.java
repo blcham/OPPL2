@@ -153,7 +153,7 @@ public class SpecificInferenceQueries {
         Set<BindingNode> leaves = opplScript.getConstraintSystem().getLeaves();
         assertNotNull(leaves);
         assertTrue(leaves.size() == 2);
-        Map<String, Set<OWLObject>> assignments = new HashMap<String, Set<OWLObject>>();
+        Map<String, Set<OWLObject>> assignments = new HashMap<>();
         for (BindingNode bindingNode : leaves) {
             Set<Variable<?>> assignedVariables = bindingNode
                     .getAssignedVariables();
@@ -163,7 +163,7 @@ public class SpecificInferenceQueries {
                         || name.compareTo(yVariableName) == 0) {
                     Set<OWLObject> set = assignments.get(name);
                     if (set == null) {
-                        set = new HashSet<OWLObject>();
+                        set = new HashSet<>();
                         assignments.put(name, set);
                     }
                     set.add(bindingNode.getAssignmentValue(
@@ -219,7 +219,7 @@ public class SpecificInferenceQueries {
 
     private static Set<OWLAxiom> getOPPLScriptInstantiatedAxioms(
             OPPLScript opplScript) {
-        Set<OWLAxiom> toReturn = new HashSet<OWLAxiom>();
+        Set<OWLAxiom> toReturn = new HashSet<>();
         Set<BindingNode> leaves = opplScript.getConstraintSystem().getLeaves();
         if (leaves != null) {
             for (BindingNode bindingNode : leaves) {

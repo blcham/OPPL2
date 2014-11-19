@@ -166,7 +166,7 @@ public class OPPLTestCaseSymbolTable extends OPPLSymbolTable {
         Variable<?> variable = constraintSystem.getVariable(variableNode
                 .getText());
         AssertContains toReturn = null;
-        Set<OWLObject> expressions = new HashSet<OWLObject>();
+        Set<OWLObject> expressions = new HashSet<>();
         boolean allFine = true;
         for (OPPLSyntaxTree expressionNode : expressionNodes) {
             OWLObject owlObject = expressionNode.getOWLObject();

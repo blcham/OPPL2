@@ -119,6 +119,6 @@ public class GeneratedVariable<O extends OWLObject> implements Variable<O> {
      * @return generated variable */
     public static <P extends OWLObject> GeneratedVariable<P> getGeneratedVariable(
             String name, VariableType<P> type, OPPLFunction<? extends P> opplFunction) {
-        return new GeneratedVariable<P>(name, type, opplFunction);
+        return new GeneratedVariable<>(name, type, opplFunction);
     }
 }

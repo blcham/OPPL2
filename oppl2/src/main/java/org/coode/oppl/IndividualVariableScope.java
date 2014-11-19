@@ -42,7 +42,7 @@ import org.semanticweb.owlapi.model.OWLRuntimeException;
  * @author Luigi Iannone */
 public class IndividualVariableScope extends AbstractVariableScope<OWLClassExpression>
         implements VariableScope<OWLClassExpression> {
-    private static Map<OWLClassExpression, IndividualVariableScope> cache = new HashMap<OWLClassExpression, IndividualVariableScope>();
+    private static Map<OWLClassExpression, IndividualVariableScope> cache = new HashMap<>();
     private OWLClassExpression classExpression;
 
     /** @param classExpression

@@ -35,39 +35,45 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class OPPLTestCaseTypes extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "IRI_ATTRIBUTE_NAME", "AT", "ESCLAMATION_MARK", "MATCH",
-            "ATTRIBUTE_SELECTOR", "VALUES", "RENDERING", "GROUPS", "STRING_OPERATION",
-            "VARIABLE_NAME", "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT", "COUNT",
-            "SEMICOLON", "INFERENCE", "CONTAINS", "OPPL_TEST_CASE", "MESSAGE", "TEST",
-            "ASSERT_EQUAL", "ASSERT_NOT_EQUAL", "ASSERT_TRUE", "ASSERT_FALSE", "TEXT",
-            "ASSERT", "STAR", "LESS_THAN", "LESS_THAN_EQUAL", "GREATER_THAN",
-            "GREATER_THAN_EQUAL", "ASSERT_LESS_THAN", "ASSERT_LESS_THAN_EQUAL",
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "IRI_ATTRIBUTE_NAME",
+            "AT", "ESCLAMATION_MARK", "MATCH", "ATTRIBUTE_SELECTOR", "VALUES",
+            "RENDERING", "GROUPS", "STRING_OPERATION", "VARIABLE_NAME",
+            "REGEXP_CONSTRAINT", "FAIL", "NAF_CONSTRAINT", "COUNT",
+            "SEMICOLON", "INFERENCE", "CONTAINS", "OPPL_TEST_CASE", "MESSAGE",
+            "TEST", "ASSERT_EQUAL", "ASSERT_NOT_EQUAL", "ASSERT_TRUE",
+            "ASSERT_FALSE", "TEXT", "ASSERT", "STAR", "LESS_THAN",
+            "LESS_THAN_EQUAL", "GREATER_THAN", "GREATER_THAN_EQUAL",
+            "ASSERT_LESS_THAN", "ASSERT_LESS_THAN_EQUAL",
             "ASSERT_GREATER_THAN", "ASSERT_GREATER_THAN_EQUAL", "BINDING" };
     public static final int COMMA = 37;
     public static final int GREATER_THAN = 485;
@@ -240,13 +246,16 @@ public class OPPLTestCaseTypes extends TreeFilter {
     private AbstractOPPLTestCaseFactory testCaseFactory;
     private RuntimeExceptionHandler handler;
 
-    public OPPLTestCaseTypes(TreeNodeStream input, OPPLTestCaseSymbolTable symtab,
-            ErrorListener errorListener, ConstraintSystem constraintSystem,
-            AbstractOPPLTestCaseFactory testCaseFactory, RuntimeExceptionHandler handler) {
+    public OPPLTestCaseTypes(TreeNodeStream input,
+            OPPLTestCaseSymbolTable symtab, ErrorListener errorListener,
+            ConstraintSystem constraintSystem,
+            AbstractOPPLTestCaseFactory testCaseFactory,
+            RuntimeExceptionHandler handler) {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
-        this.constraintSystem = checkNotNull(constraintSystem, "constraintSystem");
+        this.constraintSystem = checkNotNull(constraintSystem,
+                "constraintSystem");
         this.testCaseFactory = checkNotNull(testCaseFactory, "testCaseFactory");
         this.handler = checkNotNull(handler, "handler");
     }
@@ -277,13 +286,14 @@ public class OPPLTestCaseTypes extends TreeFilter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
@@ -291,7 +301,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:110:1:
     // bottomup : ( testCase | textVariableRef );
     @Override
-    public final void bottomup() throws RecognitionException {
+    public final void bottomup() {
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:111:5:
             // ( testCase | textVariableRef )
@@ -306,7 +316,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     state.failed = true;
                     return;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 1, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 1, 0,
+                        input);
                 throw nvae;
             }
             switch (alt1) {
@@ -369,7 +380,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
             // ^( OPPL_TEST_CASE IDENTIFIER ( INFERENCE )? s= statement
             // someTests= tests )
             {
-                match(input, OPPL_TEST_CASE, FOLLOW_OPPL_TEST_CASE_in_testCase108);
+                match(input, OPPL_TEST_CASE,
+                        FOLLOW_OPPL_TEST_CASE_in_testCase108);
                 if (state.failed) {
                     return retval;
                 }
@@ -425,15 +437,19 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                     .buildOPPLTestCase(
                                             IDENTIFIER1 != null ? IDENTIFIER1.getText()
                                                     : null,
-                                            (OPPLScript) s.statementTree.getOPPLContent(),
+                                            (OPPLScript) s.statementTree
+                                                    .getOPPLContent(),
                                             someTests, INFERENCE2 != null);
-                            ((OPPLSyntaxTree) retval.start).setOPPLContent(testCase);
+                            ((OPPLSyntaxTree) retval.start)
+                                    .setOPPLContent(testCase);
                         } else {
                             getErrorListener().illegalToken(
-                                    (OPPLSyntaxTree) retval.start, "No Valid Tests");
+                                    (OPPLSyntaxTree) retval.start,
+                                    "No Valid Tests");
                         }
                     } else {
-                        getErrorListener().illegalToken((OPPLSyntaxTree) retval.start,
+                        getErrorListener().illegalToken(
+                                (OPPLSyntaxTree) retval.start,
                                 "Invalid OPPL statement");
                     }
                 }
@@ -457,7 +473,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
     public final List<OPPLTest> tests() {
         List<OPPLTest> tests = null;
         OPPLTest t = null;
-        tests = new ArrayList<OPPLTest>();
+        tests = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:140:2:
             // ( (t= test )+ )
@@ -499,7 +515,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                 state.failed = true;
                                 return tests;
                             }
-                            EarlyExitException eee = new EarlyExitException(3, input);
+                            EarlyExitException eee = new EarlyExitException(3,
+                                    input);
                             throw eee;
                     }
                     cnt3++;
@@ -519,6 +536,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
 
     // $ANTLR end "tests"
     public static class statement_return extends TreeRuleReturnScope {
+
         public OPPLSyntaxTree statementTree;
     }
 
@@ -531,7 +549,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
         retval.start = input.LT(1);
         OPPLSyntaxTree vd = null;
         OPPLSyntaxTree query = null;
-        List<Variable<?>> vds = new ArrayList<Variable<?>>();
+        List<Variable<?>> vds = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:156:2:
             // ( ^( OPPL_STATEMENT ( ^(vd= VARIABLE_DEFINITIONS ( . )* ) )?
@@ -540,7 +558,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
             // ^( OPPL_STATEMENT ( ^(vd= VARIABLE_DEFINITIONS ( . )* ) )?
             // ^(query= QUERY ( . )* ) )
             {
-                match(input, OPPL_STATEMENT, FOLLOW_OPPL_STATEMENT_in_statement194);
+                match(input, OPPL_STATEMENT,
+                        FOLLOW_OPPL_STATEMENT_in_statement194);
                 if (state.failed) {
                     return retval;
                 }
@@ -560,7 +579,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:157:22:
                     // ^(vd= VARIABLE_DEFINITIONS ( . )* )
                     {
-                        vd = (OPPLSyntaxTree) match(input, VARIABLE_DEFINITIONS,
+                        vd = (OPPLSyntaxTree) match(input,
+                                VARIABLE_DEFINITIONS,
                                 FOLLOW_VARIABLE_DEFINITIONS_in_statement203);
                         if (state.failed) {
                             return retval;
@@ -603,7 +623,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     }
                         break;
                 }
-                query = (OPPLSyntaxTree) match(input, QUERY, FOLLOW_QUERY_in_statement215);
+                query = (OPPLSyntaxTree) match(input, QUERY,
+                        FOLLOW_QUERY_in_statement215);
                 if (state.failed) {
                     return retval;
                 }
@@ -652,12 +673,18 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     }
                     if (query.getOPPLContent() != null) {
                         ((OPPLSyntaxTree) retval.start)
-                                .setOPPLContent(getTestCaseFactory().getOPPLFactory()
-                                        .buildOPPLScript(getConstraintSystem(), vds,
-                                                (OPPLQuery) query.getOPPLContent(),
-                                                Collections.<OWLAxiomChange> emptyList()));
+                                .setOPPLContent(getTestCaseFactory()
+                                        .getOPPLFactory()
+                                        .buildOPPLScript(
+                                                getConstraintSystem(),
+                                                vds,
+                                                (OPPLQuery) query
+                                                        .getOPPLContent(),
+                                                Collections
+                                                        .<OWLAxiomChange> emptyList()));
                     } else {
-                        getErrorListener().illegalToken((OPPLSyntaxTree) retval.start,
+                        getErrorListener().illegalToken(
+                                (OPPLSyntaxTree) retval.start,
                                 "Invalid query content");
                     }
                 }
@@ -768,7 +795,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                 if (state.backtracking == 1) {
                     if (anAssertion.a != null) {
                         t = MESSAGE3 == null ? new OPPLTest(anAssertion.a)
-                                : new OPPLTest(MESSAGE3.getText(), anAssertion.a);
+                                : new OPPLTest(MESSAGE3.getText(),
+                                        anAssertion.a);
                     }
                 }
             }
@@ -786,6 +814,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
 
     // $ANTLR end "test"
     public static class assertion_return extends TreeRuleReturnScope {
+
         public Assertion a;
     }
 
@@ -809,7 +838,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
         OPPLTestCaseTypes.assertionExpression_return right = null;
         OPPLTestCaseTypes.assertionExpression_return expr = null;
         OPPLTestCaseTypes.assertion_return anAssertion = null;
-        List<OPPLSyntaxTree> containedAssertionExpressions = new ArrayList<OPPLSyntaxTree>();
+        List<OPPLSyntaxTree> containedAssertionExpressions = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:188:2:
             // ( ^( ASSERT_EQUAL left= assertionExpression right=
@@ -862,7 +891,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 10, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            10, 0, input);
                     throw nvae;
             }
             switch (alt10) {
@@ -871,7 +901,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                 // ^( ASSERT_EQUAL left= assertionExpression right=
                 // assertionExpression )
                 {
-                    match(input, ASSERT_EQUAL, FOLLOW_ASSERT_EQUAL_in_assertion285);
+                    match(input, ASSERT_EQUAL,
+                            FOLLOW_ASSERT_EQUAL_in_assertion285);
                     if (state.failed) {
                         return retval;
                     }
@@ -896,8 +927,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertEqual(left.ae, left.node,
-                                right.ae, right.node, (OPPLSyntaxTree) retval.start);
+                        retval.a = getSymbolTable().getAssertEqual(left.ae,
+                                left.node, right.ae, right.node,
+                                (OPPLSyntaxTree) retval.start);
                     }
                 }
                     break;
@@ -932,8 +964,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertNotEqual(left.ae, left.node,
-                                right.ae, right.node, (OPPLSyntaxTree) retval.start);
+                        retval.a = getSymbolTable().getAssertNotEqual(left.ae,
+                                left.node, right.ae, right.node,
+                                (OPPLSyntaxTree) retval.start);
                     }
                 }
                     break;
@@ -968,8 +1001,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertLessThan(left.ae, left.node,
-                                right.ae, right.node);
+                        retval.a = getSymbolTable().getAssertLessThan(left.ae,
+                                left.node, right.ae, right.node);
                     }
                 }
                     break;
@@ -1004,8 +1037,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertLessThanEqualtTo(left.ae,
-                                left.node, right.ae, right.node);
+                        retval.a = getSymbolTable().getAssertLessThanEqualtTo(
+                                left.ae, left.node, right.ae, right.node);
                     }
                 }
                     break;
@@ -1040,8 +1073,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertGreaterThan(left.ae,
-                                left.node, right.ae, right.node);
+                        retval.a = getSymbolTable().getAssertGreaterThan(
+                                left.ae, left.node, right.ae, right.node);
                     }
                 }
                     break;
@@ -1076,8 +1109,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertGreaterThanEqualTo(left.ae,
-                                left.node, right.ae, right.node);
+                        retval.a = getSymbolTable()
+                                .getAssertGreaterThanEqualTo(left.ae,
+                                        left.node, right.ae, right.node);
                     }
                 }
                     break;
@@ -1093,8 +1127,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    VARIABLE_NAME4 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
-                            FOLLOW_VARIABLE_NAME_in_assertion395);
+                    VARIABLE_NAME4 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME, FOLLOW_VARIABLE_NAME_in_assertion395);
                     if (state.failed) {
                         return retval;
                     }
@@ -1104,7 +1138,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     loop9: do {
                         int alt9 = 2;
                         int LA9_0 = input.LA(1);
-                        if (LA9_0 == INTEGER || LA9_0 == EXPRESSION || LA9_0 == COUNT) {
+                        if (LA9_0 == INTEGER || LA9_0 == EXPRESSION
+                                || LA9_0 == COUNT) {
                             alt9 = 1;
                         }
                         switch (alt9) {
@@ -1119,7 +1154,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                     return retval;
                                 }
                                 if (state.backtracking == 1) {
-                                    containedAssertionExpressions.add(expr.node);
+                                    containedAssertionExpressions
+                                            .add(expr.node);
                                 }
                             }
                                 break;
@@ -1131,7 +1167,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(9, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        9, input);
                                 throw eee;
                         }
                         cnt9++;
@@ -1141,10 +1178,10 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertContains(VARIABLE_NAME4,
-                                containedAssertionExpressions, getConstraintSystem(),
-                                getTestCaseFactory(), (OPPLSyntaxTree) retval.start,
-                                getHandler());
+                        retval.a = getSymbolTable().getAssertContains(
+                                VARIABLE_NAME4, containedAssertionExpressions,
+                                getConstraintSystem(), getTestCaseFactory(),
+                                (OPPLSyntaxTree) retval.start, getHandler());
                     }
                 }
                     break;
@@ -1171,7 +1208,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.a = getSymbolTable().getAssertionComplement(anAssertion.a);
+                        retval.a = getSymbolTable().getAssertionComplement(
+                                anAssertion.a);
                     }
                 }
                     break;
@@ -1190,6 +1228,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
 
     // $ANTLR end "assertion"
     public static class assertionExpression_return extends TreeRuleReturnScope {
+
         public AssertionExpression ae;
         public OPPLSyntaxTree node;
     }
@@ -1199,7 +1238,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
     // assertionExpression returns [AssertionExpression ae, OPPLSyntaxTree node]
     // : ( ^( COUNT VARIABLE_NAME ) | ^( COUNT STAR ) | ^( COUNT (bn=
     // bindingDescription )+ ) | INTEGER | ^( EXPRESSION ( . )* ) );
-    public final OPPLTestCaseTypes.assertionExpression_return assertionExpression() {
+    public final OPPLTestCaseTypes.assertionExpression_return
+            assertionExpression() {
         OPPLTestCaseTypes.assertionExpression_return retval = new OPPLTestCaseTypes.assertionExpression_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree VARIABLE_NAME5 = null;
@@ -1235,8 +1275,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                NoViableAltException nvae = new NoViableAltException("",
-                                        13, 4, input);
+                                NoViableAltException nvae = new NoViableAltException(
+                                        "", 13, 4, input);
                                 throw nvae;
                         }
                     } else {
@@ -1244,8 +1284,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                             state.failed = true;
                             return retval;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 13, 1,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 13, 1, input);
                         throw nvae;
                     }
                 }
@@ -1263,7 +1303,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 13, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            13, 0, input);
                     throw nvae;
             }
             switch (alt13) {
@@ -1279,7 +1320,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    VARIABLE_NAME5 = (OPPLSyntaxTree) match(input, VARIABLE_NAME,
+                    VARIABLE_NAME5 = (OPPLSyntaxTree) match(input,
+                            VARIABLE_NAME,
                             FOLLOW_VARIABLE_NAME_in_assertionExpression454);
                     if (state.failed) {
                         return retval;
@@ -1289,8 +1331,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.ae = getSymbolTable().getCountAssertionExpression(
-                                VARIABLE_NAME5, getConstraintSystem(), getHandler());
+                        retval.ae = getSymbolTable()
+                                .getCountAssertionExpression(VARIABLE_NAME5,
+                                        getConstraintSystem(), getHandler());
                     }
                 }
                     break;
@@ -1315,7 +1358,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.ae = getSymbolTable().getCountStarAssertionExpression();
+                        retval.ae = getSymbolTable()
+                                .getCountStarAssertionExpression();
                     }
                 }
                     break;
@@ -1353,8 +1397,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                 }
                                 if (state.backtracking == 1) {
                                     if (bn.v != null && bn.exp != null) {
-                                        bindingNode.addAssignment(new Assignment(bn.v,
-                                                bn.exp));
+                                        bindingNode
+                                                .addAssignment(new Assignment(
+                                                        bn.v, bn.exp));
                                     } else {
                                         allFine = false;
                                     }
@@ -1369,7 +1414,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(11, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        11, input);
                                 throw eee;
                         }
                         cnt11++;
@@ -1380,8 +1426,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         if (allFine) {
-                            retval.ae = getSymbolTable().getBindingNodeCount(bindingNode,
-                                    getConstraintSystem(), getTestCaseFactory());
+                            retval.ae = getSymbolTable().getBindingNodeCount(
+                                    bindingNode, getConstraintSystem(),
+                                    getTestCaseFactory());
                         }
                     }
                 }
@@ -1396,8 +1443,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.ae = getSymbolTable().getIntegerAssertionExpression(
-                                INTEGER6);
+                        retval.ae = getSymbolTable()
+                                .getIntegerAssertionExpression(INTEGER6);
                     }
                 }
                     break;
@@ -1446,9 +1493,10 @@ public class OPPLTestCaseTypes extends TreeFilter {
                         }
                     }
                     if (state.backtracking == 1) {
-                        retval.ae = getSymbolTable().getOWLExpressionAssertionExpression(
-                                EXPRESSION7, getConstraintSystem(), getTestCaseFactory(),
-                                getHandler());
+                        retval.ae = getSymbolTable()
+                                .getOWLExpressionAssertionExpression(
+                                        EXPRESSION7, getConstraintSystem(),
+                                        getTestCaseFactory(), getHandler());
                     }
                 }
                     break;
@@ -1470,6 +1518,7 @@ public class OPPLTestCaseTypes extends TreeFilter {
 
     // $ANTLR end "assertionExpression"
     public static class bindingDescription_return extends TreeRuleReturnScope {
+
         public Variable<?> v;
         public OWLObject exp;
     }
@@ -1478,7 +1527,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/OPPLTestCaseTypes.g:250:1:
     // bindingDescription returns [Variable v, OWLObject exp] : ^( BINDING
     // VARIABLE_NAME ^( EXPRESSION ( . )* ) ) ;
-    public final OPPLTestCaseTypes.bindingDescription_return bindingDescription() {
+    public final OPPLTestCaseTypes.bindingDescription_return
+            bindingDescription() {
         OPPLTestCaseTypes.bindingDescription_return retval = new OPPLTestCaseTypes.bindingDescription_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree VARIABLE_NAME8 = null;
@@ -1547,8 +1597,8 @@ public class OPPLTestCaseTypes extends TreeFilter {
                     return retval;
                 }
                 if (state.backtracking == 1) {
-                    retval.v = getConstraintSystem()
-                            .getVariable(VARIABLE_NAME8.getText());
+                    retval.v = getConstraintSystem().getVariable(
+                            VARIABLE_NAME8.getText());
                     if (retval.v == null) {
                         if (getErrorListener() != null) {
                             getErrorListener().illegalToken(VARIABLE_NAME8,
@@ -1637,18 +1687,21 @@ public class OPPLTestCaseTypes extends TreeFilter {
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_OPPL_TEST_CASE_in_testCase108 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_IDENTIFIER_in_testCase110 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000080000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000400000L });
-    public static final BitSet FOLLOW_INFERENCE_in_testCase112 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000080000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000400000L });
-    public static final BitSet FOLLOW_statement_in_testCase119 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000008000000L });
+    public static final BitSet FOLLOW_IDENTIFIER_in_testCase110 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000080000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000400000L });
+    public static final BitSet FOLLOW_INFERENCE_in_testCase112 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000080000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000400000L });
+    public static final BitSet FOLLOW_statement_in_testCase119 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000008000000L });
     public static final BitSet FOLLOW_tests_in_testCase125 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_test_in_tests165 = new BitSet(new long[] {
@@ -1663,69 +1716,78 @@ public class OPPLTestCaseTypes extends TreeFilter {
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_TEST_in_test241 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_assertion_in_test247 = new BitSet(new long[] {
-            0x0000000000000008L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
-            0x0000000000000000L, 0x0000000004000000L });
+    public static final BitSet FOLLOW_assertion_in_test247 = new BitSet(
+            new long[] { 0x0000000000000008L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000004000000L });
     public static final BitSet FOLLOW_MESSAGE_in_test251 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_ASSERT_EQUAL_in_assertion285 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion289 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion294 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ASSERT_NOT_EQUAL_in_assertion303 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion307 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion312 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ASSERT_LESS_THAN_in_assertion321 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion325 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion330 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ASSERT_LESS_THAN_EQUAL_in_assertion339 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion343 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion348 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ASSERT_GREATER_THAN_in_assertion357 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion361 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion366 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ASSERT_GREATER_THAN_EQUAL_in_assertion375 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion379 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion384 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_CONTAINS_in_assertion393 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_VARIABLE_NAME_in_assertion395 = new BitSet(
-            new long[] { 0x0000040000000000L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000000L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_assertionExpression_in_assertion401 = new BitSet(
-            new long[] { 0x0000040000000008L, 0x0000000000000020L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000040000000008L, 0x0000000000000020L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000000000100000L });
     public static final BitSet FOLLOW_NOT_in_assertion414 = new BitSet(
             new long[] { 0x0000000000000004L });
@@ -1742,8 +1804,9 @@ public class OPPLTestCaseTypes extends TreeFilter {
     public static final BitSet FOLLOW_COUNT_in_assertionExpression474 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_bindingDescription_in_assertionExpression481 = new BitSet(
-            new long[] { 0x0000000000000008L, 0x0000000000000000L, 0x0000000000000000L,
-                    0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L,
+            new long[] { 0x0000000000000008L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
+                    0x0000000000000000L, 0x0000000000000000L,
                     0x0000000000000000L, 0x0000080000000000L });
     public static final BitSet FOLLOW_INTEGER_in_assertionExpression493 = new BitSet(
             new long[] { 0x0000000000000002L });

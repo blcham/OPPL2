@@ -10,7 +10,7 @@ import org.semanticweb.owlapi.model.OWLRuntimeException;
  * 
  * @author Luigi Iannone */
 public class CollectRuntimeExceptionHandler implements RuntimeExceptionHandler {
-    private final Set<RuntimeException> exceptions = new HashSet<RuntimeException>();
+    private final Set<RuntimeException> exceptions = new HashSet<>();
 
     @Override
     public void handleOWLRuntimeException(OWLRuntimeException e) {
@@ -33,6 +33,6 @@ public class CollectRuntimeExceptionHandler implements RuntimeExceptionHandler {
 
     /** @return the exceptions */
     public Set<RuntimeException> getExceptions() {
-        return new HashSet<RuntimeException>(exceptions);
+        return new HashSet<>(exceptions);
     }
 }

@@ -140,7 +140,7 @@ public class PatternActionFactory {
             InstantiatedPatternModel instantiatedPatternModel,
             OWLDataFactory owlDataFactory, IRI annotationIRI, OWLOntology ontology,
             RuntimeExceptionHandler handler) {
-        List<OWLAxiomChange> toReturn = new ArrayList<OWLAxiomChange>();
+        List<OWLAxiomChange> toReturn = new ArrayList<>();
         Set<BindingNode> bindingNodes = instantiatedPatternModel.extractBindingNodes();
         if (instantiatedPatternModel.getPatternModel().getInputVariables().isEmpty()
                 && !instantiatedPatternModel.getPatternModel().isClassPattern()

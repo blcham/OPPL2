@@ -22,13 +22,16 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 /** @author Luigi Iannone */
 public class OPPLPatternScope implements Scope {
+
     private final Scope delegate;
     private final OWLOntologyManager ontologyManager;
 
-    /** @param scope
-     *            scope
+    /**
+     * @param scope
+     *        scope
      * @param ontologyManager
-     *            ontologyManager */
+     *        ontologyManager
+     */
     public OPPLPatternScope(Scope scope, OWLOntologyManager ontologyManager) {
         delegate = checkNotNull(scope, "scope");
         this.ontologyManager = checkNotNull(ontologyManager, "ontologyManager");
@@ -75,46 +78,53 @@ public class OPPLPatternScope implements Scope {
         return delegate;
     }
 
-    /** @param reference
-     *            reference
+    /**
+     * @param reference
+     *        reference
      * @param patternName
-     *            patternName
+     *        patternName
      * @param constraintSystem
-     *            constraintSystem
+     *        constraintSystem
      * @param listener
-     *            listener
+     *        listener
      * @param args
-     *            args
-     * @return variable */
-    public Variable<?> resolvePatternReference(OPPLSyntaxTree reference,
+     *        args
+     * @return variable
+     */
+    @SafeVarargs
+    public static Variable<?> resolvePatternReference(OPPLSyntaxTree reference,
             String patternName, PatternConstraintSystem constraintSystem,
             ErrorListener listener, List<Object>... args) {
-        return this.resolvePatternReference(reference, patternName, constraintSystem,
-                Collections.<String> emptySet(), listener, args);
+        return resolvePatternReference(reference, patternName,
+                constraintSystem, Collections.<String> emptySet(), listener,
+                args);
     }
 
-    /** @param reference
-     *            reference
+    /**
+     * @param reference
+     *        reference
      * @param patternName
-     *            patternName
+     *        patternName
      * @param constraintSystem
-     *            constraintSystem
+     *        constraintSystem
      * @param visited
-     *            visited
+     *        visited
      * @param listener
-     *            listener
+     *        listener
      * @param args
-     *            args
-     * @return variable */
-    public Variable<?> resolvePatternReference(OPPLSyntaxTree reference,
+     *        args
+     * @return variable
+     */
+    @SafeVarargs
+    public static Variable<?> resolvePatternReference(OPPLSyntaxTree reference,
             String patternName, PatternConstraintSystem constraintSystem,
             Collection<? extends String> visited, ErrorListener listener,
             List<Object>... args) {
         Variable<?> toReturn = null;
         try {
-            String resolvedPattern = constraintSystem.resolvePattern(patternName,
-                    new HashSet<String>(visited), new ArrayList<PatternOPPLScript>(),
-                    listener, args);
+            String resolvedPattern = constraintSystem.resolvePattern(
+                    patternName, new HashSet<String>(visited),
+                    new ArrayList<PatternOPPLScript>(), listener, args);
             toReturn = constraintSystem.getVariable(resolvedPattern);
         } catch (PatternException e) {
             if (listener != null) {

@@ -42,7 +42,7 @@ public class AutoCompleteStrings {
     public final static String TRANSITIVE = "Transitive";
 
     public static List<String> getStandaloneClassExpressionCompletions() {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(SUBCLASS_OF,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(SUBCLASS_OF,
                 EQUIVALENT_TO, DISJOINT_WITH));
         toReturn.addAll(getClassExpressionCompletions());
         return toReturn;
@@ -50,7 +50,7 @@ public class AutoCompleteStrings {
 
     public static List<String> getIncompleteClassExpressionCompletions(
             String incompleteText) {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(SUBCLASS_OF,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(SUBCLASS_OF,
                 EQUIVALENT_TO, DISJOINT_WITH));
         toReturn.addAll(getClassExpressionCompletions());
         filter(incompleteText, toReturn);
@@ -70,14 +70,14 @@ public class AutoCompleteStrings {
     }
 
     public static List<String> getStandalonePropertyCompletions() {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(SUB_PROPERTY_OF,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(SUB_PROPERTY_OF,
                 EQUIVALENT_TO, DISJOINT_WITH, INVERSE_OF));
         toReturn.addAll(getPropertyCompletions());
         return toReturn;
     }
 
     public static List<String> getIncompletePropertyCompletions(String incompleteText) {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(SUB_PROPERTY_OF,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(SUB_PROPERTY_OF,
                 EQUIVALENT_TO, DISJOINT_WITH, INVERSE_OF));
         toReturn.addAll(getPropertyCompletions());
         filter(incompleteText, toReturn);
@@ -85,31 +85,31 @@ public class AutoCompleteStrings {
     }
 
     public static List<String> getPropertyCompletions() {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(SOME, ONLY, MIN, MAX,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(SOME, ONLY, MIN, MAX,
                 EXACTLY, VALUE));
         return toReturn;
     }
 
     public static List<String> getClassExpressionCompletions() {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(AND, OR));
+        List<String> toReturn = new ArrayList<>(Arrays.asList(AND, OR));
         return toReturn;
     }
 
     public static List<String> getStandaloneIndividualCompletions() {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(DIFFERENT_FROM,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(DIFFERENT_FROM,
                 SAME_AS));
         return toReturn;
     }
 
     public static List<String> getIncompleteIndividualCompletions(String incompleteText) {
-        List<String> toReturn = new ArrayList<String>(Arrays.asList(DIFFERENT_FROM,
+        List<String> toReturn = new ArrayList<>(Arrays.asList(DIFFERENT_FROM,
                 SAME_AS));
         filter(incompleteText, toReturn);
         return toReturn;
     }
 
     public static List<String> getStandaloneExpressionCompletions(Type type) {
-        final List<String> toReturn = new ArrayList<String>();
+        final List<String> toReturn = new ArrayList<>();
         if (type != null) {
             type.accept(new TypeVisitor() {
                 @Override
@@ -137,7 +137,7 @@ public class AutoCompleteStrings {
 
     public static List<String> getIncompleteExpressionCompletions(
             final String incompleteText, Type type) {
-        final List<String> toReturn = new ArrayList<String>();
+        final List<String> toReturn = new ArrayList<>();
         if (type != null) {
             type.accept(new TypeVisitor() {
                 @Override
@@ -164,7 +164,7 @@ public class AutoCompleteStrings {
     }
 
     public static List<String> getExpressionCompletions(Type type) {
-        final List<String> toReturn = new ArrayList<String>();
+        final List<String> toReturn = new ArrayList<>();
         if (type != null) {
             type.accept(new TypeVisitor() {
                 @Override

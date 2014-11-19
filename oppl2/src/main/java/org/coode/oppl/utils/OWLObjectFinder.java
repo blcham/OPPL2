@@ -27,7 +27,7 @@ public class OWLObjectFinder {
 
     private static List<List<Integer>> findAll(OWLObject key, OWLObject container,
             List<Integer> position) {
-        List<List<Integer>> toReturn = new ArrayList<List<Integer>>();
+        List<List<Integer>> toReturn = new ArrayList<>();
         OWLObjectDecomposer decomposer = new OWLObjectDecomposer();
         List<Object> decomposition = container.accept(decomposer);
         if (!decomposition.isEmpty()) {
@@ -37,7 +37,7 @@ public class OWLObjectFinder {
                 Object object = iterator.next();
                 if (OWLObject.class.isAssignableFrom(object.getClass())) {
                     OWLObject toCompare = (OWLObject) object;
-                    ArrayList<Integer> newPosition = new ArrayList<Integer>(position);
+                    ArrayList<Integer> newPosition = new ArrayList<>(position);
                     newPosition.add(i);
                     if (key.equals(toCompare)) {
                         toReturn.add(newPosition);

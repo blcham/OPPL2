@@ -13,7 +13,7 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 /** @author Luigi Iannone */
 public class SolvableSearchNode extends SolvabilitySearchNode {
-    private final Set<OWLObject> values = new HashSet<OWLObject>();
+    private final Set<OWLObject> values = new HashSet<>();
     private final Variable<?> variable;
 
     /** @param variable
@@ -43,7 +43,7 @@ public class SolvableSearchNode extends SolvabilitySearchNode {
 
     /** @return the values */
     public Set<OWLObject> getValues() {
-        return new HashSet<OWLObject>(values);
+        return new HashSet<>(values);
     }
 
     /** @return the variable */

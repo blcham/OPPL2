@@ -106,7 +106,7 @@ public class GroupVariableAttribute<O extends OWLObject> extends
      * @return group variable attribute */
     public static <P extends OWLObject> GroupVariableAttribute<P>
             getGroupVariableAttribute(RegexpGeneratedVariable<P> variable, int index) {
-        return new GroupVariableAttribute<P>(variable, index);
+        return new GroupVariableAttribute<>(variable, index);
     }
 
     /** @param v

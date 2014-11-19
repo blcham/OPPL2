@@ -6,7 +6,7 @@ import java.util.Set;
 /** @author Luigi Iannone */
 public class RecognitionParsingException extends ParsingException {
     private static final long serialVersionUID = 20100L;
-    private final Set<String> symbols = new HashSet<String>();
+    private final Set<String> symbols = new HashSet<>();
 
     /** @param line
      *            line
@@ -35,6 +35,6 @@ public class RecognitionParsingException extends ParsingException {
 
     /** @return the symbols */
     public Set<String> getSymbols() {
-        return new HashSet<String>(symbols);
+        return new HashSet<>(symbols);
     }
 }

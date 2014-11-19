@@ -31,7 +31,7 @@ public class PrimeNumbersUtils {
      * @return list of primes */
     public static List<Integer> runEratosthenesSieve(int upperBound) {
         int upperBoundSquareRoot = (int) Math.sqrt(upperBound);
-        List<Integer> toReturn = new ArrayList<Integer>(upperBound / 2);
+        List<Integer> toReturn = new ArrayList<>(upperBound / 2);
         boolean[] isComposite = new boolean[upperBound + 1];
         for (int m = 2; m <= upperBoundSquareRoot; m++) {
             if (!isComposite[m]) {

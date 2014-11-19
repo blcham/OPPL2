@@ -86,7 +86,7 @@ public class PatternTestOntologies {
     }
 
     private static List<OWLAxiom> label(OWLEntity e, String... lines) {
-        List<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
+        List<OWLAxiom> axioms = new ArrayList<>();
         axioms.add(dec(e));
         for (String l : lines) {
             String language = "";
@@ -1916,7 +1916,7 @@ public class PatternTestOntologies {
 
     private static OWLEquivalentClassesAxiom eq(Set<OWLAnnotation> a,
             OWLClassExpression... classExpressions) {
-        return dataFactory.getOWLEquivalentClassesAxiom(new HashSet<OWLClassExpression>(
+        return dataFactory.getOWLEquivalentClassesAxiom(new HashSet<>(
                 Arrays.asList(classExpressions)), a);
     }
 

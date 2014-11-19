@@ -2984,7 +2984,7 @@ public class OPPLPatternScript_OPPLParser_MOWLParser extends Parser {
                                     stream_propertyExpression.add(rest.getTree());
                                 }
                                 if (list_rest == null) {
-                                    list_rest = new ArrayList<Object>();
+                                    list_rest = new ArrayList<>();
                                 }
                                 if (rest != null) {
                                     list_rest.add(rest.getTree());
@@ -5447,7 +5447,7 @@ public class OPPLPatternScript_OPPLParser_MOWLParser extends Parser {
                             return;
                         }
                         if (list_rest == null) {
-                            list_rest = new ArrayList<Object>();
+                            list_rest = new ArrayList<>();
                         }
                         list_rest.add(rest);
                     }

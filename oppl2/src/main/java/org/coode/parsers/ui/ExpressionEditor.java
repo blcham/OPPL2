@@ -300,7 +300,7 @@ public class ExpressionEditor<O> extends JTextPane implements RefreshableCompone
     }
 
     // /////////////////////// content verification
-    private final Set<InputVerificationStatusChangedListener> listeners = new HashSet<InputVerificationStatusChangedListener>();
+    private final Set<InputVerificationStatusChangedListener> listeners = new HashSet<>();
     private boolean previousValue = true;
 
     @Override

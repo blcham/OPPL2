@@ -78,7 +78,7 @@ public class OWLExpressionAssertionExpression implements
     @Override
     public Set<OWLObject>
             resolve(Set<? extends BindingNode> bindings, ConstraintSystem cs) {
-        Set<OWLObject> toReturn = new HashSet<OWLObject>();
+        Set<OWLObject> toReturn = new HashSet<>();
         for (BindingNode bindingNode : bindings) {
             ValueComputationParameters parameters = new SimpleValueComputationParameters(
                     cs, bindingNode, handler);

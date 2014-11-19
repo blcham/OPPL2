@@ -68,7 +68,7 @@ public class EvaluationResults {
     }
 
     private final OPPLScript opplScript;
-    private final List<OWLAxiomChange> changes = new ArrayList<OWLAxiomChange>();
+    private final List<OWLAxiomChange> changes = new ArrayList<>();
     private final ChangeRenderer changeRenderer;
 
     /** @param opplScript
@@ -88,7 +88,7 @@ public class EvaluationResults {
 
     /** @return the changes */
     public List<OWLAxiomChange> getChanges() {
-        return new ArrayList<OWLAxiomChange>(changes);
+        return new ArrayList<>(changes);
     }
 
     @Override

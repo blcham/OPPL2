@@ -25,8 +25,8 @@ public class TokenTableModel implements TableModel {
      * 
      */
     public static final String TOKEN_NAME = "TOKEN NAME";
-    private final Set<TokenFileSorter> tokenFileSorters = new HashSet<TokenFileSorter>();
-    private final List<String> anomalies = new ArrayList<String>();
+    private final Set<TokenFileSorter> tokenFileSorters = new HashSet<>();
+    private final List<String> anomalies = new ArrayList<>();
     private final DefaultTableModel delegate;
     private int maxUsedTokenIndex = 0;
 
@@ -35,14 +35,14 @@ public class TokenTableModel implements TableModel {
     public TokenTableModel(Collection<? extends TokenFileSorter> tokenFileSorters) {
         this.tokenFileSorters.addAll(checkNotNull(tokenFileSorters, "tokenFileSorters"));
         delegate = new DefaultTableModel();
-        Set<String> tokenNames = new TreeSet<String>();
+        Set<String> tokenNames = new TreeSet<>();
         for (TokenFileSorter tokenFileSorter : tokenFileSorters) {
             for (Token token : tokenFileSorter.getTokens()) {
                 tokenNames.add(token.getText());
             }
         }
         delegate.addColumn(TokenTableModel.TOKEN_NAME);
-        List<TokenFileSorter> sorterList = new ArrayList<TokenFileSorter>(
+        List<TokenFileSorter> sorterList = new ArrayList<>(
                 tokenFileSorters);
         for (TokenFileSorter tokenFileSorter : sorterList) {
             delegate.addColumn(tokenFileSorter.getPath().substring(
@@ -54,7 +54,7 @@ public class TokenTableModel implements TableModel {
     }
 
     private String[] getRow(String tokenName, List<TokenFileSorter> sorters) {
-        List<String> row = new ArrayList<String>();
+        List<String> row = new ArrayList<>();
         row.add(tokenName);
         for (TokenFileSorter tokenFileSorter : sorters) {
             Iterator<Token> iterator = tokenFileSorter.getTokens().iterator();
@@ -73,7 +73,7 @@ public class TokenTableModel implements TableModel {
         }
         // If there's more than one value in the row (excluding the token name
         // this is anomalous
-        Set<String> distinctValues = new HashSet<String>(row);
+        Set<String> distinctValues = new HashSet<>(row);
         distinctValues.remove("-");
         if (distinctValues.size() > 2) {
             anomalies.add(tokenName);
@@ -128,7 +128,7 @@ public class TokenTableModel implements TableModel {
 
     /** @return the anomalies */
     public List<String> getAnomalies() {
-        return new ArrayList<String>(anomalies);
+        return new ArrayList<>(anomalies);
     }
 
     /** @return the maxUsedTokenIndex */
@@ -138,7 +138,7 @@ public class TokenTableModel implements TableModel {
 
     /** @return min index */
     public int getMinUnusedTokenIndex() {
-        List<Integer> unused = new ArrayList<Integer>();
+        List<Integer> unused = new ArrayList<>();
         for (int i = 4; i < getMaxUsedTokenIndex(); i++) {
             Iterator<TokenFileSorter> iterator = tokenFileSorters.iterator();
             boolean found = false;

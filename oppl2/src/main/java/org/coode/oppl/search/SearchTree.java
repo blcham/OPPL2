@@ -37,7 +37,7 @@ public abstract class SearchTree<N> {
         currrentPath.push(start);
         boolean goalReached = this.goalReached(start);
         if (goalReached) {
-            solutions.add(new ArrayList<N>(currrentPath));
+            solutions.add(new ArrayList<>(currrentPath));
             currrentPath.pop();
             return true;
         }

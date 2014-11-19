@@ -404,7 +404,7 @@ abstract class AbstractAxiomQuery implements AxiomQuery {
 
     @Override
     public Set<BindingNode> getLeaves() {
-        return new HashSet<BindingNode>(leaves);
+        return new HashSet<>(leaves);
     }
 
     /** @return the runtimeExceptionHandler */

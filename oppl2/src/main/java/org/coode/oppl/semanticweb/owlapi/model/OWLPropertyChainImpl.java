@@ -1,15 +1,17 @@
 package org.coode.oppl.semanticweb.owlapi.model;
 
 import static org.coode.oppl.utils.ArgCheck.checkNotNull;
+import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -24,16 +26,18 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectVisitor;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 
-import javax.annotation.Nonnull;
-
 /** @author Luigi Iannone */
 public class OWLPropertyChainImpl implements OWLPropertyChain {
-    private static final long serialVersionUID = 20100L;
-    private final List<OWLObjectPropertyExpression> delegate = new ArrayList<OWLObjectPropertyExpression>();
 
-    /** @param delegate
-     *            delegate */
-    public OWLPropertyChainImpl(List<? extends OWLObjectPropertyExpression> delegate) {
+    private static final long serialVersionUID = 20100L;
+    private final List<OWLObjectPropertyExpression> delegate = new ArrayList<>();
+
+    /**
+     * @param delegate
+     *        delegate
+     */
+    public OWLPropertyChainImpl(
+            List<? extends OWLObjectPropertyExpression> delegate) {
         this.delegate.addAll(checkNotNull(delegate, "delegate"));
         if (delegate.size() < 2) {
             throw new IllegalArgumentException(
@@ -57,7 +61,8 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends OWLObjectPropertyExpression> c) {
+    public boolean addAll(int index,
+            Collection<? extends OWLObjectPropertyExpression> c) {
         return delegate.addAll(index, c);
     }
 
@@ -142,8 +147,8 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
     }
 
     @Override
-    public OWLObjectPropertyExpression
-            set(int index, OWLObjectPropertyExpression element) {
+    public OWLObjectPropertyExpression set(int index,
+            OWLObjectPropertyExpression element) {
         return delegate.set(index, element);
     }
 
@@ -153,7 +158,8 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
     }
 
     @Override
-    public List<OWLObjectPropertyExpression> subList(int fromIndex, int toIndex) {
+    public List<OWLObjectPropertyExpression>
+            subList(int fromIndex, int toIndex) {
         return delegate.subList(fromIndex, toIndex);
     }
 
@@ -186,11 +192,7 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
 
     @Override
     public Set<OWLEntity> getSignature() {
-        Set<OWLEntity> toReturn = new HashSet<OWLEntity>();
-        for (OWLObjectPropertyExpression propertyExpression : delegate) {
-            toReturn.addAll(propertyExpression.getSignature());
-        }
-        return toReturn;
+        return asSet(delegate.stream().flatMap(p -> p.signature()));
     }
 
     @Override
@@ -215,11 +217,8 @@ public class OWLPropertyChainImpl implements OWLPropertyChain {
 
     @Override
     public Set<OWLObjectProperty> getObjectPropertiesInSignature() {
-        Set<OWLObjectProperty> toReturn = new HashSet<OWLObjectProperty>();
-        for (OWLObjectPropertyExpression propertyExpression : delegate) {
-            toReturn.addAll(propertyExpression.getObjectPropertiesInSignature());
-        }
-        return toReturn;
+        return asSet(delegate.stream().flatMap(
+                p -> p.objectPropertiesInSignature()));
     }
 
     @Override

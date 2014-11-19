@@ -112,8 +112,8 @@ import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 public class OWLObjectAbstractor implements OWLObjectVisitorEx<OWLObject> {
 
     private final ValueComputationParameters parameters;
-    private final Set<Variable<?>> variables = new HashSet<Variable<?>>();
-    private final Set<BindingNode> bindingNodes = new HashSet<BindingNode>();
+    private final Set<Variable<?>> variables = new HashSet<>();
+    private final Set<BindingNode> bindingNodes = new HashSet<>();
     private final OWLDataFactory df;
 
     /**
@@ -272,7 +272,7 @@ public class OWLObjectAbstractor implements OWLObjectVisitorEx<OWLObject> {
     @Override
     public OWLObject visit(OWLDatatypeRestriction node) {
         return df.getOWLDatatypeRestriction(abs(node.getDatatype()),
-                node.getFacetRestrictions());
+                asSet(node.facetRestrictions()));
     }
 
     @Override
@@ -295,7 +295,7 @@ public class OWLObjectAbstractor implements OWLObjectVisitorEx<OWLObject> {
     @Override
     public OWLObject visit(OWLDataHasValue desc) {
         return df.getOWLDataHasValue(abs(desc.getProperty()),
-                abs(desc.getValue()));
+                abs(desc.getFiller()));
     }
 
     @Override
@@ -459,7 +459,7 @@ public class OWLObjectAbstractor implements OWLObjectVisitorEx<OWLObject> {
     public OWLObject visit(OWLSubPropertyChainOfAxiom axiom) {
         List<OWLObjectPropertyExpression> propertyChain = axiom
                 .getPropertyChain();
-        List<OWLObjectPropertyExpression> values = new ArrayList<OWLObjectPropertyExpression>();
+        List<OWLObjectPropertyExpression> values = new ArrayList<>();
         for (OWLObjectPropertyExpression v : propertyChain) {
             values.add(abs(v));
         }

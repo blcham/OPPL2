@@ -40,7 +40,7 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
  *            type */
 public class InCollectionConstraint<P extends OWLObject> implements AbstractConstraint {
     private final Variable<P> variable;
-    private final Set<P> collection = new HashSet<P>();
+    private final Set<P> collection = new HashSet<>();
     private final ConstraintSystem constraintSystem;
 
     /** @param variable
@@ -81,7 +81,7 @@ public class InCollectionConstraint<P extends OWLObject> implements AbstractCons
 
     /** @return the collection */
     public Set<P> getCollection() {
-        return new HashSet<P>(this.collection);
+        return new HashSet<>(this.collection);
     }
 
     @Override
@@ -185,6 +185,6 @@ public class InCollectionConstraint<P extends OWLObject> implements AbstractCons
             InCollectionConstraint<T>
             getInCollectionConstraint(Variable<T> variable,
                     Collection<? extends T> collection, ConstraintSystem constraintSystem) {
-        return new InCollectionConstraint<T>(variable, collection, constraintSystem);
+        return new InCollectionConstraint<>(variable, collection, constraintSystem);
     }
 }

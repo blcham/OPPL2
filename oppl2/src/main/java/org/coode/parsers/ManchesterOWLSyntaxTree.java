@@ -12,7 +12,7 @@ import org.semanticweb.owlapi.model.OWLObject;
 public class ManchesterOWLSyntaxTree extends CommonTree {
     private Type evalType = null;
     private OWLObject owlObject;
-    private final List<String> completions = new ArrayList<String>();
+    private final List<String> completions = new ArrayList<>();
 
     /** @param token
      *            token */
@@ -57,6 +57,6 @@ public class ManchesterOWLSyntaxTree extends CommonTree {
 
     /** @return the completions */
     public List<String> getCompletions() {
-        return new ArrayList<String>(completions);
+        return new ArrayList<>(completions);
     }
 }

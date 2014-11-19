@@ -49,7 +49,7 @@ public class VariableExtractorSortVariablesTest {
         assertTrue(variables.size() == 2);
         PositionBasedVariableComparator positionBasedVariableComparator = new PositionBasedVariableComparator(
                 xANDySOMEx, dataFactory);
-        SortedSet<Variable<?>> sortedVariables = new TreeSet<Variable<?>>(
+        SortedSet<Variable<?>> sortedVariables = new TreeSet<>(
                 positionBasedVariableComparator);
         sortedVariables.addAll(variables);
         assertTrue(sortedVariables.size() == 2);
@@ -60,7 +60,7 @@ public class VariableExtractorSortVariablesTest {
         variables = variableExtractor.extractVariables(xANDySOMExANDySOMEz);
         positionBasedVariableComparator = new PositionBasedVariableComparator(
                 xANDySOMExANDySOMEz, dataFactory);
-        sortedVariables = new TreeSet<Variable<?>>(positionBasedVariableComparator);
+        sortedVariables = new TreeSet<>(positionBasedVariableComparator);
         sortedVariables.addAll(variables);
         assertTrue(sortedVariables.size() == 3);
         assertTrue(sortedVariables.first().equals(x));

@@ -1476,8 +1476,8 @@ public class OPPLTypeEnforcement extends TreeFilter {
     public final OPPLTypeEnforcement.expression_return expression() {
         OPPLTypeEnforcement.expression_return retval = new OPPLTypeEnforcement.expression_return();
         retval.start = input.LT(1);
-        List<Object> list_disjuncts = new ArrayList<Object>();
-        List<Object> list_chainItems = new ArrayList<Object>();
+        List<Object> list_disjuncts = new ArrayList<>();
+        List<Object> list_chainItems = new ArrayList<>();
         OPPLTypeEnforcement.conjunction_return conjunction3 = null;
         OPPLTypeEnforcement.complexPropertyExpression_return complexPropertyExpression4 = null;
         RuleReturnScope disjuncts = null;
@@ -1579,7 +1579,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_disjuncts.size());
                         for (Object node : list_disjuncts) {
                             nodes.add(((conjunction_return) node).node);
@@ -1650,7 +1650,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_chainItems.size());
                         for (Object item : list_chainItems) {
                             nodes.add(((expression_return) item).node);
@@ -1725,7 +1725,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
     public final OPPLTypeEnforcement.conjunction_return conjunction() {
         OPPLTypeEnforcement.conjunction_return retval = new OPPLTypeEnforcement.conjunction_return();
         retval.start = input.LT(1);
-        List<Object> list_conjuncts = new ArrayList<Object>();
+        List<Object> list_conjuncts = new ArrayList<>();
         OPPLTypeEnforcement.unary_return unary5 = null;
         RuleReturnScope conjuncts = null;
         try {
@@ -1804,7 +1804,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_conjuncts.size());
                         for (Object node : list_conjuncts) {
                             nodes.add(((unary_return) node).node);
@@ -2770,7 +2770,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
         OPPLTypeEnforcement.oneOf_return retval = new OPPLTypeEnforcement.oneOf_return();
         retval.start = input.LT(1);
         OPPLSyntaxTree individuals = null;
-        List<Object> list_individuals = new ArrayList<Object>();
+        List<Object> list_individuals = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/OPPLTypeEnforcement.g:401:2:
             // ( ^( ONE_OF (individuals+= IDENTIFIER )+ ) )
@@ -2825,7 +2825,7 @@ public class OPPLTypeEnforcement extends TreeFilter {
                     return retval;
                 }
                 if (state.backtracking == 1) {
-                    List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                    List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                             list_individuals.size());
                     for (Object node : list_individuals) {
                         nodes.add((ManchesterOWLSyntaxTree) node);

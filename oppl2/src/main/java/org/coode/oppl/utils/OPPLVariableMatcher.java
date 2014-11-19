@@ -64,7 +64,7 @@ public class OPPLVariableMatcher {
             final boolean matchIndividuals, final boolean matchConstants,
             final boolean matchAnnotationProperty) {
         Set<Variable<?>> variables = constraintSystem.getVariables();
-        Set<Variable<?>> toReturn = new HashSet<Variable<?>>(variables.size());
+        Set<Variable<?>> toReturn = new HashSet<>(variables.size());
         VariableTypeVisitorEx<Boolean> visitor = new VariableTypeVisitorEx<Boolean>() {
             @Override
             public Boolean visitCLASSVariableType(CLASSVariableType classVariableType) {

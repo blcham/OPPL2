@@ -21,6 +21,7 @@ import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 @SuppressWarnings("javadoc")
 public class TestAssertedSolvabilityBasedAxiomQuery {
+
     private final static RuntimeExceptionHandler HANDLER = new QuickFailRuntimeExceptionHandler();
 
     @Test
@@ -28,7 +29,8 @@ public class TestAssertedSolvabilityBasedAxiomQuery {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         OWLOntology ontology = manager.createOntology();
         OPPLFactory opplFactory = new OPPLFactory(manager, ontology, null);
-        ConstraintSystem constraintSystem = opplFactory.createConstraintSystem();
+        ConstraintSystem constraintSystem = opplFactory
+                .createConstraintSystem();
         Variable<OWLClassExpression> x = constraintSystem.createVariable("?x",
                 VariableTypeFactory.getCLASSVariableType(), null);
         OWLDataFactory dataFactory = manager.getOWLDataFactory();
@@ -43,45 +45,48 @@ public class TestAssertedSolvabilityBasedAxiomQuery {
         AssertedSolvabilityBasedAxiomQuery assertedSolvabilityBasedAxiomQuery = new AssertedSolvabilityBasedAxiomQuery(
                 manager, constraintSystem, HANDLER);
         axiom.accept(assertedSolvabilityBasedAxiomQuery);
-        constraintSystem.setLeaves(assertedSolvabilityBasedAxiomQuery.getLeaves());
-        ConstraintSystem newConstraintSystem = opplFactory.createConstraintSystem();
+        constraintSystem.setLeaves(assertedSolvabilityBasedAxiomQuery
+                .getLeaves());
+        ConstraintSystem newConstraintSystem = opplFactory
+                .createConstraintSystem();
         newConstraintSystem.importVariable(x);
         AssertedTreeSearchSingleAxiomQuery assertedTreeSearchSingleAxiomQuery = new AssertedTreeSearchSingleAxiomQuery(
-                manager.getOntologies(), newConstraintSystem, HANDLER);
+                manager.ontologies(), newConstraintSystem, HANDLER);
         axiom.accept(assertedTreeSearchSingleAxiomQuery);
-        newConstraintSystem.setLeaves(assertedTreeSearchSingleAxiomQuery.getLeaves());
-        assertTrue(constraintSystem.getLeaves().equals(newConstraintSystem.getLeaves()));
+        newConstraintSystem.setLeaves(assertedTreeSearchSingleAxiomQuery
+                .getLeaves());
+        assertTrue(constraintSystem.getLeaves().equals(
+                newConstraintSystem.getLeaves()));
     }
 
     @Test
     public void shouldTestUnsolvableSubClassAxiom() throws Exception {
-        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        OWLOntology ontology = manager.createOntology();
-        OPPLFactory opplFactory = new OPPLFactory(manager, ontology, null);
-        ConstraintSystem constraintSystem = opplFactory.createConstraintSystem();
-        Variable<OWLClassExpression> x = constraintSystem.createVariable("?x",
+        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
+        OWLOntology ontology = m.createOntology();
+        OPPLFactory opplFactory = new OPPLFactory(m, ontology, null);
+        ConstraintSystem cs = opplFactory.createConstraintSystem();
+        Variable<OWLClassExpression> x = cs.createVariable("?x",
                 VariableTypeFactory.getCLASSVariableType(), null);
-        Variable<OWLClassExpression> y = constraintSystem.createVariable("?y",
+        Variable<OWLClassExpression> y = cs.createVariable("?y",
                 VariableTypeFactory.getCLASSVariableType(), null);
-        OWLDataFactory dataFactory = manager.getOWLDataFactory();
-        manager.addAxiom(
+        OWLDataFactory df = m.getOWLDataFactory();
+        m.addAxiom(
                 ontology,
-                dataFactory.getOWLSubClassOfAxiom(
-                        dataFactory.getOWLClass(IRI.create("A")),
-                        dataFactory.getOWLClass(IRI.create("A"))));
-        OWLSubClassOfAxiom axiom = dataFactory.getOWLSubClassOfAxiom(
-                dataFactory.getOWLClass(x.getIRI()), dataFactory.getOWLClass(y.getIRI()));
-        ConstraintSystem newConstraintSystem = opplFactory.createConstraintSystem();
-        newConstraintSystem.importVariable(x);
-        newConstraintSystem.importVariable(y);
+                df.getOWLSubClassOfAxiom(df.getOWLClass(IRI.create("A")),
+                        df.getOWLClass(IRI.create("A"))));
+        OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(
+                df.getOWLClass(x.getIRI()), df.getOWLClass(y.getIRI()));
+        ConstraintSystem newCS = opplFactory.createConstraintSystem();
+        newCS.importVariable(x);
+        newCS.importVariable(y);
         AssertedSolvabilityBasedAxiomQuery assertedSolvabilityBasedAxiomQuery = new AssertedSolvabilityBasedAxiomQuery(
-                manager, constraintSystem, HANDLER);
+                m, cs, HANDLER);
         axiom.accept(assertedSolvabilityBasedAxiomQuery);
-        constraintSystem.setLeaves(assertedSolvabilityBasedAxiomQuery.getLeaves());
+        cs.setLeaves(assertedSolvabilityBasedAxiomQuery.getLeaves());
         AssertedTreeSearchSingleAxiomQuery assertedTreeSearchSingleAxiomQuery = new AssertedTreeSearchSingleAxiomQuery(
-                manager.getOntologies(), newConstraintSystem, HANDLER);
+                m.ontologies(), newCS, HANDLER);
         axiom.accept(assertedTreeSearchSingleAxiomQuery);
-        newConstraintSystem.setLeaves(assertedTreeSearchSingleAxiomQuery.getLeaves());
-        assertTrue(constraintSystem.getLeaves().equals(newConstraintSystem.getLeaves()));
+        newCS.setLeaves(assertedTreeSearchSingleAxiomQuery.getLeaves());
+        assertTrue(cs.getLeaves().equals(newCS.getLeaves()));
     }
 }

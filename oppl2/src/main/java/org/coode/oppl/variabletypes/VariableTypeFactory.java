@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 
 /** @author Luigi Iannone */
 public class VariableTypeFactory implements OWLObjectVisitorEx{
-    private static final EnumMap<VariableTypeName, VariableType<?>> typesCache = new EnumMap<VariableTypeName, VariableType<?>>(
+    private static final EnumMap<VariableTypeName, VariableType<?>> typesCache = new EnumMap<>(
             VariableTypeName.class);
     static {
         typesCache.put(VariableTypeName.CLASS, new CLASSVariableType(
@@ -132,7 +132,7 @@ public class VariableTypeFactory implements OWLObjectVisitorEx{
 
     /** @return set of variable type */
     public static Set<VariableType<?>> getAllVariableTypes() {
-        Set<VariableType<?>> toReturn = new HashSet<VariableType<?>>();
+        Set<VariableType<?>> toReturn = new HashSet<>();
         toReturn.add(getANNOTATIONPROPERTYVariableType());
         toReturn.add(getCONSTANTVariableType());
         toReturn.add(getDATAPROPERTYVariableType());

@@ -6,7 +6,7 @@ import java.util.Set;
 /** @author Luigi Iannone */
 public class IncompatibleSymbolsParsingException extends ParsingException {
     private static final long serialVersionUID = 20100L;
-    private final Set<String> incompatibleSymbols = new HashSet<String>();
+    private final Set<String> incompatibleSymbols = new HashSet<>();
 
     /** @param parentExpression
      *            parentExpression
@@ -28,6 +28,6 @@ public class IncompatibleSymbolsParsingException extends ParsingException {
 
     /** @return the incompatibleSymbols */
     public Set<String> getIncompatibleSymbols() {
-        return new HashSet<String>(incompatibleSymbols);
+        return new HashSet<>(incompatibleSymbols);
     }
 }

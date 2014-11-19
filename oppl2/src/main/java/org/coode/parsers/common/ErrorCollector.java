@@ -20,7 +20,7 @@ import org.coode.parsers.common.exception.UnrecognisedSymbolParsingException;
 
 /** @author Luigi Iannone */
 public class ErrorCollector implements ErrorListener {
-    private final Set<Throwable> errors = new HashSet<Throwable>();
+    private final Set<Throwable> errors = new HashSet<>();
 
     @Override
     public void unrecognisedSymbol(CommonTree t) {
@@ -36,7 +36,7 @@ public class ErrorCollector implements ErrorListener {
 
     @Override
     public void incompatibleSymbols(CommonTree parentExpression, CommonTree... trees) {
-        List<String> symbols = new ArrayList<String>(trees.length);
+        List<String> symbols = new ArrayList<>(trees.length);
         for (CommonTree commonTree : trees) {
             symbols.add(commonTree.getText());
         }
@@ -74,6 +74,6 @@ public class ErrorCollector implements ErrorListener {
 
     /** @return the errors */
     public Set<Throwable> getErrors() {
-        return new HashSet<Throwable>(errors);
+        return new HashSet<>(errors);
     }
 }

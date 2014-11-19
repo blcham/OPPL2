@@ -14,65 +14,78 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 /** @author Luigi Iannone */
 public class OPPLPatternsSymbolTable extends OPPLSymbolTable {
+
     private final OWLOntologyManager ontologyManager;
 
-    /** @param globalScope
-     *            globalScope
+    /**
+     * @param globalScope
+     *        globalScope
      * @param ontologyManager
-     *            ontologyManager */
-    public OPPLPatternsSymbolTable(Scope globalScope, OWLOntologyManager ontologyManager) {
+     *        ontologyManager
+     */
+    public OPPLPatternsSymbolTable(Scope globalScope,
+            OWLOntologyManager ontologyManager) {
         super(globalScope, ontologyManager.getOWLDataFactory());
         this.ontologyManager = ontologyManager;
     }
 
-    /** @param reference
-     *            reference
+    /**
+     * @param reference
+     *        reference
      * @param patternName
-     *            patternName
+     *        patternName
      * @param constraintSystem
-     *            constraintSystem
+     *        constraintSystem
      * @param args
-     *            args */
-    public void resolvePattern(OPPLSyntaxTree reference, String patternName,
-            PatternConstraintSystem constraintSystem, List<Object>... args) {
+     *        args
+     */
+    @SafeVarargs
+    public final void resolvePattern(OPPLSyntaxTree reference,
+            String patternName, PatternConstraintSystem constraintSystem,
+            List<Object>... args) {
         List<List<Object>> arguments = Arrays.asList(args);
-        @SuppressWarnings("unchecked")
-        Variable<?> resolvedPatternReference = getGlobalScope().resolvePatternReference(
-                reference, patternName, constraintSystem, getErrorListener(),
-                arguments.toArray(new List[arguments.size()]));
+        getGlobalScope();
+        Variable<?> resolvedPatternReference = OPPLPatternScope
+                .resolvePatternReference(reference, patternName,
+                        constraintSystem, getErrorListener(),
+                        arguments.toArray(new List[arguments.size()]));
         if (resolvedPatternReference == null) {
             reportIllegalToken(reference, "The pattern reference is invalid");
         } else {
-            VariableTypes type = VariableTypes.getVariableType(resolvedPatternReference
-                    .getType());
+            VariableTypes type = VariableTypes
+                    .getVariableType(resolvedPatternReference.getType());
             define(reference.token,
                     type.getSymbol(getDataFactory(), reference.token.getText()));
         }
     }
 
-    /** @param reference
-     *            reference
+    /**
+     * @param reference
+     *        reference
      * @param patternName
-     *            patternName
+     *        patternName
      * @param constraintSystem
-     *            constraintSystem
+     *        constraintSystem
      * @param visited
-     *            visited
+     *        visited
      * @param args
-     *            args */
-    public void resolvePattern(OPPLSyntaxTree reference, String patternName,
-            PatternConstraintSystem constraintSystem,
+     *        args
+     */
+    @SafeVarargs
+    public final void resolvePattern(OPPLSyntaxTree reference,
+            String patternName, PatternConstraintSystem constraintSystem,
             Collection<? extends String> visited, List<Object>... args) {
         List<List<Object>> arguments = Arrays.asList(args);
-        @SuppressWarnings("unchecked")
-        Variable<?> resolvedPatternReference = getGlobalScope().resolvePatternReference(
-                reference, patternName, constraintSystem, visited, getErrorListener(),
-                arguments.toArray(new List[arguments.size()]));
+        getGlobalScope();
+        Variable<?> resolvedPatternReference = OPPLPatternScope
+                .resolvePatternReference(reference, patternName,
+                        constraintSystem, visited, getErrorListener(),
+                        arguments.toArray(new List[arguments.size()]));
         if (resolvedPatternReference == null) {
             reportIllegalToken(reference, "The pattern reference is invalid");
         } else {
-            VariableTypes type = VariableTypes.getVariableType(resolvedPatternReference
-                    .getType());
+            VariableTypes type = VariableTypes
+                    .getVariableType(resolvedPatternReference.getType());
             define(reference.token,
                     type.getSymbol(getDataFactory(), reference.token.getText()));
         }
@@ -80,7 +93,8 @@ public class OPPLPatternsSymbolTable extends OPPLSymbolTable {
 
     @Override
     public OPPLPatternScope getGlobalScope() {
-        return new OPPLPatternScope(super.getGlobalScope(), getOntologyManager());
+        return new OPPLPatternScope(super.getGlobalScope(),
+                getOntologyManager());
     }
 
     /** @return the ontologyManager */
@@ -88,14 +102,17 @@ public class OPPLPatternsSymbolTable extends OPPLSymbolTable {
         return ontologyManager;
     }
 
-    /** @param thisClass
-     *            thisClass
+    /**
+     * @param thisClass
+     *        thisClass
      * @param constraintSystem
-     *            constraintSystem */
+     *        constraintSystem
+     */
     public void resolveThisClass(OPPLSyntaxTree thisClass,
             PatternConstraintSystem constraintSystem) {
         Variable<?> thisClassVariable = constraintSystem.getThisClassVariable();
-        VariableTypes type = VariableTypes.getVariableType(thisClassVariable.getType());
+        VariableTypes type = VariableTypes.getVariableType(thisClassVariable
+                .getType());
         define(thisClass.token,
                 type.getSymbol(getDataFactory(), thisClass.token.getText()));
     }

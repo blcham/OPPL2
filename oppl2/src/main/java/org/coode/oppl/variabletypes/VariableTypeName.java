@@ -17,7 +17,7 @@ public enum VariableTypeName {
     ANNOTATIONPROPERTY,
     /** individual */
     INDIVIDUAL;
-    private static final Map<String, VariableTypeName> cache = new HashMap<String, VariableTypeName>();
+    private static final Map<String, VariableTypeName> cache = new HashMap<>();
     static {
         cache.put("CLASS", CLASS);
         cache.put("OBJECTPROPERTY", OBJECTPROPERTY);

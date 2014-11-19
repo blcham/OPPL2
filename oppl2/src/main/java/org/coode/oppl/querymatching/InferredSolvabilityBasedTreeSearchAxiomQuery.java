@@ -61,12 +61,12 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
     @Override
     protected Set<BindingNode> match(OWLAxiom axiom) {
         clearInstantions();
-        List<List<? extends OPPLOWLAxiomSearchNode>> solutions = new ArrayList<List<? extends OPPLOWLAxiomSearchNode>>();
+        List<List<? extends OPPLOWLAxiomSearchNode>> solutions = new ArrayList<>();
         VariableExtractor variableExtractor = new VariableExtractor(
                 getConstraintSystem(), false);
         Set<Variable<?>> extractedVariables = variableExtractor
                 .extractVariables(axiom);
-        SortedSet<Variable<?>> sortedVariables = new TreeSet<Variable<?>>(
+        SortedSet<Variable<?>> sortedVariables = new TreeSet<>(
                 new PositionBasedVariableComparator(axiom,
                         getConstraintSystem().getOntologyManager()
                                 .getOWLDataFactory()));
@@ -98,7 +98,7 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
 
     private List<List<OPPLOWLAxiomSearchNode>> nonSolvabilityBasedMatch(
             OPPLOWLAxiomSearchNode start) {
-        List<List<OPPLOWLAxiomSearchNode>> solutions = new ArrayList<List<OPPLOWLAxiomSearchNode>>();
+        List<List<OPPLOWLAxiomSearchNode>> solutions = new ArrayList<>();
         OPPLInferredOWLAxiomSearchTree searchTree = new OPPLInferredOWLAxiomSearchTree(
                 getConstraintSystem(), getRuntimeExceptionHandler());
         searchTree.exhaustiveSearchTree(start, solutions);
@@ -109,7 +109,7 @@ public class InferredSolvabilityBasedTreeSearchAxiomQuery extends
             OWLAxiom axiom, BindingNode bindingNode) {
         InferredSolvabilitySearchTree searchTree = new InferredSolvabilitySearchTree(
                 getConstraintSystem(), getRuntimeExceptionHandler());
-        List<List<SolvabilitySearchNode>> solutions = new ArrayList<List<SolvabilitySearchNode>>();
+        List<List<SolvabilitySearchNode>> solutions = new ArrayList<>();
         SolvabilitySearchNode start = searchTree.buildSolvabilitySearchNode(
                 axiom, bindingNode);
         searchTree.exhaustiveSearchTree(start, solutions);

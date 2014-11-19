@@ -18,7 +18,7 @@ public class QueryItemVariableExtractor implements
     @Override
     public Set<Variable<?>> visitConstraintQueryPlannerItem(
             ConstraintQueryPlannerItem constraintQueryPlannerItem) {
-        final Set<Variable<?>> toReturn = new HashSet<Variable<?>>();
+        final Set<Variable<?>> toReturn = new HashSet<>();
         final VariableExtractor variableExtractor = new VariableExtractor(
                 constraintQueryPlannerItem.getConstraintSystem(), false);
         constraintQueryPlannerItem.getConstraint().accept(new ConstraintVisitor() {

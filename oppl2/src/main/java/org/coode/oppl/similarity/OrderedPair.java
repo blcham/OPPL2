@@ -57,10 +57,10 @@ public class OrderedPair<O> extends Pair<O> {
      * @return all ordered pairs */
     public static <T> Set<OrderedPair<T>> getAllPossibleOrderedPairs(
             Collection<? extends T> c) {
-        Set<OrderedPair<T>> toReturn = new HashSet<OrderedPair<T>>();
+        Set<OrderedPair<T>> toReturn = new HashSet<>();
         for (T t : c) {
             for (T anotherT : c) {
-                toReturn.add(new OrderedPair<T>(t, anotherT));
+                toReturn.add(new OrderedPair<>(t, anotherT));
             }
         }
         return toReturn;

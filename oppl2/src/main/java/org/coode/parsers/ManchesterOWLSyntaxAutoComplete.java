@@ -22,35 +22,41 @@ import org.antlr.runtime.tree.TreeNodeStream;
 import org.antlr.runtime.tree.TreeRuleReturnScope;
 import org.semanticweb.owlapi.model.OWLObject;
 
-@SuppressWarnings({ "javadoc", "incomplete-switch" })
+@SuppressWarnings({ "javadoc", "incomplete-switch", "unused" })
 public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "STANDALONE_EXPRESSION", "INCOMPLETE_TYPE_ASSERTION",
-            "INCOMPLETE_ROLE_ASSERTION", "INCOMPLETE_UNARY_AXIOM",
-            "INCOMPLETE_SUB_CLASS_AXIOM", "INCOMPLETE_EQUIVALENT_TO_AXIOM",
-            "INCOMPLETE_DISJOINT_WITH_AXIOM", "INCOMPLETE_SUB_PROPERTY_AXIOM",
-            "INCOMPLETE_SAME_AS_AXIOM", "INCOMPLETE_DIFFERENT_FROM_AXIOM",
-            "INCOMPLETE_DOMAIN", "INCOMPLETE_RANGE", "INCOMPLETE_INVERSE_OF",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "STANDALONE_EXPRESSION",
+            "INCOMPLETE_TYPE_ASSERTION", "INCOMPLETE_ROLE_ASSERTION",
+            "INCOMPLETE_UNARY_AXIOM", "INCOMPLETE_SUB_CLASS_AXIOM",
+            "INCOMPLETE_EQUIVALENT_TO_AXIOM", "INCOMPLETE_DISJOINT_WITH_AXIOM",
+            "INCOMPLETE_SUB_PROPERTY_AXIOM", "INCOMPLETE_SAME_AS_AXIOM",
+            "INCOMPLETE_DIFFERENT_FROM_AXIOM", "INCOMPLETE_DOMAIN",
+            "INCOMPLETE_RANGE", "INCOMPLETE_INVERSE_OF",
             "INCOMPLETE_PROPERTY_CHAIN", "INCOMPLETE_DISJUNCTION",
-            "INCOMPLETE_CONJUNCTION", "INCOMPLETE_INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "INCOMPLETE_CONJUNCTION",
+            "INCOMPLETE_INVERSE_OBJECT_PROPERTY_EXPRESSION",
             "INCOMPLETE_NEGATED_EXPRESSION", "INCOMPLETE_SOME_RESTRICTION",
             "INCOMPLETE_ALL_RESTRICTION", "INCOMPLETE_CARDINALITY_RESTRICTION",
-            "INCOMPLETE_ONE_OF", "INCOMPLETE_VALUE_RESTRICTION", "INCOMPLETE_EXPRESSION" };
+            "INCOMPLETE_ONE_OF", "INCOMPLETE_VALUE_RESTRICTION",
+            "INCOMPLETE_EXPRESSION" };
     public static final int COMMA = 37;
     public static final int DIFFERENT_FROM = 24;
     public static final int TYPE_ASSERTION = 66;
@@ -168,7 +174,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     private SymbolTable symtab;
     private boolean newWord = false;
 
-    public ManchesterOWLSyntaxAutoComplete(TreeNodeStream input, SymbolTable symtab) {
+    public ManchesterOWLSyntaxAutoComplete(TreeNodeStream input,
+            SymbolTable symtab) {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
     }
@@ -192,8 +199,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     protected void mismatch(IntStream in, int ttype, BitSet follow) {}
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         return null;
     }
 
@@ -263,7 +270,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 1, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 1,
+                            0, input);
                     throw nvae;
             }
             switch (alt1) {
@@ -349,8 +357,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:82:9:
             // ^( EXPRESSION e= expression )
             {
-                EXPRESSION1 = (ManchesterOWLSyntaxTree) match(input, EXPRESSION,
-                        FOLLOW_EXPRESSION_in_expressionRoot155);
+                EXPRESSION1 = (ManchesterOWLSyntaxTree) match(input,
+                        EXPRESSION, FOLLOW_EXPRESSION_in_expressionRoot155);
                 if (state.failed) {
                     return;
                 }
@@ -400,7 +408,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 if (state.failed) {
                     return;
                 }
-                match(input, EXPRESSION, FOLLOW_EXPRESSION_in_standaloneExpression186);
+                match(input, EXPRESSION,
+                        FOLLOW_EXPRESSION_in_standaloneExpression186);
                 if (state.failed) {
                     return;
                 }
@@ -442,6 +451,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "standaloneExpression"
     public static class expression_return extends TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -493,7 +503,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 4, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 4,
+                            0, input);
                     throw nvae;
             }
             switch (alt4) {
@@ -501,7 +512,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:107:4:
                 // ^( DISJUNCTION (c= conjunction )+ )
                 {
-                    match(input, DISJUNCTION, FOLLOW_DISJUNCTION_in_expression226);
+                    match(input, DISJUNCTION,
+                            FOLLOW_DISJUNCTION_in_expression226);
                     if (state.failed) {
                         return retval;
                     }
@@ -516,7 +528,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         int alt2 = 2;
                         int LA2_0 = input.LA(1);
                         if (LA2_0 >= IDENTIFIER && LA2_0 <= ENTITY_REFERENCE
-                                || LA2_0 == CONJUNCTION || LA2_0 == NEGATED_EXPRESSION
+                                || LA2_0 == CONJUNCTION
+                                || LA2_0 == NEGATED_EXPRESSION
                                 || LA2_0 >= SOME_RESTRICTION && LA2_0 <= ONE_OF) {
                             alt2 = 1;
                         }
@@ -533,7 +546,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 }
                                 if (state.backtracking == 1) {
                                     ((ManchesterOWLSyntaxTree) retval.start)
-                                            .setCompletions(c.node.getCompletions());
+                                            .setCompletions(c.node
+                                                    .getCompletions());
                                 }
                             }
                                 break;
@@ -545,7 +559,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(2, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        2, input);
                                 throw eee;
                         }
                         cnt2++;
@@ -560,7 +575,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:110:6:
                 // ^( PROPERTY_CHAIN (chainItem= expression )+ )
                 {
-                    match(input, PROPERTY_CHAIN, FOLLOW_PROPERTY_CHAIN_in_expression248);
+                    match(input, PROPERTY_CHAIN,
+                            FOLLOW_PROPERTY_CHAIN_in_expression248);
                     if (state.failed) {
                         return retval;
                     }
@@ -575,7 +591,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         int alt3 = 2;
                         int LA3_0 = input.LA(1);
                         if (LA3_0 >= IDENTIFIER && LA3_0 <= ENTITY_REFERENCE
-                                || LA3_0 >= DISJUNCTION && LA3_0 <= NEGATED_EXPRESSION
+                                || LA3_0 >= DISJUNCTION
+                                && LA3_0 <= NEGATED_EXPRESSION
                                 || LA3_0 >= SOME_RESTRICTION && LA3_0 <= ONE_OF
                                 || LA3_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION) {
                             alt3 = 1;
@@ -606,7 +623,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(3, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        3, input);
                                 throw eee;
                         }
                         cnt3++;
@@ -628,8 +646,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(conj.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(conj.node.getCompletions());
                     }
                 }
                     break;
@@ -644,8 +662,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(cpe.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(cpe.node.getCompletions());
                     }
                 }
                     break;
@@ -659,6 +677,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "expression"
     public static class conjunction_return extends TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -666,7 +685,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:125:1:
     // conjunction returns [ManchesterOWLSyntaxTree node] : ( ^( CONJUNCTION
     // (conjunct= unary )+ ) | u= unary );
-    public final ManchesterOWLSyntaxAutoComplete.conjunction_return conjunction() {
+    public final ManchesterOWLSyntaxAutoComplete.conjunction_return
+            conjunction() {
         ManchesterOWLSyntaxAutoComplete.conjunction_return retval = new ManchesterOWLSyntaxAutoComplete.conjunction_return();
         retval.start = input.LT(1);
         ManchesterOWLSyntaxAutoComplete.unary_return conjunct = null;
@@ -687,7 +707,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 6, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 6, 0,
+                        input);
                 throw nvae;
             }
             switch (alt6) {
@@ -695,7 +716,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:131:2:
                 // ^( CONJUNCTION (conjunct= unary )+ )
                 {
-                    match(input, CONJUNCTION, FOLLOW_CONJUNCTION_in_conjunction328);
+                    match(input, CONJUNCTION,
+                            FOLLOW_CONJUNCTION_in_conjunction328);
                     if (state.failed) {
                         return retval;
                     }
@@ -740,7 +762,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(5, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        5, input);
                                 throw eee;
                         }
                         cnt5++;
@@ -762,8 +785,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(u.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(u.node.getCompletions());
                     }
                 }
                     break;
@@ -777,6 +800,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "conjunction"
     public static class unary_return extends TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -823,7 +847,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 7, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 7,
+                            0, input);
                     throw nvae;
             }
             switch (alt7) {
@@ -831,8 +856,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:145:3:
                 // IDENTIFIER
                 {
-                    IDENTIFIER3 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_unary376);
+                    IDENTIFIER3 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_unary376);
                     if (state.failed) {
                         return retval;
                     }
@@ -867,8 +892,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(e.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(e.node.getCompletions());
                     }
                 }
                     break;
@@ -894,7 +919,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // ENTITY_REFERENCE
                 {
                     ENTITY_REFERENCE5 = (ManchesterOWLSyntaxTree) match(input,
-                            ENTITY_REFERENCE, FOLLOW_ENTITY_REFERENCE_in_unary423);
+                            ENTITY_REFERENCE,
+                            FOLLOW_ENTITY_REFERENCE_in_unary423);
                     if (state.failed) {
                         return retval;
                     }
@@ -915,6 +941,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "unary"
     public static class propertyExpression_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -954,7 +981,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 8, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 8,
+                            0, input);
                     throw nvae;
             }
             switch (alt8) {
@@ -962,7 +990,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:172:7:
                 // IDENTIFIER
                 {
-                    IDENTIFIER6 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
+                    IDENTIFIER6 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER,
                             FOLLOW_IDENTIFIER_in_propertyExpression462);
                     if (state.failed) {
                         return retval;
@@ -1018,7 +1047,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     // $ANTLR end "propertyExpression"
-    public static class complexPropertyExpression_return extends TreeRuleReturnScope {
+    public static class complexPropertyExpression_return extends
+            TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -1028,7 +1059,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // INVERSE_OBJECT_PROPERTY_EXPRESSION p= complexPropertyExpression ) | ^(
     // INVERSE_OBJECT_PROPERTY_EXPRESSION IDENTIFIER ) | ^(
     // INVERSE_OBJECT_PROPERTY_EXPRESSION ENTITY_REFERENCE ) );
-    public final ManchesterOWLSyntaxAutoComplete.complexPropertyExpression_return
+    public final
+            ManchesterOWLSyntaxAutoComplete.complexPropertyExpression_return
             complexPropertyExpression() {
         ManchesterOWLSyntaxAutoComplete.complexPropertyExpression_return retval = new ManchesterOWLSyntaxAutoComplete.complexPropertyExpression_return();
         retval.start = input.LT(1);
@@ -1064,8 +1096,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 9,
-                                    2, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 9, 2, input);
                             throw nvae;
                     }
                 } else {
@@ -1073,7 +1105,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 9, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("", 9,
+                            1, input);
                     throw nvae;
                 }
             } else {
@@ -1081,7 +1114,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 9, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 9, 0,
+                        input);
                 throw nvae;
             }
             switch (alt9) {
@@ -1110,8 +1144,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(p.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(p.node.getCompletions());
                     }
                 }
                     break;
@@ -1128,7 +1162,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    IDENTIFIER9 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
+                    IDENTIFIER9 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER,
                             FOLLOW_IDENTIFIER_in_complexPropertyExpression546);
                     if (state.failed) {
                         return retval;
@@ -1178,12 +1213,13 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             if (state.backtracking == 1) {
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
             }
-        } catch (RecognitionException exception) {} catch (RewriteEmptyStreamException exception) {} finally {}
+        } catch (RecognitionException | RewriteEmptyStreamException exception) {} finally {}
         return retval;
     }
 
     // $ANTLR end "complexPropertyExpression"
     public static class qualifiedRestriction_return extends TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -1233,7 +1269,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 10, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            10, 0, input);
                     throw nvae;
             }
             switch (alt10) {
@@ -1267,8 +1304,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(f.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(f.node.getCompletions());
                     }
                 }
                     break;
@@ -1302,8 +1339,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        ((ManchesterOWLSyntaxTree) retval.start).setCompletions(f.node
-                                .getCompletions());
+                        ((ManchesterOWLSyntaxTree) retval.start)
+                                .setCompletions(f.node.getCompletions());
                     }
                 }
                     break;
@@ -1362,12 +1399,14 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             if (state.backtracking == 1) {
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
             }
-        } catch (RecognitionException exception) {} catch (RewriteEmptyStreamException exception) {} finally {}
+        } catch (RecognitionException | RewriteEmptyStreamException exception) {} finally {}
         return retval;
     }
 
     // $ANTLR end "qualifiedRestriction"
-    public static class cardinalityRestriction_return extends TreeRuleReturnScope {
+    public static class cardinalityRestriction_return extends
+            TreeRuleReturnScope {
+
         public ManchesterOWLSyntaxTree node;
     }
 
@@ -1413,8 +1452,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 14,
-                                    2, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 14, 2, input);
                             throw nvae;
                     }
                 } else {
@@ -1422,7 +1461,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 14, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            14, 1, input);
                     throw nvae;
                 }
             } else {
@@ -1430,7 +1470,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 14, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 14, 0,
+                        input);
                 throw nvae;
             }
             switch (alt14) {
@@ -1452,7 +1493,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, INTEGER, FOLLOW_INTEGER_in_cardinalityRestriction727);
+                    match(input, INTEGER,
+                            FOLLOW_INTEGER_in_cardinalityRestriction727);
                     if (state.failed) {
                         return retval;
                     }
@@ -1467,7 +1509,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     int alt11 = 2;
                     int LA11_0 = input.LA(1);
                     if (LA11_0 >= IDENTIFIER && LA11_0 <= ENTITY_REFERENCE
-                            || LA11_0 >= DISJUNCTION && LA11_0 <= NEGATED_EXPRESSION
+                            || LA11_0 >= DISJUNCTION
+                            && LA11_0 <= NEGATED_EXPRESSION
                             || LA11_0 >= SOME_RESTRICTION && LA11_0 <= ONE_OF
                             || LA11_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION) {
                         alt11 = 1;
@@ -1492,8 +1535,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         ((ManchesterOWLSyntaxTree) retval.start)
-                                .setCompletions(filler == null ? p.node.getCompletions()
-                                        : filler.node.getCompletions());
+                                .setCompletions(filler == null ? p.node
+                                        .getCompletions() : filler.node
+                                        .getCompletions());
                     }
                 }
                     break;
@@ -1515,7 +1559,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, INTEGER, FOLLOW_INTEGER_in_cardinalityRestriction762);
+                    match(input, INTEGER,
+                            FOLLOW_INTEGER_in_cardinalityRestriction762);
                     if (state.failed) {
                         return retval;
                     }
@@ -1530,7 +1575,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     int alt12 = 2;
                     int LA12_0 = input.LA(1);
                     if (LA12_0 >= IDENTIFIER && LA12_0 <= ENTITY_REFERENCE
-                            || LA12_0 >= DISJUNCTION && LA12_0 <= NEGATED_EXPRESSION
+                            || LA12_0 >= DISJUNCTION
+                            && LA12_0 <= NEGATED_EXPRESSION
                             || LA12_0 >= SOME_RESTRICTION && LA12_0 <= ONE_OF
                             || LA12_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION) {
                         alt12 = 1;
@@ -1555,8 +1601,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         ((ManchesterOWLSyntaxTree) retval.start)
-                                .setCompletions(filler == null ? p.node.getCompletions()
-                                        : filler.node.getCompletions());
+                                .setCompletions(filler == null ? p.node
+                                        .getCompletions() : filler.node
+                                        .getCompletions());
                     }
                 }
                     break;
@@ -1574,11 +1621,13 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXACTLY, FOLLOW_EXACTLY_in_cardinalityRestriction797);
+                    match(input, EXACTLY,
+                            FOLLOW_EXACTLY_in_cardinalityRestriction797);
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, INTEGER, FOLLOW_INTEGER_in_cardinalityRestriction802);
+                    match(input, INTEGER,
+                            FOLLOW_INTEGER_in_cardinalityRestriction802);
                     if (state.failed) {
                         return retval;
                     }
@@ -1593,7 +1642,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     int alt13 = 2;
                     int LA13_0 = input.LA(1);
                     if (LA13_0 >= IDENTIFIER && LA13_0 <= ENTITY_REFERENCE
-                            || LA13_0 >= DISJUNCTION && LA13_0 <= NEGATED_EXPRESSION
+                            || LA13_0 >= DISJUNCTION
+                            && LA13_0 <= NEGATED_EXPRESSION
                             || LA13_0 >= SOME_RESTRICTION && LA13_0 <= ONE_OF
                             || LA13_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION) {
                         alt13 = 1;
@@ -1618,8 +1668,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         ((ManchesterOWLSyntaxTree) retval.start)
-                                .setCompletions(filler == null ? p.node.getCompletions()
-                                        : filler.node.getCompletions());
+                                .setCompletions(filler == null ? p.node
+                                        .getCompletions() : filler.node
+                                        .getCompletions());
                     }
                 }
                     break;
@@ -1633,6 +1684,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "cardinalityRestriction"
     public static class oneOf_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1667,8 +1719,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     int alt15 = 2;
                     int LA15_0 = input.LA(1);
                     if (LA15_0 >= IDENTIFIER && LA15_0 <= ENTITY_REFERENCE
-                            || LA15_0 == NEGATED_EXPRESSION || LA15_0 >= SOME_RESTRICTION
-                            && LA15_0 <= ONE_OF) {
+                            || LA15_0 == NEGATED_EXPRESSION
+                            || LA15_0 >= SOME_RESTRICTION && LA15_0 <= ONE_OF) {
                         alt15 = 1;
                     }
                     switch (alt15) {
@@ -1684,7 +1736,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             }
                             if (state.backtracking == 1) {
                                 ((ManchesterOWLSyntaxTree) retval.start)
-                                        .setCompletions(individual.node.getCompletions());
+                                        .setCompletions(individual.node
+                                                .getCompletions());
                             }
                         }
                             break;
@@ -1696,7 +1749,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            EarlyExitException eee = new EarlyExitException(15, input);
+                            EarlyExitException eee = new EarlyExitException(15,
+                                    input);
                             throw eee;
                     }
                     cnt15++;
@@ -1715,6 +1769,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "oneOf"
     public static class valueRestriction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1761,8 +1816,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     return retval;
                 }
                 if (state.backtracking == 1) {
-                    ((ManchesterOWLSyntaxTree) retval.start).setCompletions(value.node
-                            .getCompletions());
+                    ((ManchesterOWLSyntaxTree) retval.start)
+                            .setCompletions(value.node.getCompletions());
                 }
             }
             if (state.backtracking == 1) {
@@ -1774,6 +1829,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "valueRestriction"
     public static class axiom_return extends TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -1850,7 +1906,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // ^( SUB_CLASS_AXIOM ^( EXPRESSION subClass= expression ) ^(
                 // EXPRESSION superClass= expression ) )
                 {
-                    match(input, SUB_CLASS_AXIOM, FOLLOW_SUB_CLASS_AXIOM_in_axiom936);
+                    match(input, SUB_CLASS_AXIOM,
+                            FOLLOW_SUB_CLASS_AXIOM_in_axiom936);
                     if (state.failed) {
                         return retval;
                     }
@@ -1970,7 +2027,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     rhs.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2013,8 +2071,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    anotherProperty = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_axiom1026);
+                    anotherProperty = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_axiom1026);
                     if (state.failed) {
                         return retval;
                     }
@@ -2028,9 +2086,11 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         if (!isNewWord()) {
-                            retval.completions = anotherProperty.getCompletions();
+                            retval.completions = anotherProperty
+                                    .getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2094,7 +2154,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     rhs.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2158,7 +2219,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     superProperty.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2169,7 +2231,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // EXPRESSION predicate= propertyExpression ) ^( EXPRESSION
                 // object= unary ) )
                 {
-                    match(input, ROLE_ASSERTION, FOLLOW_ROLE_ASSERTION_in_axiom1104);
+                    match(input, ROLE_ASSERTION,
+                            FOLLOW_ROLE_ASSERTION_in_axiom1104);
                     if (state.failed) {
                         return retval;
                     }
@@ -2185,8 +2248,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    subject = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_axiom1114);
+                    subject = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_axiom1114);
                     if (state.failed) {
                         return retval;
                     }
@@ -2239,7 +2302,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     object.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2249,7 +2313,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // ^( TYPE_ASSERTION ^( EXPRESSION description= expression ) ^(
                 // EXPRESSION subject= IDENTIFIER ) )
                 {
-                    match(input, TYPE_ASSERTION, FOLLOW_TYPE_ASSERTION_in_axiom1145);
+                    match(input, TYPE_ASSERTION,
+                            FOLLOW_TYPE_ASSERTION_in_axiom1145);
                     if (state.failed) {
                         return retval;
                     }
@@ -2283,8 +2348,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    subject = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_axiom1165);
+                    subject = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_axiom1165);
                     if (state.failed) {
                         return retval;
                     }
@@ -2300,7 +2365,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = subject.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2362,7 +2428,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     domain.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2424,7 +2491,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             retval.completions = new ArrayList<String>(
                                     range.node.getCompletions());
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2434,7 +2502,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // ^( SAME_AS_AXIOM ^( EXPRESSION anIndividual= IDENTIFIER ) ^(
                 // EXPRESSION anotherIndividual= IDENTIFIER ) )
                 {
-                    match(input, SAME_AS_AXIOM, FOLLOW_SAME_AS_AXIOM_in_axiom1243);
+                    match(input, SAME_AS_AXIOM,
+                            FOLLOW_SAME_AS_AXIOM_in_axiom1243);
                     if (state.failed) {
                         return retval;
                     }
@@ -2481,9 +2550,11 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         if (!isNewWord()) {
-                            retval.completions = anotherIndividual.getCompletions();
+                            retval.completions = anotherIndividual
+                                    .getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2541,9 +2612,11 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         if (!isNewWord()) {
-                            retval.completions = anotherIndividual.getCompletions();
+                            retval.completions = anotherIndividual
+                                    .getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2589,7 +2662,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2637,7 +2711,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2683,7 +2758,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2729,7 +2805,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2775,7 +2852,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2821,7 +2899,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = p.getCompletions();
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2830,7 +2909,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:419:6:
                 // ^( NEGATED_ASSERTION a= axiom )
                 {
-                    match(input, NEGATED_ASSERTION, FOLLOW_NEGATED_ASSERTION_in_axiom1466);
+                    match(input, NEGATED_ASSERTION,
+                            FOLLOW_NEGATED_ASSERTION_in_axiom1466);
                     if (state.failed) {
                         return retval;
                     }
@@ -2852,7 +2932,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         if (!isNewWord()) {
                             retval.completions = a.completions;
                         } else {
-                            retval.completions = Collections.<String> emptyList();
+                            retval.completions = Collections
+                                    .<String> emptyList();
                         }
                     }
                 }
@@ -2868,6 +2949,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "axiom"
     public static class incompleteAxiom_return extends TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -2898,7 +2980,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // INCOMPLETE_UNARY_AXIOM IRREFLEXIVE ) | ^( INCOMPLETE_UNARY_AXIOM
     // REFLEXIVE ) | ^( INCOMPLETE_UNARY_AXIOM SYMMETRIC ) | ^(
     // INCOMPLETE_UNARY_AXIOM TRANSITIVE ) );
-    public final ManchesterOWLSyntaxAutoComplete.incompleteAxiom_return incompleteAxiom() {
+    public final ManchesterOWLSyntaxAutoComplete.incompleteAxiom_return
+            incompleteAxiom() {
         ManchesterOWLSyntaxAutoComplete.incompleteAxiom_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteAxiom_return();
         retval.start = input.LT(1);
         ManchesterOWLSyntaxAutoComplete.incompleteExpression_return superClass = null;
@@ -2955,7 +3038,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1525);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1525);
                     if (state.failed) {
                         return retval;
                     }
@@ -3015,8 +3099,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.backtracking == 1) {
                         // class expression completions
                         retval.completions = superClass == null ? new ArrayList<String>(
-                                symtab.getOWLClassCompletions()) : new ArrayList<String>(
-                                superClass.completions);
+                                symtab.getOWLClassCompletions())
+                                : new ArrayList<String>(superClass.completions);
                     }
                 }
                     break;
@@ -3035,7 +3119,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1566);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1566);
                     if (state.failed) {
                         return retval;
                     }
@@ -3112,7 +3197,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1607);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1607);
                     if (state.failed) {
                         return retval;
                     }
@@ -3120,7 +3206,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1613);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1613);
                     if (state.failed) {
                         return retval;
                     }
@@ -3189,7 +3276,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1642);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1642);
                     if (state.failed) {
                         return retval;
                     }
@@ -3267,7 +3355,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1678);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1678);
                     if (state.failed) {
                         return retval;
                     }
@@ -3329,8 +3418,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         // property expression completions
                         retval.completions = superProperty == null ? new ArrayList<String>(
                                 symtab.getOWLPropertyCompletions(subProperty.node
-                                        .getEvalType())) : new ArrayList<String>(
-                                superProperty.completions);
+                                        .getEvalType()))
+                                : new ArrayList<String>(
+                                        superProperty.completions);
                     }
                 }
                     break;
@@ -3348,7 +3438,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1719);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1719);
                     if (state.failed) {
                         return retval;
                     }
@@ -3356,7 +3447,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1721);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1721);
                     if (state.failed) {
                         return retval;
                     }
@@ -3364,7 +3456,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1725);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1725);
                     if (state.failed) {
                         return retval;
                     }
@@ -3406,7 +3499,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1742);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1742);
                     if (state.failed) {
                         return retval;
                     }
@@ -3414,7 +3508,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1744);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1744);
                     if (state.failed) {
                         return retval;
                     }
@@ -3446,7 +3541,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1760);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1760);
                     if (state.failed) {
                         return retval;
                     }
@@ -3454,7 +3550,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1766);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1766);
                     if (state.failed) {
                         return retval;
                     }
@@ -3487,7 +3584,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1784);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1784);
                     if (state.failed) {
                         return retval;
                     }
@@ -3495,7 +3593,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1790);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1790);
                     if (state.failed) {
                         return retval;
                     }
@@ -3544,7 +3643,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1818);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1818);
                     if (state.failed) {
                         return retval;
                     }
@@ -3552,7 +3652,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1824);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1824);
                     if (state.failed) {
                         return retval;
                     }
@@ -3585,7 +3686,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1838);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1838);
                     if (state.failed) {
                         return retval;
                     }
@@ -3593,7 +3695,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1844);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1844);
                     if (state.failed) {
                         return retval;
                     }
@@ -3643,7 +3746,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1872);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1872);
                     if (state.failed) {
                         return retval;
                     }
@@ -3651,7 +3755,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1877);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1877);
                     if (state.failed) {
                         return retval;
                     }
@@ -3684,7 +3789,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXPRESSION, FOLLOW_EXPRESSION_in_incompleteAxiom1896);
+                    match(input, EXPRESSION,
+                            FOLLOW_EXPRESSION_in_incompleteAxiom1896);
                     if (state.failed) {
                         return retval;
                     }
@@ -3692,7 +3798,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IDENTIFIER, FOLLOW_IDENTIFIER_in_incompleteAxiom1901);
+                    match(input, IDENTIFIER,
+                            FOLLOW_IDENTIFIER_in_incompleteAxiom1901);
                     if (state.failed) {
                         return retval;
                     }
@@ -3724,7 +3831,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, FUNCTIONAL, FOLLOW_FUNCTIONAL_in_incompleteAxiom1918);
+                    match(input, FUNCTIONAL,
+                            FOLLOW_FUNCTIONAL_in_incompleteAxiom1918);
                     if (state.failed) {
                         return retval;
                     }
@@ -3735,7 +3843,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.backtracking == 1) {
                         // property expression completions
                         retval.completions = new ArrayList<String>(
-                                symtab.getAllCompletions(OWLType.OWL_OBJECT_PROPERTY,
+                                symtab.getAllCompletions(
+                                        OWLType.OWL_OBJECT_PROPERTY,
                                         OWLType.OWL_DATA_PROPERTY));
                     }
                 }
@@ -3782,7 +3891,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, IRREFLEXIVE, FOLLOW_IRREFLEXIVE_in_incompleteAxiom1951);
+                    match(input, IRREFLEXIVE,
+                            FOLLOW_IRREFLEXIVE_in_incompleteAxiom1951);
                     if (state.failed) {
                         return retval;
                     }
@@ -3810,7 +3920,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, REFLEXIVE, FOLLOW_REFLEXIVE_in_incompleteAxiom1967);
+                    match(input, REFLEXIVE,
+                            FOLLOW_REFLEXIVE_in_incompleteAxiom1967);
                     if (state.failed) {
                         return retval;
                     }
@@ -3838,7 +3949,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, SYMMETRIC, FOLLOW_SYMMETRIC_in_incompleteAxiom1983);
+                    match(input, SYMMETRIC,
+                            FOLLOW_SYMMETRIC_in_incompleteAxiom1983);
                     if (state.failed) {
                         return retval;
                     }
@@ -3866,7 +3978,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, TRANSITIVE, FOLLOW_TRANSITIVE_in_incompleteAxiom2001);
+                    match(input, TRANSITIVE,
+                            FOLLOW_TRANSITIVE_in_incompleteAxiom2001);
                     if (state.failed) {
                         return retval;
                     }
@@ -3892,6 +4005,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "incompleteAxiom"
     public static class incompleteExpression_return extends TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -3939,8 +4053,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 24,
-                                    4, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 24, 4, input);
                             throw nvae;
                         }
                     } else {
@@ -3948,8 +4062,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                             state.failed = true;
                             return retval;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 24, 3,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 24, 3, input);
                         throw nvae;
                     }
                 }
@@ -3959,7 +4073,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 24, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            24, 0, input);
                     throw nvae;
             }
             switch (alt24) {
@@ -3982,7 +4097,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     loop23: do {
                         int alt23 = 2;
                         int LA23_0 = input.LA(1);
-                        if (LA23_0 >= COMPOSITION && LA23_0 <= INCOMPLETE_EXPRESSION) {
+                        if (LA23_0 >= COMPOSITION
+                                && LA23_0 <= INCOMPLETE_EXPRESSION) {
                             alt23 = 1;
                         } else if (LA23_0 == UP) {
                             alt23 = 2;
@@ -4006,7 +4122,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(23, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        23, input);
                                 throw eee;
                         }
                         cnt23++;
@@ -4084,7 +4201,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    IDENTIFIER14 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
+                    IDENTIFIER14 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER,
                             FOLLOW_IDENTIFIER_in_incompleteExpression2096);
                     if (state.failed) {
                         return retval;
@@ -4098,8 +4216,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         retval.completions = type == null ? Collections
                                 .<String> emptyList() : AutoCompleteStrings
                                 .getIncompleteExpressionCompletions(
-                                        IDENTIFIER14 != null ? IDENTIFIER14.getText()
-                                                : null, type);
+                                        IDENTIFIER14 != null ? IDENTIFIER14
+                                                .getText() : null, type);
                     }
                 }
                     break;
@@ -4142,7 +4260,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     // $ANTLR end "incompleteExpression"
-    public static class incompleteConjunction_return extends TreeRuleReturnScope {
+    public static class incompleteConjunction_return extends
+            TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4217,6 +4337,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "incompleteConjunction"
     public static class incompleteUnary_return extends TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4225,7 +4346,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // incompleteUnary returns [List<String> completions] : ( ^(
     // INCOMPLETE_NEGATED_EXPRESSION ( . )? ) | incompleteQualifiedRestriction
     // );
-    public final ManchesterOWLSyntaxAutoComplete.incompleteUnary_return incompleteUnary() {
+    public final ManchesterOWLSyntaxAutoComplete.incompleteUnary_return
+            incompleteUnary() {
         ManchesterOWLSyntaxAutoComplete.incompleteUnary_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteUnary_return();
         retval.start = input.LT(1);
         ManchesterOWLSyntaxAutoComplete.incompleteQualifiedRestriction_return incompleteQualifiedRestriction15 = null;
@@ -4245,7 +4367,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 27, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 27, 0,
+                        input);
                 throw nvae;
             }
             switch (alt27) {
@@ -4267,7 +4390,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         // ( . )?
                         int alt26 = 2;
                         int LA26_0 = input.LA(1);
-                        if (LA26_0 >= COMPOSITION && LA26_0 <= INCOMPLETE_EXPRESSION) {
+                        if (LA26_0 >= COMPOSITION
+                                && LA26_0 <= INCOMPLETE_EXPRESSION) {
                             alt26 = 1;
                         }
                         switch (alt26) {
@@ -4320,7 +4444,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     // $ANTLR end "incompleteUnary"
-    public static class incompleteQualifiedRestriction_return extends TreeRuleReturnScope {
+    public static class incompleteQualifiedRestriction_return extends
+            TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4331,7 +4457,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // INCOMPLETE_ALL_RESTRICTION propertyExpression ) |
     // incompleteCardinalityRestriction | incompleteOneOf |
     // incompleteValueRestriction );
-    public final ManchesterOWLSyntaxAutoComplete.incompleteQualifiedRestriction_return
+    public final
+            ManchesterOWLSyntaxAutoComplete.incompleteQualifiedRestriction_return
             incompleteQualifiedRestriction() {
         ManchesterOWLSyntaxAutoComplete.incompleteQualifiedRestriction_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteQualifiedRestriction_return();
         retval.start = input.LT(1);
@@ -4371,7 +4498,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 28, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            28, 0, input);
                     throw nvae;
             }
             switch (alt28) {
@@ -4495,6 +4623,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // $ANTLR end "incompleteQualifiedRestriction"
     public static class incompleteCardinalityRestriction_return extends
             TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4502,7 +4631,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:635:1:
     // incompleteCardinalityRestriction returns [List<String> completions] : ^(
     // INCOMPLETE_CARDINALITY_RESTRICTION . INTEGER propertyExpression ) ;
-    public final ManchesterOWLSyntaxAutoComplete.incompleteCardinalityRestriction_return
+    public final
+            ManchesterOWLSyntaxAutoComplete.incompleteCardinalityRestriction_return
             incompleteCardinalityRestriction() {
         ManchesterOWLSyntaxAutoComplete.incompleteCardinalityRestriction_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteCardinalityRestriction_return();
         retval.start = input.LT(1);
@@ -4514,7 +4644,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             // ^( INCOMPLETE_CARDINALITY_RESTRICTION . INTEGER
             // propertyExpression )
             {
-                match(input, INCOMPLETE_CARDINALITY_RESTRICTION,
+                match(input,
+                        INCOMPLETE_CARDINALITY_RESTRICTION,
                         FOLLOW_INCOMPLETE_CARDINALITY_RESTRICTION_in_incompleteCardinalityRestriction2475);
                 if (state.failed) {
                     return retval;
@@ -4558,6 +4689,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
 
     // $ANTLR end "incompleteCardinalityRestriction"
     public static class incompleteOneOf_return extends TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4565,7 +4697,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:651:1:
     // incompleteOneOf returns [List<String> completions] : ^( INCOMPLETE_ONE_OF
     // ( IDENTIFIER )+ ) ;
-    public final ManchesterOWLSyntaxAutoComplete.incompleteOneOf_return incompleteOneOf() {
+    public final ManchesterOWLSyntaxAutoComplete.incompleteOneOf_return
+            incompleteOneOf() {
         ManchesterOWLSyntaxAutoComplete.incompleteOneOf_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteOneOf_return();
         retval.start = input.LT(1);
         try {
@@ -4612,7 +4745,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            EarlyExitException eee = new EarlyExitException(29, input);
+                            EarlyExitException eee = new EarlyExitException(29,
+                                    input);
                             throw eee;
                     }
                     cnt29++;
@@ -4636,7 +4770,9 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     // $ANTLR end "incompleteOneOf"
-    public static class incompleteValueRestriction_return extends TreeRuleReturnScope {
+    public static class incompleteValueRestriction_return extends
+            TreeRuleReturnScope {
+
         public List<String> completions;
     }
 
@@ -4644,7 +4780,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxAutoComplete.g:666:2:
     // incompleteValueRestriction returns [List<String> completions] : ^(
     // INCOMPLETE_VALUE_RESTRICTION p= propertyExpression ) ;
-    public final ManchesterOWLSyntaxAutoComplete.incompleteValueRestriction_return
+    public final
+            ManchesterOWLSyntaxAutoComplete.incompleteValueRestriction_return
             incompleteValueRestriction() {
         ManchesterOWLSyntaxAutoComplete.incompleteValueRestriction_return retval = new ManchesterOWLSyntaxAutoComplete.incompleteValueRestriction_return();
         retval.start = input.LT(1);
@@ -4704,15 +4841,18 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     static final String DFA16_specialS = "\25\uffff}>";
     static final String[] DFA16_transitionS = {
             "\1\3\1\uffff\1\10\1\11\23\uffff\1\1\1\2\1\4\1\5\1\12\1\13\1"
-                    + "\14\4\uffff\1\15\6\uffff\1\7\1\6", "", "", "", "", "", "", "", "",
-            "", "", "", "\1\16", "", "\1\17\1\23\1\uffff\1\22\1\21\1\24\1\20", "", "",
-            "", "", "", "" };
+                    + "\14\4\uffff\1\15\6\uffff\1\7\1\6", "", "", "", "", "",
+            "", "", "", "", "", "", "\1\16", "",
+            "\1\17\1\23\1\uffff\1\22\1\21\1\24\1\20", "", "", "", "", "", "" };
     static final short[] DFA16_eot = DFA.unpackEncodedString(DFA16_eotS);
     static final short[] DFA16_eof = DFA.unpackEncodedString(DFA16_eofS);
-    static final char[] DFA16_min = DFA.unpackEncodedStringToUnsignedChars(DFA16_minS);
-    static final char[] DFA16_max = DFA.unpackEncodedStringToUnsignedChars(DFA16_maxS);
+    static final char[] DFA16_min = DFA
+            .unpackEncodedStringToUnsignedChars(DFA16_minS);
+    static final char[] DFA16_max = DFA
+            .unpackEncodedStringToUnsignedChars(DFA16_maxS);
     static final short[] DFA16_accept = DFA.unpackEncodedString(DFA16_acceptS);
-    static final short[] DFA16_special = DFA.unpackEncodedString(DFA16_specialS);
+    static final short[] DFA16_special = DFA
+            .unpackEncodedString(DFA16_specialS);
     static final short[][] DFA16_transition;
     static {
         int numStates = DFA16_transitionS.length;
@@ -4723,6 +4863,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     class DFA16 extends DFA {
+
         public DFA16(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             decisionNumber = 16;
@@ -4751,17 +4892,21 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             + "\16\1\17\1\20\1\21\1\22\1\23\6\uffff\1\10\1\11\1\12\1\13";
     static final String DFA22_specialS = "\42\uffff}>";
     static final String[] DFA22_transitionS = {
-            "\1\7\1\6\1\14\1\1\1\2\1\4\1\5\1\12\1\13\1\10\1\11\1\3", "", "", "", "", "",
-            "", "", "\1\15", "\1\16", "", "", "\1\17", "\1\20", "\1\21",
-            "\1\22\1\26\1\uffff\1\25\1\24\1\27\1\23", "\1\30", "\1\31", "", "", "", "",
-            "", "", "\1\32", "\1\33", "\1\34", "\1\35", "\1\36\u026b\uffff\1\37",
-            "\1\40\u026b\uffff\1\41", "", "", "", "" };
+            "\1\7\1\6\1\14\1\1\1\2\1\4\1\5\1\12\1\13\1\10\1\11\1\3", "", "",
+            "", "", "", "", "", "\1\15", "\1\16", "", "", "\1\17", "\1\20",
+            "\1\21", "\1\22\1\26\1\uffff\1\25\1\24\1\27\1\23", "\1\30",
+            "\1\31", "", "", "", "", "", "", "\1\32", "\1\33", "\1\34",
+            "\1\35", "\1\36\u026b\uffff\1\37", "\1\40\u026b\uffff\1\41", "",
+            "", "", "" };
     static final short[] DFA22_eot = DFA.unpackEncodedString(DFA22_eotS);
     static final short[] DFA22_eof = DFA.unpackEncodedString(DFA22_eofS);
-    static final char[] DFA22_min = DFA.unpackEncodedStringToUnsignedChars(DFA22_minS);
-    static final char[] DFA22_max = DFA.unpackEncodedStringToUnsignedChars(DFA22_maxS);
+    static final char[] DFA22_min = DFA
+            .unpackEncodedStringToUnsignedChars(DFA22_minS);
+    static final char[] DFA22_max = DFA
+            .unpackEncodedStringToUnsignedChars(DFA22_maxS);
     static final short[] DFA22_accept = DFA.unpackEncodedString(DFA22_acceptS);
-    static final short[] DFA22_special = DFA.unpackEncodedString(DFA22_specialS);
+    static final short[] DFA22_special = DFA
+            .unpackEncodedString(DFA22_specialS);
     static final short[][] DFA22_transition;
     static {
         int numStates = DFA22_transitionS.length;
@@ -4772,6 +4917,7 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
     }
 
     class DFA22 extends DFA {
+
         public DFA22(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             decisionNumber = 22;
@@ -4824,8 +4970,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_CONJUNCTION_in_conjunction328 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_unary_in_conjunction334 = new BitSet(new long[] {
-            0xE500300000000008L, 0x0000000000000003L });
+    public static final BitSet FOLLOW_unary_in_conjunction334 = new BitSet(
+            new long[] { 0xE500300000000008L, 0x0000000000000003L });
     public static final BitSet FOLLOW_unary_in_conjunction349 = new BitSet(
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_IDENTIFIER_in_unary376 = new BitSet(
@@ -4906,8 +5052,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_ONE_OF_in_oneOf849 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_unary_in_oneOf854 = new BitSet(new long[] {
-            0xE500300000000008L, 0x0000000000000003L });
+    public static final BitSet FOLLOW_unary_in_oneOf854 = new BitSet(
+            new long[] { 0xE500300000000008L, 0x0000000000000003L });
     public static final BitSet FOLLOW_VALUE_RESTRICTION_in_valueRestriction889 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_unary_in_valueRestriction896 = new BitSet(
@@ -5030,8 +5176,8 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom1309 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_FUNCTIONAL_in_axiom1311 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_FUNCTIONAL_in_axiom1311 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom1314 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom1320 = new BitSet(
@@ -5046,32 +5192,32 @@ public class ManchesterOWLSyntaxAutoComplete extends TreeFilter {
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom1360 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_IRREFLEXIVE_in_axiom1362 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_IRREFLEXIVE_in_axiom1362 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom1365 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom1371 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom1386 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_REFLEXIVE_in_axiom1388 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_REFLEXIVE_in_axiom1388 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom1391 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom1397 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom1412 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_SYMMETRIC_in_axiom1414 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_SYMMETRIC_in_axiom1414 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom1417 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom1423 = new BitSet(
             new long[] { 0x0000000000000008L });
     public static final BitSet FOLLOW_UNARY_AXIOM_in_axiom1440 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_TRANSITIVE_in_axiom1442 = new BitSet(new long[] {
-            0x0000000000000000L, 0x0000000000000020L });
+    public static final BitSet FOLLOW_TRANSITIVE_in_axiom1442 = new BitSet(
+            new long[] { 0x0000000000000000L, 0x0000000000000020L });
     public static final BitSet FOLLOW_EXPRESSION_in_axiom1445 = new BitSet(
             new long[] { 0x0000000000000004L });
     public static final BitSet FOLLOW_IDENTIFIER_in_axiom1451 = new BitSet(

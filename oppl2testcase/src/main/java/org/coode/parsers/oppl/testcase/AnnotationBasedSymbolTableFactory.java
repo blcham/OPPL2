@@ -32,7 +32,7 @@ public class AnnotationBasedSymbolTableFactory implements
         SymbolTableFactory<OPPLTestCaseSymbolTable> {
 
     private final OWLOntologyManager manager;
-    private final List<OWLAnnotationProperty> annotations = new ArrayList<OWLAnnotationProperty>();
+    private final List<OWLAnnotationProperty> annotations = new ArrayList<>();
 
     /**
      * @param manager

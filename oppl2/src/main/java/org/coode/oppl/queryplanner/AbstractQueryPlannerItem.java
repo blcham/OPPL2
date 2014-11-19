@@ -24,11 +24,11 @@ public abstract class AbstractQueryPlannerItem implements QueryPlannerItem {
 
     protected Set<BindingNode> merge(BindingNode leaf,
             Collection<? extends BindingNode> newLeaves) {
-        Set<BindingNode> toReturn = new HashSet<BindingNode>();
+        Set<BindingNode> toReturn = new HashSet<>();
         for (BindingNode bindingNode : newLeaves) {
-            Set<Assignment> newAssignment = new HashSet<Assignment>(leaf.getAssignments());
+            Set<Assignment> newAssignment = new HashSet<>(leaf.getAssignments());
             newAssignment.addAll(bindingNode.getAssignments());
-            Set<Variable<?>> newUnassigendVariables = new HashSet<Variable<?>>(
+            Set<Variable<?>> newUnassigendVariables = new HashSet<>(
                     leaf.getUnassignedVariables());
             newUnassigendVariables.addAll(bindingNode.getUnassignedVariables());
             toReturn.add(new BindingNode(newAssignment, newUnassigendVariables));

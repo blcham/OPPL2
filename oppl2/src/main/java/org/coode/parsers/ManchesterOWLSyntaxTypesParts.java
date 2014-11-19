@@ -23,35 +23,40 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 @SuppressWarnings({ "javadoc", "incomplete-switch" })
 public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
-    public static final String[] tokenNames = new String[] { "<invalid>", "<EOR>",
-            "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS", "OPEN_CURLY_BRACES",
-            "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS", "WHITESPACE", "AND", "OR",
-            "NOT", "SOME", "ONLY", "MIN", "MAX", "EXACTLY", "VALUE", "INVERSE",
-            "SUBCLASS_OF", "SUB_PROPERTY_OF", "EQUIVALENT_TO", "SAME_AS",
-            "DIFFERENT_FROM", "INVERSE_OF", "DISJOINT_WITH", "DOMAIN", "RANGE",
-            "FUNCTIONAL", "SYMMETRIC", "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE",
-            "TRANSITIVE", "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
-            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER", "ENTITY_REFERENCE",
-            "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM", "EQUIVALENT_TO_AXIOM",
-            "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM", "SAME_AS_AXIOM",
-            "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM", "DISJUNCTION", "CONJUNCTION",
-            "PROPERTY_CHAIN", "NEGATED_EXPRESSION", "NEGATED_ASSERTION",
-            "INVERSE_PROPERTY", "SOME_RESTRICTION", "ALL_RESTRICTION",
-            "VALUE_RESTRICTION", "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
-            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION", "EXPRESSION",
-            "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN", "SELECT", "ASSERTED",
-            "COLON", "DOT", "PLUS", "CREATE", "CREATE_INTERSECTION",
-            "CREATE_DISJUNCTION", "BEGIN", "END", "OPEN_SQUARE_BRACKET",
-            "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF", "SUPER_PROPERTY_OF",
-            "VARIABLE_TYPE", "ADD", "REMOVE", "ASSERTED_CLAUSE", "PLAIN_CLAUSE",
-            "INEQUALITY_CONSTRAINT", "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
+
+    public static final String[] tokenNames = new String[] { "<invalid>",
+            "<EOR>", "<DOWN>", "<UP>", "COMPOSITION", "OPEN_PARENTHESYS",
+            "OPEN_CURLY_BRACES", "CLOSED_CURLY_BRACES", "CLOSED_PARENTHESYS",
+            "WHITESPACE", "AND", "OR", "NOT", "SOME", "ONLY", "MIN", "MAX",
+            "EXACTLY", "VALUE", "INVERSE", "SUBCLASS_OF", "SUB_PROPERTY_OF",
+            "EQUIVALENT_TO", "SAME_AS", "DIFFERENT_FROM", "INVERSE_OF",
+            "DISJOINT_WITH", "DOMAIN", "RANGE", "FUNCTIONAL", "SYMMETRIC",
+            "ANTI_SYMMETRIC", "REFLEXIVE", "IRREFLEXIVE", "TRANSITIVE",
+            "INVERSE_FUNCTIONAL", "POW", "COMMA", "INSTANCE_OF", "TYPES",
+            "DBLQUOTE", "DIGIT", "INTEGER", "LETTER", "IDENTIFIER",
+            "ENTITY_REFERENCE", "QUESTION_MARK", "Tokens", "SUB_CLASS_AXIOM",
+            "EQUIVALENT_TO_AXIOM", "DISJOINT_WITH_AXIOM", "SUB_PROPERTY_AXIOM",
+            "SAME_AS_AXIOM", "DIFFERENT_FROM_AXIOM", "UNARY_AXIOM",
+            "DISJUNCTION", "CONJUNCTION", "PROPERTY_CHAIN",
+            "NEGATED_EXPRESSION", "NEGATED_ASSERTION", "INVERSE_PROPERTY",
+            "SOME_RESTRICTION", "ALL_RESTRICTION", "VALUE_RESTRICTION",
+            "CARDINALITY_RESTRICTION", "ONE_OF", "TYPE_ASSERTION",
+            "ROLE_ASSERTION", "INVERSE_OBJECT_PROPERTY_EXPRESSION",
+            "EXPRESSION", "CONSTANT", "WHERE", "NOT_EQUAL", "EQUAL", "IN",
+            "SELECT", "ASSERTED", "COLON", "DOT", "PLUS", "CREATE",
+            "CREATE_INTERSECTION", "CREATE_DISJUNCTION", "BEGIN", "END",
+            "OPEN_SQUARE_BRACKET", "CLOSED_SQUARE_BRACKET", "SUPER_CLASS_OF",
+            "SUPER_PROPERTY_OF", "VARIABLE_TYPE", "ADD", "REMOVE",
+            "ASSERTED_CLAUSE", "PLAIN_CLAUSE", "INEQUALITY_CONSTRAINT",
+            "IN_SET_CONSTRAINT", "INPUT_VARIABLE_DEFINITION",
             "GENERATED_VARIABLE_DEFINITION", "CREATE_OPPL_FUNCTION",
-            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS", "VARIABLE_DEFINITIONS",
-            "QUERY", "VARIABLE_SCOPE", "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER",
-            "OPPL_STATEMENT", "DATA_RANGE", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION",
-            "AT", "ESCLAMATION_MARK", "CREATE_IDENTIFIER", "PLAIN_IDENTIFIER", "MATCH",
-            "ATTRIBUTE_SELECTOR", "LESS_THAN", "LESS_THAN_EQUAL", "GREATER_THAN",
-            "GREATER_THAN_EQUAL" };
+            "VARIABLE_ATTRIBUTE", "OPPL_FUNCTION", "ACTIONS",
+            "VARIABLE_DEFINITIONS", "QUERY", "VARIABLE_SCOPE",
+            "SUBPROPERTY_OF", "VARIABLE_IDENTIFIER", "OPPL_STATEMENT",
+            "DATA_RANGE", "HAS_KEY", "IRI", "ANNOTATION_ASSERTION", "AT",
+            "ESCLAMATION_MARK", "CREATE_IDENTIFIER", "PLAIN_IDENTIFIER",
+            "MATCH", "ATTRIBUTE_SELECTOR", "LESS_THAN", "LESS_THAN_EQUAL",
+            "GREATER_THAN", "GREATER_THAN_EQUAL" };
     public static final int COMMA = 37;
     public static final int GREATER_THAN = 485;
     public static final int ASSERTED = 76;
@@ -178,7 +183,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
         this(input, new RecognizerSharedState());
     }
 
-    public ManchesterOWLSyntaxTypesParts(TreeNodeStream input, RecognizerSharedState state) {
+    public ManchesterOWLSyntaxTypesParts(TreeNodeStream input,
+            RecognizerSharedState state) {
         super(input, state);
     }
 
@@ -195,8 +201,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     private SymbolTable symtab;
     private ErrorListener errorListener;
 
-    public ManchesterOWLSyntaxTypesParts(TreeNodeStream input, SymbolTable symtab,
-            ErrorListener errorListener) {
+    public ManchesterOWLSyntaxTypesParts(TreeNodeStream input,
+            SymbolTable symtab, ErrorListener errorListener) {
         this(input);
         this.symtab = checkNotNull(symtab, "symtab");
         this.errorListener = checkNotNull(errorListener, "errorListener");
@@ -216,13 +222,14 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     }
 
     protected void mismatch(IntStream in, int ttype,
-            @SuppressWarnings("unused") BitSet follow) throws RecognitionException {
+            @SuppressWarnings("unused") BitSet follow)
+            throws RecognitionException {
         throw new MismatchedTokenException(ttype, in);
     }
 
     @Override
-    public Object recoverFromMismatchedSet(IntStream in, RecognitionException e,
-            BitSet follow) throws RecognitionException {
+    public Object recoverFromMismatchedSet(IntStream in,
+            RecognitionException e, BitSet follow) throws RecognitionException {
         throw e;
     }
 
@@ -230,7 +237,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:73:1:
     // bottomup : expression ;
     @Override
-    public final void bottomup() throws RecognitionException {
+    public final void bottomup() {
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:75:5:
             // ( expression )
@@ -254,6 +261,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "bottomup"
     public static class expression_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -268,8 +276,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     public final ManchesterOWLSyntaxTypesParts.expression_return expression() {
         ManchesterOWLSyntaxTypesParts.expression_return retval = new ManchesterOWLSyntaxTypesParts.expression_return();
         retval.start = input.LT(1);
-        List<Object> list_disjuncts = new ArrayList<Object>();
-        List<Object> list_chainItems = new ArrayList<Object>();
+        List<Object> list_disjuncts = new ArrayList<>();
+        List<Object> list_chainItems = new ArrayList<>();
         ManchesterOWLSyntaxTypesParts.conjunction_return conjunction1 = null;
         ManchesterOWLSyntaxTypesParts.complexPropertyExpression_return complexPropertyExpression2 = null;
         RuleReturnScope disjuncts = null;
@@ -311,7 +319,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 3, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 3,
+                            0, input);
                     throw nvae;
             }
             switch (alt3) {
@@ -319,7 +328,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:91:4:
                 // ^( DISJUNCTION (disjuncts+= conjunction )+ )
                 {
-                    match(input, DISJUNCTION, FOLLOW_DISJUNCTION_in_expression124);
+                    match(input, DISJUNCTION,
+                            FOLLOW_DISJUNCTION_in_expression124);
                     if (state.failed) {
                         return retval;
                     }
@@ -334,7 +344,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         int alt1 = 2;
                         int LA1_0 = input.LA(1);
                         if (LA1_0 >= IDENTIFIER && LA1_0 <= ENTITY_REFERENCE
-                                || LA1_0 == CONJUNCTION || LA1_0 == NEGATED_EXPRESSION
+                                || LA1_0 == CONJUNCTION
+                                || LA1_0 == NEGATED_EXPRESSION
                                 || LA1_0 >= SOME_RESTRICTION && LA1_0 <= ONE_OF
                                 || LA1_0 == CONSTANT) {
                             alt1 = 1;
@@ -361,7 +372,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(1, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        1, input);
                                 throw eee;
                         }
                         cnt1++;
@@ -371,17 +383,19 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_disjuncts.size());
                         for (Object node : list_disjuncts) {
                             nodes.add(((conjunction_return) node).node);
                         }
                         retval.type = getSymbolTable().getDisjunctionType(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         retval.owlObject = getSymbolTable().getDisjunction(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -389,7 +403,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:100:6:
                 // ^( PROPERTY_CHAIN (chainItems+= expression )+ )
                 {
-                    match(input, PROPERTY_CHAIN, FOLLOW_PROPERTY_CHAIN_in_expression146);
+                    match(input, PROPERTY_CHAIN,
+                            FOLLOW_PROPERTY_CHAIN_in_expression146);
                     if (state.failed) {
                         return retval;
                     }
@@ -404,7 +419,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         int alt2 = 2;
                         int LA2_0 = input.LA(1);
                         if (LA2_0 >= IDENTIFIER && LA2_0 <= ENTITY_REFERENCE
-                                || LA2_0 >= DISJUNCTION && LA2_0 <= NEGATED_EXPRESSION
+                                || LA2_0 >= DISJUNCTION
+                                && LA2_0 <= NEGATED_EXPRESSION
                                 || LA2_0 >= SOME_RESTRICTION && LA2_0 <= ONE_OF
                                 || LA2_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                                 || LA2_0 == CONSTANT) {
@@ -432,7 +448,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(2, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        2, input);
                                 throw eee;
                         }
                         cnt2++;
@@ -442,17 +459,19 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_chainItems.size());
                         for (Object item : list_chainItems) {
                             nodes.add(((expression_return) item).node);
                         }
                         retval.type = getSymbolTable().getPropertyChainType(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         retval.owlObject = getSymbolTable().getPropertyChain(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -467,7 +486,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = conjunction1 != null ? conjunction1.type : null;
+                        retval.type = conjunction1 != null ? conjunction1.type
+                                : null;
                         retval.owlObject = conjunction1 != null ? conjunction1.owlObject
                                 : null;
                     }
@@ -493,9 +513,11 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -511,6 +533,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "expression"
     public static class conjunction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -523,7 +546,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     public final ManchesterOWLSyntaxTypesParts.conjunction_return conjunction() {
         ManchesterOWLSyntaxTypesParts.conjunction_return retval = new ManchesterOWLSyntaxTypesParts.conjunction_return();
         retval.start = input.LT(1);
-        List<Object> list_conjuncts = new ArrayList<Object>();
+        List<Object> list_conjuncts = new ArrayList<>();
         ManchesterOWLSyntaxTypesParts.unary_return unary3 = null;
         RuleReturnScope conjuncts = null;
         try {
@@ -542,7 +565,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 5, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 5, 0,
+                        input);
                 throw nvae;
             }
             switch (alt5) {
@@ -550,7 +574,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:130:2:
                 // ^( CONJUNCTION (conjuncts+= unary )+ )
                 {
-                    match(input, CONJUNCTION, FOLLOW_CONJUNCTION_in_conjunction214);
+                    match(input, CONJUNCTION,
+                            FOLLOW_CONJUNCTION_in_conjunction214);
                     if (state.failed) {
                         return retval;
                     }
@@ -592,7 +617,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                                     state.failed = true;
                                     return retval;
                                 }
-                                EarlyExitException eee = new EarlyExitException(4, input);
+                                EarlyExitException eee = new EarlyExitException(
+                                        4, input);
                                 throw eee;
                         }
                         cnt4++;
@@ -602,17 +628,19 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                        List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                                 list_conjuncts.size());
                         for (Object node : list_conjuncts) {
                             nodes.add(((unary_return) node).node);
                         }
                         retval.type = getSymbolTable().getConjunctionType(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                         retval.owlObject = getSymbolTable().getConjunction(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
                     break;
@@ -628,15 +656,18 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = unary3 != null ? unary3.type : null;
-                        retval.owlObject = unary3 != null ? unary3.owlObject : null;
+                        retval.owlObject = unary3 != null ? unary3.owlObject
+                                : null;
                     }
                 }
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -652,6 +683,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "conjunction"
     public static class unary_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -709,7 +741,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 8, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("", 8,
+                            0, input);
                     throw nvae;
             }
             switch (alt8) {
@@ -717,15 +750,16 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:153:3:
                 // IDENTIFIER
                 {
-                    IDENTIFIER4 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                            FOLLOW_IDENTIFIER_in_unary257);
+                    IDENTIFIER4 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER, FOLLOW_IDENTIFIER_in_unary257);
                     if (state.failed) {
                         return retval;
                     }
                     if (state.backtracking == 1) {
                         Symbol symbol = getSymbolTable().resolve(IDENTIFIER4);
                         retval.type = symbol == null ? null : symbol.getType();
-                        retval.owlObject = getSymbolTable().getOWLObject(IDENTIFIER4);
+                        retval.owlObject = getSymbolTable().getOWLObject(
+                                IDENTIFIER4);
                     }
                 }
                     break;
@@ -753,10 +787,14 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getNegatedClassExpressionType(
-                                (ManchesterOWLSyntaxTree) retval.start, e.node);
-                        retval.owlObject = getSymbolTable().getNegatedClassExpression(
-                                (ManchesterOWLSyntaxTree) retval.start, e.node);
+                        retval.type = getSymbolTable()
+                                .getNegatedClassExpressionType(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        e.node);
+                        retval.owlObject = getSymbolTable()
+                                .getNegatedClassExpression(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        e.node);
                     }
                 }
                     break;
@@ -783,12 +821,14 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // ENTITY_REFERENCE
                 {
                     ENTITY_REFERENCE6 = (ManchesterOWLSyntaxTree) match(input,
-                            ENTITY_REFERENCE, FOLLOW_ENTITY_REFERENCE_in_unary304);
+                            ENTITY_REFERENCE,
+                            FOLLOW_ENTITY_REFERENCE_in_unary304);
                     if (state.failed) {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        Symbol symbol = getSymbolTable().resolve(ENTITY_REFERENCE6);
+                        Symbol symbol = getSymbolTable().resolve(
+                                ENTITY_REFERENCE6);
                         retval.type = symbol == null ? null : symbol.getType();
                         retval.owlObject = getSymbolTable().getOWLObject(
                                 ENTITY_REFERENCE6);
@@ -833,8 +873,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                             if (state.failed) {
                                 return retval;
                             }
-                            language = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
-                                    FOLLOW_IDENTIFIER_in_unary333);
+                            language = (ManchesterOWLSyntaxTree) match(input,
+                                    IDENTIFIER, FOLLOW_IDENTIFIER_in_unary333);
                             if (state.failed) {
                                 return retval;
                             }
@@ -857,8 +897,9 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:175:70:
                         // constantType= IDENTIFIER
                         {
-                            constantType = (ManchesterOWLSyntaxTree) match(input,
-                                    IDENTIFIER, FOLLOW_IDENTIFIER_in_unary342);
+                            constantType = (ManchesterOWLSyntaxTree) match(
+                                    input, IDENTIFIER,
+                                    FOLLOW_IDENTIFIER_in_unary342);
                             if (state.failed) {
                                 return retval;
                             }
@@ -874,16 +915,18 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         retval.owlObject = constantType == null ? getSymbolTable()
                                 .getOWLUntypedConstant(value, language)
                                 : getSymbolTable().getOWLTypedConstant(
-                                        (ManchesterOWLSyntaxTree) retval.start, value,
-                                        constantType);
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        value, constantType);
                     }
                 }
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -899,6 +942,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "unary"
     public static class propertyExpression_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -928,7 +972,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 9, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 9, 0,
+                        input);
                 throw nvae;
             }
             switch (alt9) {
@@ -936,7 +981,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:191:7:
                 // IDENTIFIER
                 {
-                    IDENTIFIER7 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
+                    IDENTIFIER7 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER,
                             FOLLOW_IDENTIFIER_in_propertyExpression379);
                     if (state.failed) {
                         return retval;
@@ -944,7 +990,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         Symbol symbol = getSymbolTable().resolve(IDENTIFIER7);
                         retval.type = symbol == null ? null : symbol.getType();
-                        retval.owlObject = getSymbolTable().getOWLObject(IDENTIFIER7);
+                        retval.owlObject = getSymbolTable().getOWLObject(
+                                IDENTIFIER7);
                     }
                 }
                     break;
@@ -968,9 +1015,11 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -985,7 +1034,9 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     }
 
     // $ANTLR end "propertyExpression"
-    public static class complexPropertyExpression_return extends TreeRuleReturnScope {
+    public static class complexPropertyExpression_return extends
+            TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1023,8 +1074,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                             state.failed = true;
                             return retval;
                         }
-                        NoViableAltException nvae = new NoViableAltException("", 10, 2,
-                                input);
+                        NoViableAltException nvae = new NoViableAltException(
+                                "", 10, 2, input);
                         throw nvae;
                     }
                 } else {
@@ -1032,7 +1083,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 10, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            10, 1, input);
                     throw nvae;
                 }
             } else {
@@ -1040,7 +1092,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 10, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 10, 0,
+                        input);
                 throw nvae;
             }
             switch (alt10) {
@@ -1089,7 +1142,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    IDENTIFIER9 = (ManchesterOWLSyntaxTree) match(input, IDENTIFIER,
+                    IDENTIFIER9 = (ManchesterOWLSyntaxTree) match(input,
+                            IDENTIFIER,
                             FOLLOW_IDENTIFIER_in_complexPropertyExpression446);
                     if (state.failed) {
                         return retval;
@@ -1101,17 +1155,21 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         getSymbolTable().resolve(IDENTIFIER9);
                         retval.type = getSymbolTable().getInversePropertyType(
-                                (ManchesterOWLSyntaxTree) retval.start, IDENTIFIER9);
+                                (ManchesterOWLSyntaxTree) retval.start,
+                                IDENTIFIER9);
                         retval.owlObject = getSymbolTable().getInverseProperty(
-                                (ManchesterOWLSyntaxTree) retval.start, IDENTIFIER9);
+                                (ManchesterOWLSyntaxTree) retval.start,
+                                IDENTIFIER9);
                     }
                 }
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1127,6 +1185,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "complexPropertyExpression"
     public static class qualifiedRestriction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1179,7 +1238,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 11, 0, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            11, 0, input);
                     throw nvae;
             }
             switch (alt11) {
@@ -1213,10 +1273,14 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getSomeValueRestrictionType(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node, f.node);
-                        retval.owlObject = getSymbolTable().getSomeValueRestriction(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node, f.node);
+                        retval.type = getSymbolTable()
+                                .getSomeValueRestrictionType(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node, f.node);
+                        retval.owlObject = getSymbolTable()
+                                .getSomeValueRestriction(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node, f.node);
                     }
                 }
                     break;
@@ -1250,10 +1314,14 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getAllValueRestrictionType(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node, f.node);
-                        retval.owlObject = getSymbolTable().getAllValueRestriction(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node, f.node);
+                        retval.type = getSymbolTable()
+                                .getAllValueRestrictionType(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node, f.node);
+                        retval.owlObject = getSymbolTable()
+                                .getAllValueRestriction(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node, f.node);
                     }
                 }
                     break;
@@ -1287,7 +1355,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     }
                     if (state.backtracking == 1) {
                         retval.type = oneOf11 != null ? oneOf11.type : null;
-                        retval.owlObject = oneOf11 != null ? oneOf11.owlObject : null;
+                        retval.owlObject = oneOf11 != null ? oneOf11.owlObject
+                                : null;
                     }
                 }
                     break;
@@ -1311,9 +1380,11 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1328,7 +1399,9 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     }
 
     // $ANTLR end "qualifiedRestriction"
-    public static class cardinalityRestriction_return extends TreeRuleReturnScope {
+    public static class cardinalityRestriction_return extends
+            TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1377,8 +1450,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            NoViableAltException nvae = new NoViableAltException("", 15,
-                                    2, input);
+                            NoViableAltException nvae = new NoViableAltException(
+                                    "", 15, 2, input);
                             throw nvae;
                     }
                 } else {
@@ -1386,7 +1459,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         state.failed = true;
                         return retval;
                     }
-                    NoViableAltException nvae = new NoViableAltException("", 15, 1, input);
+                    NoViableAltException nvae = new NoViableAltException("",
+                            15, 1, input);
                     throw nvae;
                 }
             } else {
@@ -1394,7 +1468,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     state.failed = true;
                     return retval;
                 }
-                NoViableAltException nvae = new NoViableAltException("", 15, 0, input);
+                NoViableAltException nvae = new NoViableAltException("", 15, 0,
+                        input);
                 throw nvae;
             }
             switch (alt15) {
@@ -1432,7 +1507,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     int alt12 = 2;
                     int LA12_0 = input.LA(1);
                     if (LA12_0 >= IDENTIFIER && LA12_0 <= ENTITY_REFERENCE
-                            || LA12_0 >= DISJUNCTION && LA12_0 <= NEGATED_EXPRESSION
+                            || LA12_0 >= DISJUNCTION
+                            && LA12_0 <= NEGATED_EXPRESSION
                             || LA12_0 >= SOME_RESTRICTION && LA12_0 <= ONE_OF
                             || LA12_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA12_0 == CONSTANT) {
@@ -1457,13 +1533,17 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getMinCardinalityRestrictionType(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
+                        retval.type = getSymbolTable()
+                                .getMinCardinalityRestrictionType(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node,
+                                        filler == null ? null : filler.node);
                         int cardinality = Integer.parseInt(i.token.getText());
-                        retval.owlObject = getSymbolTable().getMinCardinalityRestriction(
-                                (ManchesterOWLSyntaxTree) retval.start, cardinality,
-                                p.node, filler == null ? null : filler.node);
+                        retval.owlObject = getSymbolTable()
+                                .getMinCardinalityRestriction(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        cardinality, p.node,
+                                        filler == null ? null : filler.node);
                     }
                 }
                     break;
@@ -1501,7 +1581,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     int alt13 = 2;
                     int LA13_0 = input.LA(1);
                     if (LA13_0 >= IDENTIFIER && LA13_0 <= ENTITY_REFERENCE
-                            || LA13_0 >= DISJUNCTION && LA13_0 <= NEGATED_EXPRESSION
+                            || LA13_0 >= DISJUNCTION
+                            && LA13_0 <= NEGATED_EXPRESSION
                             || LA13_0 >= SOME_RESTRICTION && LA13_0 <= ONE_OF
                             || LA13_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA13_0 == CONSTANT) {
@@ -1526,13 +1607,17 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         return retval;
                     }
                     if (state.backtracking == 1) {
-                        retval.type = getSymbolTable().getMaxCardinalityRestrictionType(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node,
-                                filler == null ? null : filler.node);
+                        retval.type = getSymbolTable()
+                                .getMaxCardinalityRestrictionType(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node,
+                                        filler == null ? null : filler.node);
                         int cardinality = Integer.parseInt(i.token.getText());
-                        retval.owlObject = getSymbolTable().getMaxCardinalityRestriction(
-                                (ManchesterOWLSyntaxTree) retval.start, cardinality,
-                                p.node, filler == null ? null : filler.node);
+                        retval.owlObject = getSymbolTable()
+                                .getMaxCardinalityRestriction(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        cardinality, p.node,
+                                        filler == null ? null : filler.node);
                     }
                 }
                     break;
@@ -1550,7 +1635,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     if (state.failed) {
                         return retval;
                     }
-                    match(input, EXACTLY, FOLLOW_EXACTLY_in_cardinalityRestriction685);
+                    match(input, EXACTLY,
+                            FOLLOW_EXACTLY_in_cardinalityRestriction685);
                     if (state.failed) {
                         return retval;
                     }
@@ -1570,7 +1656,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     int alt14 = 2;
                     int LA14_0 = input.LA(1);
                     if (LA14_0 >= IDENTIFIER && LA14_0 <= ENTITY_REFERENCE
-                            || LA14_0 >= DISJUNCTION && LA14_0 <= NEGATED_EXPRESSION
+                            || LA14_0 >= DISJUNCTION
+                            && LA14_0 <= NEGATED_EXPRESSION
                             || LA14_0 >= SOME_RESTRICTION && LA14_0 <= ONE_OF
                             || LA14_0 == INVERSE_OBJECT_PROPERTY_EXPRESSION
                             || LA14_0 == CONSTANT) {
@@ -1597,7 +1684,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     if (state.backtracking == 1) {
                         retval.type = getSymbolTable()
                                 .getExactCardinalityRestrictionType(
-                                        (ManchesterOWLSyntaxTree) retval.start, p.node,
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node,
                                         filler == null ? null : filler.node);
                         int cardinality = Integer.parseInt(i.token.getText());
                         retval.owlObject = getSymbolTable()
@@ -1610,9 +1698,11 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     break;
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1628,6 +1718,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "cardinalityRestriction"
     public static class oneOf_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1641,7 +1732,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
         ManchesterOWLSyntaxTypesParts.oneOf_return retval = new ManchesterOWLSyntaxTypesParts.oneOf_return();
         retval.start = input.LT(1);
         ManchesterOWLSyntaxTree individuals = null;
-        List<Object> list_individuals = new ArrayList<Object>();
+        List<Object> list_individuals = new ArrayList<>();
         try {
             // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:295:2:
             // ( ^( ONE_OF (individuals+= IDENTIFIER )+ ) )
@@ -1670,8 +1761,9 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                         // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:296:23:
                         // individuals+= IDENTIFIER
                         {
-                            individuals = (ManchesterOWLSyntaxTree) match(input,
-                                    IDENTIFIER, FOLLOW_IDENTIFIER_in_oneOf743);
+                            individuals = (ManchesterOWLSyntaxTree) match(
+                                    input, IDENTIFIER,
+                                    FOLLOW_IDENTIFIER_in_oneOf743);
                             if (state.failed) {
                                 return retval;
                             }
@@ -1686,7 +1778,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                                 state.failed = true;
                                 return retval;
                             }
-                            EarlyExitException eee = new EarlyExitException(16, input);
+                            EarlyExitException eee = new EarlyExitException(16,
+                                    input);
                             throw eee;
                     }
                     cnt16++;
@@ -1696,25 +1789,29 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                     return retval;
                 }
                 if (state.backtracking == 1) {
-                    List<ManchesterOWLSyntaxTree> nodes = new ArrayList<ManchesterOWLSyntaxTree>(
+                    List<ManchesterOWLSyntaxTree> nodes = new ArrayList<>(
                             list_individuals.size());
                     for (Object node : list_individuals) {
                         nodes.add((ManchesterOWLSyntaxTree) node);
                     }
                     retval.type = getSymbolTable().getOneOfType(
                             (ManchesterOWLSyntaxTree) retval.start,
-                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                            nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                    .size()]));
                     if (retval.type != null) {
                         retval.owlObject = getSymbolTable().getOneOf(
                                 (ManchesterOWLSyntaxTree) retval.start,
-                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes.size()]));
+                                nodes.toArray(new ManchesterOWLSyntaxTree[nodes
+                                        .size()]));
                     }
                 }
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1730,6 +1827,7 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
 
     // $ANTLR end "oneOf"
     public static class valueRestriction_return extends TreeRuleReturnScope {
+
         public Type type;
         public ManchesterOWLSyntaxTree node;
         public OWLObject owlObject;
@@ -1739,7 +1837,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
     // /Users/luigi/Documents/workspace/Parsers/src/ManchesterOWLSyntaxTypesParts.g:309:1:
     // valueRestriction returns [Type type , ManchesterOWLSyntaxTree node,
     // OWLObject owlObject] : ^( VALUE_RESTRICTION p= unary value= unary ) ;
-    public final ManchesterOWLSyntaxTypesParts.valueRestriction_return valueRestriction() {
+    public final ManchesterOWLSyntaxTypesParts.valueRestriction_return
+            valueRestriction() {
         ManchesterOWLSyntaxTypesParts.valueRestriction_return retval = new ManchesterOWLSyntaxTypesParts.valueRestriction_return();
         retval.start = input.LT(1);
         ManchesterOWLSyntaxTypesParts.unary_return p = null;
@@ -1777,18 +1876,22 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
                 }
                 if (state.backtracking == 1) {
                     retval.type = getSymbolTable().getValueRestrictionType(
-                            (ManchesterOWLSyntaxTree) retval.start, p.node, value.node);
+                            (ManchesterOWLSyntaxTree) retval.start, p.node,
+                            value.node);
                     if (retval.type != null) {
-                        retval.owlObject = getSymbolTable().getValueRestriction(
-                                (ManchesterOWLSyntaxTree) retval.start, p.node,
-                                value.node);
+                        retval.owlObject = getSymbolTable()
+                                .getValueRestriction(
+                                        (ManchesterOWLSyntaxTree) retval.start,
+                                        p.node, value.node);
                     }
                 }
             }
             if (state.backtracking == 1) {
-                ((ManchesterOWLSyntaxTree) retval.start).setEvalType(retval.type);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setEvalType(retval.type);
                 retval.node = (ManchesterOWLSyntaxTree) retval.start;
-                ((ManchesterOWLSyntaxTree) retval.start).setOWLObject(retval.owlObject);
+                ((ManchesterOWLSyntaxTree) retval.start)
+                        .setOWLObject(retval.owlObject);
             }
         } catch (RecognitionException exception) {
             if (errorListener != null) {
@@ -1820,8 +1923,8 @@ public class ManchesterOWLSyntaxTypesParts extends TreeFilter {
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_CONJUNCTION_in_conjunction214 = new BitSet(
             new long[] { 0x0000000000000004L });
-    public static final BitSet FOLLOW_unary_in_conjunction219 = new BitSet(new long[] {
-            0xE500300000000008L, 0x0000000000000043L });
+    public static final BitSet FOLLOW_unary_in_conjunction219 = new BitSet(
+            new long[] { 0xE500300000000008L, 0x0000000000000043L });
     public static final BitSet FOLLOW_unary_in_conjunction230 = new BitSet(
             new long[] { 0x0000000000000002L });
     public static final BitSet FOLLOW_IDENTIFIER_in_unary257 = new BitSet(

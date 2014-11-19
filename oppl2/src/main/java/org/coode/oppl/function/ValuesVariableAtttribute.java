@@ -42,7 +42,7 @@ public class ValuesVariableAtttribute<O extends OWLObject> extends
                 Set<BindingNode> leaves = constraintSystem.getLeaves();
                 Set<O> toReturn = null;
                 if (leaves != null) {
-                    toReturn = new HashSet<O>(leaves.size());
+                    toReturn = new HashSet<>(leaves.size());
                     for (BindingNode bindingNode : leaves) {
                         OWLObject assignmentValue = bindingNode.getAssignmentValue(
                                 ValuesVariableAtttribute.this.getVariable(),
@@ -67,6 +67,6 @@ public class ValuesVariableAtttribute<O extends OWLObject> extends
      * @return new value variable attribute */
     public static <P extends OWLObject> ValuesVariableAtttribute<P>
             getValuesVariableAtttribute(Variable<P> v) {
-        return new ValuesVariableAtttribute<P>(v);
+        return new ValuesVariableAtttribute<>(v);
     }
 }

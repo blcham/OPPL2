@@ -22,7 +22,7 @@ import org.semanticweb.owlapi.model.OWLObject;
 public class AssertContains implements Assertion {
     private final Variable<?> variable;
     private final ConstraintSystem constraintSystem;
-    private final Set<OWLObject> values = new HashSet<OWLObject>();
+    private final Set<OWLObject> values = new HashSet<>();
     private final AbstractOPPLTestCaseFactory testCaseFactory;
     private final RuntimeExceptionHandler handler;
 
@@ -92,7 +92,7 @@ public class AssertContains implements Assertion {
 
     @Override
     public boolean holds(Set<? extends BindingNode> bindings, ConstraintSystem cs) {
-        Set<OWLObject> containerValues = new HashSet<OWLObject>(bindings.size());
+        Set<OWLObject> containerValues = new HashSet<>(bindings.size());
         for (BindingNode bindingNode : bindings) {
             ValueComputationParameters parameters = new SimpleValueComputationParameters(
                     cs, bindingNode, getHandler());
@@ -106,7 +106,7 @@ public class AssertContains implements Assertion {
 
     /** @return the values */
     public Set<OWLObject> getValues() {
-        return new HashSet<OWLObject>(values);
+        return new HashSet<>(values);
     }
 
     @Override

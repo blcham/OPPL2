@@ -12,7 +12,7 @@ public abstract class AbstractLinearisingErrorReport implements ErrorReport {
     public int getLinearisedPosition(String text) {
         int toReturn = getCharPositionInLine();
         BufferedReader reader = new BufferedReader(new StringReader(text));
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         String line = null;
         String lineSeparator = System.getProperty("line.separator");
         try {

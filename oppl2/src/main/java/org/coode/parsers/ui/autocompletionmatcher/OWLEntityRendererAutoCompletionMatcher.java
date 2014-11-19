@@ -36,7 +36,7 @@ public final class OWLEntityRendererAutoCompletionMatcher implements
 
     @Override
     public List<String> getMatches(String string2Complete) {
-        List<String> toReturn = new ArrayList<String>();
+        List<String> toReturn = new ArrayList<>();
         Set<OWLEntity> entities = entityFinder.getEntities(string2Complete);
         for (OWLEntity owlEntity : entities) {
             toReturn.add(entityRenderer.render(owlEntity));

@@ -37,7 +37,7 @@ public class AssertedAxiomPlannerItem extends AbstractQueryPlannerItem {
     public Set<BindingNode> match(Collection<? extends BindingNode> currentLeaves,
             ExecutionMonitor executionMonitor,
             RuntimeExceptionHandler runtimeExceptionHandler) {
-        Set<BindingNode> toReturn = new HashSet<BindingNode>();
+        Set<BindingNode> toReturn = new HashSet<>();
         if (currentLeaves != null) {
             Iterator<? extends BindingNode> iterator = currentLeaves.iterator();
             while (!executionMonitor.isCancelled() && iterator.hasNext()) {
@@ -64,7 +64,7 @@ public class AssertedAxiomPlannerItem extends AbstractQueryPlannerItem {
     private Set<BindingNode> updateBindingsAssertedAxiom(OWLAxiom ax,
             RuntimeExceptionHandler runtimeExceptionHandler) {
         assert ax != null;
-        Set<BindingNode> toReturn = new HashSet<BindingNode>();
+        Set<BindingNode> toReturn = new HashSet<>();
         int initialSize = getConstraintSystem().getLeaves() == null ? 0
                 : getConstraintSystem().getLeaves().size();
         Logging.getQueryLogger().log("Initial size: ", initialSize);
