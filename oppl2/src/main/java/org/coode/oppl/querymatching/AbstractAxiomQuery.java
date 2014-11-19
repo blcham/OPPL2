@@ -78,6 +78,8 @@ abstract class AbstractAxiomQuery implements AxiomQuery {
     /**
      * @param runtimeExceptionHandler
      *        runtimeExceptionHandler
+     * @param cs
+     *        constraint system
      */
     AbstractAxiomQuery(RuntimeExceptionHandler runtimeExceptionHandler,
             ConstraintSystem cs) {
